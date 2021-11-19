@@ -1,11 +1,9 @@
-import Banner from './Banner/Banner';
-import Sign from './components/Sign';
+import Banner from './components/Banner/Banner';
 
 function App() {
   return (
     <div>
       <Banner/>
-      <Sign/>
     </div>
   );
 }
