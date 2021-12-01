@@ -1,5 +1,26 @@
-// import d'express
+//import d'express
 const express = require('express');
+
+//import dotenv
+const dotenv = require('dotenv');
+dotenv.config();
+
+//import mysql
+const mysql = require('mysql');
+
+//connexion à la base données sql
+const groupomaniaDBConnect = mysql.createConnection({
+    host: process.env.GROUPOMANIA_HOSTNAME,
+    user: process.env.GROUPOMANIA_USERNAME,
+    password: process.env.GROUPOMANIA_USERPASSWORD
+});
+
+groupomaniaDBConnect.connect((error) => {
+    if(error) {
+        throw error;
+    }
+    console.log('connexion sql réussie');
+});
 
 //création de l'application express
 const app = express();
@@ -20,8 +41,7 @@ app.use((req, res, next) => {
 
 //route test
 app.use((req, res, next) => {
-    console.log("app fonctionne bien");
-    res.status(200).json({ message: "l'app répond bien" });
+    res.status(200).json({ message: "requête reçue." });
     next();
 });
 
