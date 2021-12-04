@@ -11,7 +11,7 @@ const userCtrl = require('../controllers/user');
 router.post('/signup', userCtrl.signUp);
 
 //route pour la connexion d'un utilisateur à l'application
-router.post('/signIn', userCtrl.signIn);
+router.post('/signin', userCtrl.signIn);
 
 //route pour accéder à son profil utilisateur
 router.get('/', userCtrl.getMyProfil);

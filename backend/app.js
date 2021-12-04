@@ -11,6 +11,9 @@ const mysql = require('mysql');
 // import helmet
 const helmet = require('helmet');
 
+//import cookie parser
+const cookieParser = require('cookie-parser');
+
 //import du router user
 const userRouter = require('./routes/user');
 
@@ -55,6 +58,9 @@ app.use(helmet())
 
 //middleware global, transforme le corps de la requete en objet javascript utilisable
 app.use(express.json());
+
+//middleware cookie-parser
+app.use(cookieParser());
 
 //Utilisation du router user pour la gestion des utilisateurs de l'application 
 app.use('/api/auth', userRouter);
