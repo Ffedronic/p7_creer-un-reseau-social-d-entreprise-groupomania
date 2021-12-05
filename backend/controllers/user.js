@@ -42,14 +42,18 @@ exports.signUp = (req, res, next) => {
 
 //controller pour la connexion d'utilisateur à l'application
 exports.signIn = (req, res, next) => {
+    
     //recherche de l'utilisateur dans la base de données
-    groupomaniaDBConnect.query(`SELECT * FROM users WHERE email = '${req.body.email}'`, (error, result) => {
+    const sqlSearchUser = `SELECT * FROM users WHERE email = '${req.body.email}'`;
+    groupomaniaDBConnect.query(sqlSearchUser, (error, result) => {
         if (error) {
             throw error;
         }
+        
         //récupération du résultat de la recherche de l'utilisateur
         const userProfil = result[0];
-        //comparaison du mot de passe de la requête au mot de passe haché dans la base de données
+        
+        //comparaison du mot de passe de la requête au mot de passe crypté dans la base de données
         bcrypt.compare(req.body.password, userProfil.password)
             .then((valid) => {
                 if (!valid) {
@@ -63,13 +67,10 @@ exports.signIn = (req, res, next) => {
                 }, process.env.GROUPOMANIA_SECRET_KEY, {
                     expiresIn: "168h"
                 });
-                //envoi du cookie contenant le profil de l'utilisateur
+                //envoi du cookie contenant l'id de l'utilisateur, son token, son isAdmin
                 res.cookie("userProfil", {
-                    id: userProfil.id,
+                    userId: userProfil.id,
                     token: token,
-                    firstName: userProfil.firstName,
-                    lastName: userProfil.lastName,
-                    email: userProfil.email,
                     isAdmin: userProfil.isAdmin
                 }, {
                     maxAge: 604800000,
@@ -87,25 +88,60 @@ exports.signIn = (req, res, next) => {
 
 //controller pour accéder à son profil utilisateur
 exports.getMyProfil = (req, res, next) => {
-
+    const sqlSearchMyProfil = `SELECT * FROM users WHERE id = '${req.body.id}'`;
+    groupomaniaDBConnect.query(sqlSearchMyProfil, (error, result) => {
+        if(error) {
+            console.log(error);
+            res.status(500).json({message: error});
+        }
+        res.status(200).json(result);
+    });
 };
 
 //controller pour modifier son profil utilisateur
 exports.modifyMyProfil = (req, res, next) => {
-
+    const sqlUpdateMyProfil = `UPDATE users SET firstName = '${req.body.firstName}', lastName = '${req.body.lastName}', email = '${req.body.email}' WHERE id = '${req.body.id}'`;
+        groupomaniaDBConnect.query(sqlUpdateMyProfil, (error, result) => {
+            if(error) {
+                console.log(error);
+                res.status(500).json({ error });
+            }
+            res.status(200).json(result);
+        });
 };
 
 //controller pour supprimer son profil utilisateur
 exports.deleteMyProfil = (req, res, next) => {
-
+    const sqlDeleteMyProfil = `DELETE FROM users WHERE id = '${req.body.id}'`;
+    groupomaniaDBConnect.query(sqlDeleteMyProfil, (error, result) => {
+        if (error) {
+            console.log(error);
+            res.status(500).json({ error });
+        }
+        res.status(200).json(result);
+    });
 };
 
 //controller pour voir le profil d'un utilisateur
 exports.getUserProfil = (req, res, next) => {
-
+    const sqlSearchUserProfil = `SELECT * FROM users WHERE lastName = '${req.params.id}'`;
+    groupomaniaDBConnect.query(sqlSearchUserProfil, (error, result) => {
+        if(error) {
+            console.log(error);
+            res.status(500).json({message: error});
+        }
+        res.status(200).json(result);
+    });
 };
 
 //controller pour supprimer le profil d'un utilisateur
 exports.deleteUserProfil = (req, res, next) => {
-
+    const sqlDeleteUserProfil = `DELETE FROM users WHERE lastName = '${req.params.id}'`;
+    groupomaniaDBConnect.query(sqlDeleteUserProfil, (error, result) => {
+        if(error) {
+            console.log(error);
+            res.status(500).json({message: error});
+        }
+        res.status(200).json(result);
+    });
 };

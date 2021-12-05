@@ -1,6 +1,6 @@
 //controller pour récupérer les posts de la base de données
 exports.getPosts = (req, res, next) => {
-
+    
 };
 
 //controller pour récupérer un post de la base de données

@@ -66,7 +66,7 @@ app.use(cookieParser());
 app.use('/api/auth', userRouter);
 
 //Utilisation du router posts pour la gestion des posts de l'application
-app.use('api/posts', postsRouter);
+app.use('/api/posts', postsRouter);
 
 //Utilisation du router comments pour la gestion des commentaires sur les posts issus de l'application
 app.use('/api/posts/:id/comments', commentsRouter);
