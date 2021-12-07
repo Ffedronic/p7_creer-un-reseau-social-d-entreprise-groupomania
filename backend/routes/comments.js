@@ -8,7 +8,7 @@ const router = express.Router();
 const commentsCtrl = require('../controllers/comments');
 
 //route pour récupérer tous les commentaires d'un post dont l'id est fourni
-router.get('/', commentsCtrl.getComments);
+router.get('/:id', commentsCtrl.getComments);
 
 //controller pour créer un commentaire sur un post dont l'id et l'id utilisateur sont fournis
 router.post('/', commentsCtrl.createOneComment);

@@ -5,6 +5,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
 
+//import de path
+const path = require('path');
 //import mysql
 const mysql = require('mysql');
 
@@ -61,6 +63,10 @@ app.use(express.json());
 
 //middleware cookie-parser
 app.use(cookieParser());
+
+// indique à Express qu'il faut gerer la ressource images de manière statique à chaque requête reçue vers la route /images
+// __dirname = nom du dossier dans lequel on va se trouver
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //Utilisation du router user pour la gestion des utilisateurs de l'application 
 app.use('/api/auth', userRouter);
