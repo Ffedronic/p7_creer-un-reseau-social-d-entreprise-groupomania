@@ -19,15 +19,14 @@ const storage = multer.diskStorage({
     // fonction qui indique quel nom de fichier utiliser
     filename: (req, file, callback) => {
         // on génere le nouveau nom pour le fichier
-        const preName = file.originalname.split('.');
         // on élmine les espaces en les remplacant par des underscore pour éviter erreurs avec split et join
-        const name = preName[0].split(' ').join('_');
+        const name = file.originalname.split('.')[0].split(' ').join('_');
         // on ajoute une extension au fichier : élement de notre dictionnaire qui correspond au format du fichier envoyé par le frontend
         const extension = MIME_TYPES[file.mimetype];
-        // on appelle la callback, on ajoute nom + un timestamp(=format date sous forme d'entier comptant les milisecondes, nom de fichier unique) + un '.' + l'extension
+        // on appelle la callback, on ajoute nom + un timestamp(=fo rmat date sous forme d'entier comptant les milisecondes, nom de fichier unique) + un '.' + l'extension
         callback(null, name + Date.now() + '.' + extension);
     },
 });
 
 // exports du multer configuré, 'single' pour dire qu'il s'agit d'un fichier unique + fichier image uniquement
-module.exports = multer({ storage }).single('image');
+module.exports = multer({ storage: storage }).any('image');

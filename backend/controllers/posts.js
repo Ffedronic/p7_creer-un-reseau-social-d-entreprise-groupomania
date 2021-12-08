@@ -1,11 +1,12 @@
 //import mysql
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 //import de file system
 const fs = require('fs');
 
 //import dotenv
 const dotenv = require('dotenv');
+
 dotenv.config();
 
 //connexion à la base données sql
@@ -23,9 +24,7 @@ exports.getPosts = (req, res, next) => {
     const sqlGetPosts = `SELECT * FROM posts`;
     groupomaniaDBConnect.query(sqlGetPosts, (error, result) => {
         if (error) {
-            res.status(500).json({
-                error
-            });
+            throw error;
         }
         res.status(200).json({
             result
@@ -41,9 +40,7 @@ exports.getOnePost = (req, res, next) => {
     const sqlGetPosts = `SELECT * FROM posts WHERE id = '${req.params.id}'`;
     groupomaniaDBConnect.query(sqlGetPosts, (error, result) => {
         if (error) {
-            res.status(500).json({
-                error
-            });
+            throw error;
         }
         res.status(200).json({
             result
@@ -54,43 +51,27 @@ exports.getOnePost = (req, res, next) => {
 
 //controller pour créer un post
 exports.createOnePost = (req, res, next) => {
-    const postObject = JSON.parse(req.body.post);
-    const post = {
-        title: postObject.title,
-        subject: postObject.subject,
-        img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        author: postObject.userId
-    };
-    const sqlCreateOnePost = `INSERT INTO posts (title, subject, img_url, author) VALUES ('${post.title}', '${post.subject}', '${post.img_url}', '${post.author}')`;
-    groupomaniaDBConnect.query(sqlCreateOnePost, (error) => {
-        res.status(500).json({
-            error
+    const sqlCreateOnePost = `INSERT INTO posts (title, subject, img_url, author) VALUES ('${req.body.title}', '${req.body.subject}', '${req.protocol}://${req.get('host')}/images/${req.files[0].filename}', ${req.body.author})`;
+    groupomaniaDBConnect.query(sqlCreateOnePost, (error, result) => {
+        if(error) {
+            throw error;
+        }
+        res.status(200).json({
+            result
         });
     });
-    res.status(200).json({
-        message: "post créé."
-    });
-
 };
 
 //controller pour modifier un post
 exports.modifyOnePost = (req, res, next) => {
-    const postObject = JSON.parse(req.body.post);
-    const post = {
-        id: req.params.id,
-        title: postObject.title,
-        subject: postObject.subject,
-        img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        author: postObject.userId
-    };
-    const sqlModifyOnePost = `UPDATE posts SET title = '${post.title}', subject = '${post.subject}', img_url = '${post.img_url}' WHERE id = '${post.id}'`;
-    groupomaniaDBConnect.query(sqlModifyOnePost, (error) => {
-        res.status(500).json({
-            error
+    const sqlModifyOnePost = `UPDATE posts SET title = '${req.body.title}', subject = '${req.body.subject}', img_url = '${req.protocol}://${req.get('host')}/images/${req.files[0].filename}' WHERE id = '${req.params.id}'`;
+    groupomaniaDBConnect.query(sqlModifyOnePost, (error, result) => {
+        if(error) {
+            throw error;
+        }
+        res.status(200).json({
+            result
         });
-    });
-    res.status(200).json({
-        message: "post créé."
     });
 };
 
@@ -99,21 +80,20 @@ exports.deleteOnePost = (req, res, next) => {
     const sqlGetPosts = `SELECT * FROM posts WHERE id = '${req.params.id}'`;
     groupomaniaDBConnect.query(sqlGetPosts, (error, result) => {
         if (error) {
-            res.status(500).json({
-                error
-            });
+            throw error;
         }
-        const filename = result.img_url.split('/images/')[1];
+        const filename = result[0].img_url.split('/images/')[1];
         fs.unlink(`images/${filename}`, () => {
             const sqlDeleteOnePost = `DELETE FROM posts WHERE id = '${req.params.id}'`;
-            groupomaniaDBConnect.query(sqlDeleteOnePost, (error) => {
-                res.status(500).json({
-                    error
+            groupomaniaDBConnect.query(sqlDeleteOnePost, (error, result) => {
+                if(error) {
+                    throw error;
+                }
+                res.status(200).json({
+                    result
                 });
             });
-            res.status(200).json({
-                message: "post supprimé."
-            });     
+                 
         });
     });
 };
