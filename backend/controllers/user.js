@@ -22,17 +22,22 @@ const bcrypt = require('bcrypt');
 //controller pour l'inscription d'un utilisateur à l'application
 exports.signUp = (req, res, next) => {
 
-    //hashage du mot de passe saisi par l'utilisateur
+    /*hashage du mot de passe saisi par l'utilisateur*/
     bcrypt.hash(req.body.password, 10)
         .then((hash) => {
-            //insertion de l'utilisateur dans la base de données
+            /*création de la requête sql pour créer le profil utilisateur dans la base de données sql*/
             const sqlCreateUser = `INSERT INTO users (firstName, lastName, email, password, isAdmin) VALUES ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${hash}', '0')`;
+            /*envoi de la requête au serveur*/
             groupomaniaDBConnect.query(sqlCreateUser, (error) => {
-                if (error) throw error;
+                /*si l'insertion est impossible*/
+                if (error) {
+                    throw error;
+                }
                 console.log("utilisateur ajouté à la base données.");
-            });
-            res.status(200).json({
-                message: "utilisateur créé."
+                /*sinon, envoi du message de validation de la création de l'utilisateur dans la base de données*/
+                res.status(200).json({
+                    message: "utilisateur créé."
+                });
             });
         })
         .catch((error) => res.status(500).json({
@@ -42,32 +47,35 @@ exports.signUp = (req, res, next) => {
 
 //controller pour la connexion d'utilisateur à l'application
 exports.signIn = (req, res, next) => {
-    
-    //recherche de l'utilisateur dans la base de données
+    /*création de la requête sql pour rechercher le profil utilisateur dans la base de données sql à partir de 
+    l'email fourni par l'application*/
     const sqlSearchUser = `SELECT * FROM users WHERE email = '${req.body.email}'`;
+    /*envoi de la requête au serveur*/
     groupomaniaDBConnect.query(sqlSearchUser, (error, result) => {
         if (error) {
             throw error;
         }
-        
-        //récupération du résultat de la recherche de l'utilisateur
+        /*création du profil utilisateur à partir de la réponse de la requête sqlSearchUser*/
         const userProfil = result[0];
-        
-        //comparaison du mot de passe de la requête au mot de passe crypté dans la base de données
+
+        /*comparaison du mot de passe entré par l'utilisateur avec le mot de passe crypté présent dans le profil utilisateur
+        issu de la base données*/
         bcrypt.compare(req.body.password, userProfil.password)
             .then((valid) => {
+                /*si la comparaison est invalide,*/
                 if (!valid) {
                     return res.status(401).json({
-                        message: "mot de passe incorrect"
+                        message: "mot de passe incorrect."
                     });
                 }
-                //création du token à partir de l'id de l'utilisateur founi dans la base de données
+                /*si ok, création du token d'identification de l'utilisateur avec l'id fourni par son profil utilisateur
+                issu de la base de données*/
                 const token = jwt.sign({
                     userId: userProfil.id
                 }, process.env.GROUPOMANIA_SECRET_KEY, {
                     expiresIn: "168h"
                 });
-                //envoi du cookie contenant l'id de l'utilisateur, son token, son isAdmin
+                /*envoi du cookie contenant l'id de l'utilisateur, son token, son isAdmin*/
                 res.cookie("userProfil", {
                     userId: userProfil.id,
                     token: token,
@@ -76,6 +84,7 @@ exports.signIn = (req, res, next) => {
                     maxAge: 604800000,
                     httpOnly: true
                 });
+                /*envoi du message de validation du login de l'utilisateur*/
                 res.status(200).json({
                     message: "utilisateur retrouvé."
                 });
@@ -88,60 +97,107 @@ exports.signIn = (req, res, next) => {
 
 //controller pour accéder à son profil utilisateur
 exports.getMyProfil = (req, res, next) => {
-    const sqlSearchMyProfil = `SELECT * FROM users WHERE id = '${req.body.id}'`;
+    /*création du profil utilisateur à partir du cookie d'authentification*/
+    const userProfil = req.cookies.userProfil;
+    /*création de la requête sql pour rechercher le prénom, nom et email de l'utilisateur dans la base données à partir de son id 
+    fourni par le profil utilisateur*/
+    const sqlSearchMyProfil = `SELECT firstName, lastName, email FROM users WHERE id = '${userProfil.userId}'`;
+    /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlSearchMyProfil, (error, result) => {
-        if(error) {
+        if (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({
+                message: error
+            });
         }
-        res.status(200).json(result);
+        /*envoi au client de la réponse issue du serveur sql contenant le prénom, nom et email de l'utilisateur dans la base de données*/
+        res.status(200).json({
+            result
+        });
     });
 };
 
 //controller pour modifier son profil utilisateur
 exports.modifyMyProfil = (req, res, next) => {
-    const sqlUpdateMyProfil = `UPDATE users SET firstName = '${req.body.firstName}', lastName = '${req.body.lastName}', email = '${req.body.email}' WHERE id = '${req.body.id}'`;
-        groupomaniaDBConnect.query(sqlUpdateMyProfil, (error, result) => {
-            if(error) {
-                console.log(error);
-                res.status(500).json({ error });
-            }
-            res.status(200).json(result);
+    /*création du profil utilisateur à partir du cookie d'authentification*/
+    const userProfil = req.cookies.userProfil;
+    /*création de la requête sql pour mettre à jour le prénom, nom et email de l'utilisateur dans la base de données à partir de son id 
+    fourni par le profil utilisateur*/
+    const sqlUpdateMyProfil = `UPDATE users SET firstName = '${req.body.firstName}', lastName = '${req.body.lastName}', email = '${req.body.email}' WHERE id = '${userProfil.userId}'`;
+    /*envoi de la requête au serveur sql*/
+    groupomaniaDBConnect.query(sqlUpdateMyProfil, (error, result) => {
+        if (error) {
+            console.log(error);
+            res.status(500).json({
+                error
+            });
+        }
+        /*envoi du résultat de la requête sql*/
+        res.status(200).json({
+            message: "le profil a été modifié."
         });
+    });
 };
 
 //controller pour supprimer son profil utilisateur
 exports.deleteMyProfil = (req, res, next) => {
-    const sqlDeleteMyProfil = `DELETE FROM users WHERE id = '${req.body.id}'`;
-    groupomaniaDBConnect.query(sqlDeleteMyProfil, (error, result) => {
+    /*création du profil utilisateur à partir du cookie d'authentification*/
+    const userProfil = req.cookies.userProfil;
+    /*création de la requête sql pour supprimer l'utilisateur de la base de données à partir de son id fourni par le profil utilisateur*/
+    const sqlDeleteMyProfil = `DELETE FROM users WHERE id = '${userProfil.userId}'`;
+    /*envoi de la requête au serveur sql*/
+    groupomaniaDBConnect.query(sqlDeleteMyProfil, (error) => {
         if (error) {
             console.log(error);
-            res.status(500).json({ error });
+            res.status(500).json({
+                error
+            });
         }
-        res.status(200).json(result);
+        /*suppression du cookie d'authentification*/
+        res.clearCookie("userProfil");
+        /*envoi du message de validation de la suppression du profil dans la base de données*/
+        res.status(200).json({
+            message: "le profil a été supprimé."
+        });
     });
 };
 
 //controller pour voir le profil d'un utilisateur
 exports.getUserProfil = (req, res, next) => {
-    const sqlSearchUserProfil = `SELECT * FROM users WHERE lastName = '${req.params.id}'`;
+    /*création de la requête sql pour récupérer le prénom, le nom, l'email de l'utilisateur dans la base de données
+    dont l'id est fourni par les paramètres de la requete client*/
+    const sqlSearchUserProfil = `SELECT firstName, lastName, email FROM users WHERE id = '${req.params.id}'`;
+    /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlSearchUserProfil, (error, result) => {
-        if(error) {
+        if (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({
+                error
+            });
         }
-        res.status(200).json(result);
+        /*envoi du résultat de la requête sql*/
+        res.status(200).json({
+            result
+        });
     });
 };
 
 //controller pour supprimer le profil d'un utilisateur
 exports.deleteUserProfil = (req, res, next) => {
-    const sqlDeleteUserProfil = `DELETE FROM users WHERE lastName = '${req.params.id}'`;
+    /*création de la requête sql pour supprimer l'utilisateur dans la base de données
+    dont l'id est fourni par les paramètres de la requete client*/
+    const sqlDeleteUserProfil = `DELETE FROM users WHERE id = '${req.params.id}'`;
+    /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlDeleteUserProfil, (error, result) => {
-        if(error) {
+        if (error) {
             console.log(error);
-            res.status(500).json({message: error});
+            res.status(500).json({
+                message: error
+            });
         }
-        res.status(200).json(result);
+        /*envoi du résultat de la requête sql*/
+        res.status(200).json({
+            message: "le profil a été supprimé."
+        });
     });
 };

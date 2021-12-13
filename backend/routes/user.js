@@ -11,16 +11,16 @@ const userCtrl = require('../controllers/user');
 router.post('/signup', userCtrl.signUp);
 
 //route pour la connexion d'un utilisateur à l'application
-router.post('/signin', userCtrl.signIn);
+router.post('/login', userCtrl.signIn);
 
 //route pour accéder à son profil utilisateur
-router.get('/', userCtrl.getMyProfil);
+router.get('/myProfil', userCtrl.getMyProfil);
 
 //route pour modifier son profil utilisateur
-router.put('/', userCtrl.modifyMyProfil);
+router.put('/myProfil', userCtrl.modifyMyProfil);
 
 //route supprimer mon profil d'utilisateur
-router.delete('/', userCtrl.deleteMyProfil);
+router.delete('/myProfil', userCtrl.deleteMyProfil);
 
 //route pour voir le profil d'un utilisateur
 router.get('/:id', userCtrl.getUserProfil);

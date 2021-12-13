@@ -29,4 +29,4 @@ const storage = multer.diskStorage({
 });
 
 // exports du multer configuré, 'single' pour dire qu'il s'agit d'un fichier unique + fichier image uniquement
-module.exports = multer({ storage: storage }).any('image');
+module.exports = multer({ storage: storage }).single('image');

@@ -2,13 +2,13 @@
 const express = require("express");
 
 //création du router
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 //import du controller user
 const commentsCtrl = require('../controllers/comments');
 
 //route pour récupérer tous les commentaires d'un post dont l'id est fourni
-router.get('/:id', commentsCtrl.getComments);
+router.get('/', commentsCtrl.getComments);
 
 //controller pour créer un commentaire sur un post dont l'id et l'id utilisateur sont fournis
 router.post('/', commentsCtrl.createOneComment);
