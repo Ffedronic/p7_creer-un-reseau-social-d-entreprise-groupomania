@@ -38,7 +38,7 @@ exports.getPosts = (req, res, next) => {
 exports.getOnePost = (req, res, next) => {
     /*récupération du post présent dans la base de données dont l'id est fourni par les paramètres de requête client en faisant une jointure avec la table users
     pour récupérer le prénom de l'auteur*/
-    const sqlGetOnePost = `SELECT posts.title AS title, posts.subject AS subject, posts.img_url AS img_url, posts.date AS date, users.firstName AS author FROM posts JOIN users ON posts.author = users.id WHERE posts.id = '${req.params.id}'`;
+    const sqlGetOnePost = `SELECT posts.title AS title, posts.subject AS subject, posts.img_url AS img_url, posts.date AS date, posts.author AS authorId, users.firstName AS authorFirstName FROM posts JOIN users ON posts.author = users.id WHERE posts.id = '${req.params.id}'`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlGetOnePost, (error, result) => {
         if (error) {
@@ -53,8 +53,6 @@ exports.getOnePost = (req, res, next) => {
 
 //controller pour créer un post
 exports.createOnePost = (req, res, next) => {
-    /*création du profil utilisateur à partir du cookie d'authentification*/
-    const userProfil = req.cookies.userProfil;
     /*si la requête contient une image*/
     if (req.file) {
         /*création de l'objet post*/
@@ -62,7 +60,7 @@ exports.createOnePost = (req, res, next) => {
             title: req.body.title,
             subject: req.body.subject,
             img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-            author: userProfil.userId
+            author: req.body.userId
         };
         /*création de la requête sql pour insérer le post dans la base de données dont l'id de l'auteur est fourni par le profil utilisateur issu du cookie d'authentification*/
         const sqlCreateOnePost = `INSERT INTO posts (title, subject, img_url, author) VALUES ('${post.title}', '${post.subject}', '${post.img_url}', ${post.author})`;
@@ -83,7 +81,7 @@ exports.createOnePost = (req, res, next) => {
         const post = {
             title: req.body.title,
             subject: req.body.subject,
-            author: userProfil.userId
+            author: req.body.userId
         };
         /*création de la requête sql pour insérer un post dans la base de données dont l'id de l'auteur est fourni par le profil utilisateur issu du cookie d'authentification*/
         const sqlCreateOnePost = `INSERT INTO posts (title, subject, author) VALUES ('${post.title}', '${post.subject}', ${post.author})`;
@@ -108,7 +106,7 @@ exports.modifyOnePost = (req, res, next) => {
         const post = {
             title: req.body.title,
             subject: req.body.subject,
-            img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+            img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         };
         /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
         const sqlModifyOnePost = `UPDATE posts SET title = '${post.title}', subject = '${post.subject}', img_url = '${post.img_url}' WHERE id = '${req.params.id}'`;

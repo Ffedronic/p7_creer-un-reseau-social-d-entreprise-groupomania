@@ -36,11 +36,9 @@ exports.getComments = (req, res, next) => {
 
 //controller pour créer un commentaire au sujet d'un post
 exports.createOneComment = (req, res, next) => {
-    /*création du profil utilisateur à partir du cookie d'authentification*/
-    const userProfil = req.cookies.userProfil;
     /*création de la requête sql pour créer un commentaire au sujet du post dans la base de données dont l'id est fourni
     par les paramètres de requête*/
-    const sqlCreateOneComment = `INSERT INTO comments (content, author, post) VALUES ('${req.body.content}', '${userProfil.userId}', '${req.params.id}')`;
+    const sqlCreateOneComment = `INSERT INTO comments (content, author, post) VALUES ('${req.body.content}', '${req.body.userId}', '${req.params.id}')`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlCreateOneComment, (error) => {
         if (error) {

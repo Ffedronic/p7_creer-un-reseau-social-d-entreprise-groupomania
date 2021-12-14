@@ -1,7 +1,11 @@
 //import express
 const express = require("express");
 
+//import du middleware multer
 const multer = require('../middlewares/multer-config');
+
+const auth = require('../middlewares/auth');
+
 //création du router
 const router = express.Router();
 
@@ -15,12 +19,12 @@ router.get('/', postsCtrl.getPosts);
 router.get('/:id', postsCtrl.getOnePost);
 
 //route pour créer un post
-router.post('/', multer, postsCtrl.createOnePost);
+router.post('/', auth, multer, postsCtrl.createOnePost);
 
 //route pour modifier un post
-router.put('/:id', multer, postsCtrl.modifyOnePost);
+router.put('/:id', auth, multer, postsCtrl.modifyOnePost);
 
 //route pour supprimer un post
-router.delete('/:id', multer, postsCtrl.deleteOnePost);
+router.delete('/:id', auth, multer, postsCtrl.deleteOnePost);
 
 module.exports = router;
