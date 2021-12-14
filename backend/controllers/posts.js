@@ -157,7 +157,7 @@ exports.deleteOnePost = (req, res, next) => {
         /*suppression de l'image du post du dossier 'images'*/
         const filename = post.img_url.split('/images/')[1];
         fs.unlink(`images/${filename}`, () => {
-            /*création de la requête sql pour sélectionner le post dans la base de données dont l'id est fourni par 
+            /*création de la requête sql pour supprimer le post dans la base de données dont l'id est fourni par 
             les paramètres de la requête*/
             const sqlDeleteOnePost = `DELETE FROM posts WHERE id = '${req.params.id}'`;
             /*envoi de la requête au serveur sql*/
