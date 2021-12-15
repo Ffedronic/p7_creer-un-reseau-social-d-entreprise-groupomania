@@ -19,6 +19,15 @@ const groupomaniaDBConnect = mysql.createConnection({
 //import de bcrpyt pour le hashage des mots de passe
 const bcrypt = require('bcrypt');
 
+//controller pour le rendu vers la page d'inscription
+exports.renderSignUp = (req, res, next) => {
+    
+};
+
+//controller pour le rendu vers la page de connexion
+exports.renderLogin = (req, res, next) => {
+    
+};
 //controller pour l'inscription d'un utilisateur à l'application
 exports.signUp = (req, res, next) => {
 
@@ -46,7 +55,7 @@ exports.signUp = (req, res, next) => {
 };
 
 //controller pour la connexion d'utilisateur à l'application
-exports.signIn = (req, res, next) => {
+exports.login = (req, res, next) => {
     /*création de la requête sql pour rechercher le profil utilisateur dans la base de données sql à partir de 
     l'email fourni par l'application*/
     const sqlSearchUser = `SELECT * FROM users WHERE email = '${req.body.email}'`;

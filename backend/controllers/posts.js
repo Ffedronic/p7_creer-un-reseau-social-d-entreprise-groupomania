@@ -60,7 +60,7 @@ exports.createOnePost = (req, res, next) => {
             title: req.body.title,
             subject: req.body.subject,
             img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-            author: req.body.userId
+            author: res.locals.userId
         };
         /*création de la requête sql pour insérer le post dans la base de données dont l'id de l'auteur est fourni par le profil utilisateur issu du cookie d'authentification*/
         const sqlCreateOnePost = `INSERT INTO posts (title, subject, img_url, author) VALUES ('${post.title}', '${post.subject}', '${post.img_url}', ${post.author})`;
@@ -81,7 +81,7 @@ exports.createOnePost = (req, res, next) => {
         const post = {
             title: req.body.title,
             subject: req.body.subject,
-            author: req.body.userId
+            author: res.locals.userId
         };
         /*création de la requête sql pour insérer un post dans la base de données dont l'id de l'auteur est fourni par le profil utilisateur issu du cookie d'authentification*/
         const sqlCreateOnePost = `INSERT INTO posts (title, subject, author) VALUES ('${post.title}', '${post.subject}', ${post.author})`;
@@ -109,7 +109,7 @@ exports.modifyOnePost = (req, res, next) => {
             img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         };
         /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = '${post.title}', subject = '${post.subject}', img_url = '${post.img_url}' WHERE id = '${req.params.id}'`;
+        const sqlModifyOnePost = `UPDATE posts SET title = '${post.title}', subject = '${post.subject}', img_url = '${post.img_url}' WHERE id = '${req.params.id}' AND author ='${res.locals.userId}'`;
         /*envoi de la requête au serveur sql*/
         groupomaniaDBConnect.query(sqlModifyOnePost, (error) => {
             if (error) {
@@ -129,7 +129,7 @@ exports.modifyOnePost = (req, res, next) => {
             subject: req.body.subject
         };
         /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = '${post.title}', subject = '${post.subject}' WHERE id = '${req.params.id}'`;
+        const sqlModifyOnePost = `UPDATE posts SET title = '${post.title}', subject = '${post.subject}' WHERE id = '${req.params.id}' AND author ='${res.locals.userId}'`;
         /*envoi de la requête au serveur sql*/
         groupomaniaDBConnect.query(sqlModifyOnePost, (error) => {
             if (error) {
@@ -159,7 +159,7 @@ exports.deleteOnePost = (req, res, next) => {
         fs.unlink(`images/${filename}`, () => {
             /*création de la requête sql pour supprimer le post dans la base de données dont l'id est fourni par 
             les paramètres de la requête*/
-            const sqlDeleteOnePost = `DELETE FROM posts WHERE id = '${req.params.id}'`;
+            const sqlDeleteOnePost = `DELETE FROM posts WHERE id = '${req.params.id}' AND author = '${res.locals.userId}'`;
             /*envoi de la requête au serveur sql*/
             groupomaniaDBConnect.query(sqlDeleteOnePost, (error, result) => {
                 if (error) {

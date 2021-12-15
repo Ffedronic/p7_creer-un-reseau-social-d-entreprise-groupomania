@@ -1,21 +1,22 @@
+// (verification tokens)
 const jwt = require('jsonwebtoken');
-//import dotenv
-const dotenv = require('dotenv');
+
+//import des variables d'environnement
+const dotenv = require("dotenv");
 dotenv.config();
+
+// middleware a appliquer à nos routes sauces à proteger
 module.exports = (req, res, next) => {
-    try {
-        console.log(req);
-        const token = req.cookies.userProfil.userId;
-        const decodedToken = jwt.verify(token, process.env.GROUPOMANIA_SECRET_KEY);
-        const userId = decodedToken.userId;
-        if (req.body.userId && req.body.userId !== userId) {
-          throw new Error("requête non authentifiée");
-        } else {
-          next();
-        }
-      } catch {
-        res.status(401).json({
-          error: new Error('Invalid request!')
-        });
-      }
+  try {
+    const token = req.cookies.userProfil.token;
+    // on decode le token avec fonction verify de jwt et le token et sa clé secrète en argument
+    const decodedToken = jwt.verify(token, process.env.GROUPOMANIA_SECRET_KEY);
+    // on recupere le userId contenu dans le token décodé
+    const userId = decodedToken.userId;
+    res.locals.userId = userId;
+    next();
+  } catch (error) {
+    res.status(401).json({error: new Error("non autorisé")});
+  }
+
 };

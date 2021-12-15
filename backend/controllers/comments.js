@@ -38,7 +38,7 @@ exports.getComments = (req, res, next) => {
 exports.createOneComment = (req, res, next) => {
     /*création de la requête sql pour créer un commentaire au sujet du post dans la base de données dont l'id est fourni
     par les paramètres de requête*/
-    const sqlCreateOneComment = `INSERT INTO comments (content, author, post) VALUES ('${req.body.content}', '${req.body.userId}', '${req.params.id}')`;
+    const sqlCreateOneComment = `INSERT INTO comments (content, author, post) VALUES ('${req.body.content}', '${res.locals.userId}', '${req.params.id}')`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlCreateOneComment, (error) => {
         if (error) {
@@ -57,7 +57,7 @@ exports.createOneComment = (req, res, next) => {
 exports.modifyOneComment = (req, res, next) => {
     /*création de la requête sql pour modifier un commentaire au sujet du post dans la base de données dont l'id est fourni
     par les paramètres de requête*/
-    const sqlmodifyOneComment = `UPDATE comments SET content = '${req.body.content}' WHERE id = '${req.params.id}'`;
+    const sqlmodifyOneComment = `UPDATE comments SET content = '${req.body.content}' WHERE id = '${req.params.id}' AND author = '${res.locals.userId}'`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlmodifyOneComment, (error) => {
         if (error) {
@@ -76,7 +76,7 @@ exports.modifyOneComment = (req, res, next) => {
 exports.deleteOneComment = (req, res, next) => {
     /*création de la requête sql pour supprimer un commentaire au sujet du post dans la base de données dont l'id est fourni
     par les paramètres de requête*/
-    const sqlDeleteComment = `DELETE FROM comments WHERE id = '${req.params.id}'`;
+    const sqlDeleteComment = `DELETE FROM comments WHERE id = '${req.params.id}' AND author = '${res.locals.userId}'`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlDeleteComment, (error) => {
         if (error) {

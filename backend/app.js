@@ -7,6 +7,7 @@ dotenv.config();
 
 //import de path
 const path = require('path');
+
 //import mysql
 const mysql = require('mysql');
 
@@ -56,7 +57,7 @@ app.use((req, res, next) => {
 });
 
 //middleware helmet
-app.use(helmet())
+app.use(helmet());
 
 //middleware global, transforme le corps de la requete en objet javascript utilisable
 app.use(express.json());
