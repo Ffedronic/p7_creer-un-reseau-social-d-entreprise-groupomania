@@ -154,23 +154,43 @@ exports.deleteOnePost = (req, res, next) => {
         }
         /*création de l'objet post à partir du résultat de la requête sql*/
         const post = result[0];
-        /*suppression de l'image du post du dossier 'images'*/
-        const filename = post.img_url.split('/images/')[1];
-        fs.unlink(`images/${filename}`, () => {
-            /*création de la requête sql pour supprimer le post dans la base de données dont l'id est fourni par 
-            les paramètres de la requête*/
-            const sqlDeleteOnePost = `DELETE FROM posts WHERE id = '${req.params.id}' AND author = '${res.locals.userId}'`;
-            /*envoi de la requête au serveur sql*/
-            groupomaniaDBConnect.query(sqlDeleteOnePost, (error, result) => {
-                if (error) {
-                    throw error;
-                }
-                /*envoi du message de validation de la suppression du post*/
-                res.status(200).json({
-                    message: "post supprimé."
+        /*si l'utilisateur est administrateur (isAdmin === 1)*/
+        if (res.locals.isAdmin === 1) {
+            /*suppression de l'image du post du dossier 'images'*/
+            const filename = post.img_url.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                /*création de la requête sql pour supprimer le post dans la base de données dont l'id est fourni par 
+                les paramètres de la requête*/
+                const sqlDeleteOnePost = `DELETE FROM posts WHERE id = '${req.params.id}'`;
+                /*envoi de la requête au serveur sql*/
+                groupomaniaDBConnect.query(sqlDeleteOnePost, (error, result) => {
+                    if (error) {
+                        throw error;
+                    }
+                    /*envoi du message de validation de la suppression du post*/
+                    res.status(200).json({
+                        message: "post supprimé."
+                    });
                 });
             });
-
-        });
+        } else {
+            /*suppression de l'image du post du dossier 'images'*/
+            const filename = post.img_url.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                /*création de la requête sql pour supprimer le post dans la base de données dont l'id est fourni par 
+                les paramètres de la requête*/
+                const sqlDeleteOnePost = `DELETE FROM posts WHERE id = '${req.params.id}' AND author = '${res.locals.userId}'`;
+                /*envoi de la requête au serveur sql*/
+                groupomaniaDBConnect.query(sqlDeleteOnePost, (error, result) => {
+                    if (error) {
+                        throw error;
+                    }
+                    /*envoi du message de validation de la suppression du post*/
+                    res.status(200).json({
+                        message: "post supprimé."
+                    });
+                });
+            });
+        }
     });
 };

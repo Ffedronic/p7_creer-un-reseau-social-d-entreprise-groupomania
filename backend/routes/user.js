@@ -7,17 +7,14 @@ const router = express.Router();
 //import du controller user
 const userCtrl = require('../controllers/user');
 
-//route pour la redirection de l'utilisateur vers la page d'inscription
-router.get('/signup', userCtrl.renderSignUp);
-
-//route pour la redirection de l'utilisateur vers la page de connexion
-router.get('/login', userCtrl.renderLogin);
+//import du middleware passwordValidator
+const passwordValidator = require('../middlewares/passwordValidator');
 
 //route pour l'inscription d'un utilisateur à l'application
-router.post('/signup', userCtrl.signUp);
+router.post('/signup', passwordValidator, userCtrl.signUp);
 
 //route pour la connexion d'un utilisateur à l'application
-router.post('/login', userCtrl.login);
+router.post('/login', passwordValidator, userCtrl.login);
 
 //route pour accéder à son profil utilisateur
 router.get('/myProfil', userCtrl.getMyProfil);
