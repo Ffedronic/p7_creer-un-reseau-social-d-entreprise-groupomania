@@ -1,29 +1,23 @@
+import 'bootstrap';
 import logo from '../icon-left-font-monochrome-black.png';
+import { Outlet, Link } from "react-router-dom";
 import './Banner.scss';
 
 function Banner() {
   return (
-    <header>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/groupomania-app/public/index.html"><img src={logo} alt="logo" /></a>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse text-center justify-content-lg-end" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#0"><span className="btn btn-info rounded-pill fw-bold text-white">Se connecter</span></a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#0"><span className="btn btn-success rounded-pill fw-bold text-white">S'inscrire</span></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
-  );
+    <div className="text-center" id="banner">
+      <img src={ logo } alt="logo" width="400px"/>
+      <ul className="list-unstyled"> 
+        <li className="my-5">
+          <Link className="h1 text-decoration-none border border-1 px-5 py-2 bg-info text-dark rounded-pill" to="/signUp">Inscription</Link>
+        </li>
+        <li className="mb-5">
+          <Link className="h1 text-decoration-none border border-1 px-5 py-2 bg-success text-dark rounded-pill" to="/login">Connexion</Link>
+        </li>
+      </ul>
+      <Outlet/>
+    </div> 
+  )
 }
 
 export default Banner;
