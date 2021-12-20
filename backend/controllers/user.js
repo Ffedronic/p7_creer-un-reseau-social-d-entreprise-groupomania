@@ -28,7 +28,7 @@ exports.signUp = (req, res, next) => {
             /*création de la requête sql pour créer le profil utilisateur dans la base de données sql*/
             const sqlCreateUser = `INSERT INTO users (firstName, lastName, email, password, isAdmin) VALUES ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${hash}', '0')`;
             /*envoi de la requête au serveur*/
-            groupomaniaDBConnect.query(sqlCreateUser, (error) => {
+            groupomaniaDBConnect.query(sqlCreateUser, (error, result) => {
                 /*si l'insertion est impossible*/
                 if (error) {
                     throw error;
@@ -36,7 +36,7 @@ exports.signUp = (req, res, next) => {
                 console.log("utilisateur ajouté à la base données.");
                 /*sinon, envoi du message de validation de la création de l'utilisateur dans la base de données*/
                 res.status(200).json({
-                    message: "utilisateur créé."
+                    result
                 });
             });
         })
@@ -45,7 +45,7 @@ exports.signUp = (req, res, next) => {
         }));
 };
 
-//controller pour la connexion d'utilisateur à l'application
+/*controller pour la connexion d'utilisateur à l'application*/
 exports.login = (req, res, next) => {
     /*création de la requête sql pour rechercher le profil utilisateur dans la base de données sql à partir de 
     l'email fourni par l'application*/
@@ -67,26 +67,26 @@ exports.login = (req, res, next) => {
                     return res.status(401).json({
                         message: "mot de passe incorrect."
                     });
-                }
-                /*si ok, création du token d'identification de l'utilisateur avec l'id fourni par son profil utilisateur
+                } else {
+                    /*si ok, création du token d'identification de l'utilisateur avec l'id fourni par son profil utilisateur
                 issu de la base de données*/
-                const token = jwt.sign({
-                    userId: userProfil.id
-                }, process.env.GROUPOMANIA_SECRET_KEY, {
-                    expiresIn: "168h"
-                });
-                /*envoi du cookie contenant l'id de l'utilisateur, son token, son isAdmin*/
-                res.cookie("userProfil", {
-                    token: token,
-                    isAdmin: userProfil.isAdmin
-                }, {
-                    maxAge: 604800000,
-                    httpOnly: true
-                });
-                /*envoi du message de validation du login de l'utilisateur*/
-                res.status(200).json({
-                    message: "utilisateur retrouvé."
-                });
+                    const token = jwt.sign({
+                        userId: userProfil.id
+                    }, process.env.GROUPOMANIA_SECRET_KEY, {
+                        expiresIn: "168h"
+                    });
+                    /*envoi du cookie contenant l'id de l'utilisateur, son token, son isAdmin*/
+                    res.cookie("userProfil", {
+                        token: token,
+                        isAdmin: userProfil.isAdmin
+                    }, {
+                        maxAge: 604800000,
+                        httpOnly: true
+                    });
+                    res.status(200).json({
+                        message: "utilisateur loggé"
+                    });
+                }
             })
             .catch((error) => res.status(500).json({
                 error
