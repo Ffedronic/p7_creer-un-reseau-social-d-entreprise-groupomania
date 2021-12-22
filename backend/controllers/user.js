@@ -76,16 +76,7 @@ exports.login = (req, res, next) => {
                         expiresIn: "168h"
                     });
                     /*envoi du cookie contenant l'id de l'utilisateur, son token, son isAdmin*/
-                    res.cookie("userProfil", {
-                        token: token,
-                        isAdmin: userProfil.isAdmin
-                    }, {
-                        maxAge: 604800000,
-                        httpOnly: true
-                    });
-                    res.status(200).json({
-                        message: "utilisateur loggé"
-                    });
+                    res.status(200).json({ token: token, isAdmin: userProfil.isAdmin });
                 }
             })
             .catch((error) => res.status(500).json({
