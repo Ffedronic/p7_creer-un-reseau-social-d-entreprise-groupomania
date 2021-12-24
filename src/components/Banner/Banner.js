@@ -19,8 +19,8 @@ function Banner() {
               <img
                 alt=""
                 src= { logo }
-                width="250"
-                height="55"
+                width="275"
+                height="70"
                 className="d-inline-block align-top"
               />{' '}
             </Navbar.Brand>
@@ -47,18 +47,21 @@ function Banner() {
               <img
                 alt=""
                 src= { logo }
-                width="250"
-                height="55"
+                width="275"
+                height="70"
                 className="d-inline-block align-top"
               />{' '}
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
-              <Nav.Item className="btn btn-info rounded-pill p-0 me-3">
-                <Nav.Link className="text-white" href="/profil">Mon Profil</Nav.Link>
+              <Nav.Item className="btn btn-primary rounded-pill p-0 me-3">
+                <Nav.Link className="text-white" href="/profil"><i className="far fa-id-card me-2"></i>Profil</Nav.Link>
+              </Nav.Item>
+              <Nav.Item className="btn btn-warning rounded-pill p-0 me-3">
+                <Nav.Link className="text-white" href="/profil"><i className="far fa-envelope me-2"></i>Ajouter un sujet</Nav.Link>
               </Nav.Item>
               <Nav.Item className="btn btn-success rounded-pill p-0">
-                <Nav.Link onClick={ isLogOut } className="text-white" href="/connexion">Déconnexion</Nav.Link>
+                <Nav.Link onClick={ isLogOut } className="text-white" href="/connexion"><i className="fas fa-sign-out-alt me-2"></i>Déconnexion</Nav.Link>
               </Nav.Item>
             </Navbar.Collapse>
           </Container>
