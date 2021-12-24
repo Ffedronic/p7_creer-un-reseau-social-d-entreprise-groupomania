@@ -1,8 +1,19 @@
+//import de react
 import React, {useState} from "react";
+
+//import des classes de bootstrap
 import 'bootstrap';
-import Container from 'react-bootstrap/Container'
+
+//import Axios pour effectuer les requêtes
 import Axios from 'axios';
 
+//import des react-bootstrap components
+import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
+
+//composant React Login servant à se logger
 function Login() {
   
   /*Création des useStates email et password*/
@@ -12,8 +23,8 @@ function Login() {
   /*vérification du log de l'utilisateur*/
   const isLogged = localStorage.token;
 
-  /*onSubmit du formulaire au serveur*/
-  const login = (event) => {
+  /*requête Login : connexion de l'utilisateur, enregistrement dans le localStorage du token et de l'isAdmin, redirection vers la page des posts*/
+  const Login = (event) => {
     event.preventDefault();
     Axios.post("http://localhost:4000/api/auth/login", {
     email: email,
@@ -25,29 +36,34 @@ function Login() {
       window.location.href = "posts";
     })
   };
+    
+  /*si l'utilisateur n'est pas connecté,*/
   if(!isLogged) {
     return (
+      /*formulaire de connexion avec les react-bootstrap components*/      
       <Container>
-        <form onSubmit={login} className="text-center border border-1 rounded-3 p-3 mt-5 bg-light shadow">
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email :</label>
-            <div className="input-group mb-3">
-              <span className="input-group-text"><i className="fas fa-at"></i></span>
-              <input className="form-control" type="email" name="email" id="email" value={ email } onChange={(e) => setEmail(e.target.value)}/>
-            </div>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Mot de passe :</label>
-            <div className="input-group mb-3">
-              <span className="input-group-text"><i className="fas fa-key"></i></span>
-              <input className="form-control" type="password" name="password" id="password" value={ password } onChange={(e) => setPassword(e.target.value)}/>
-            </div>
-          </div>
-          <button className="btn btn-success rounded-pill" type="submit"><i className="fas fa-check-circle me-3"></i>Valider</button>
-        </form>
+        <Form onSubmit={ Login } className="border border-1 p-3 rounded-3 shadow bg-light mt-5">
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label className="fw-bold">Email :</Form.Label>
+            <InputGroup>
+              <InputGroup.Text><i className="fas fa-at"></i></InputGroup.Text>
+              <Form.Control type="email" name="email" value={ email } onChange={(e) => setEmail(e.target.value)} placeholder="exemple@groupomania.com" />
+            </InputGroup>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label className="fw-bold">Mot de passe :</Form.Label>
+            <InputGroup className="mb-3">
+              <InputGroup.Text><i className="fas fa-lock"></i></InputGroup.Text>
+              <Form.Control type="password" name="password" value={ password } onChange={(e) => setPassword(e.target.value)} placeholder="entrez votre mot de passe" />
+            </InputGroup>
+            <Form.Text className="text-muted"><i className="fas fa-exclamation-circle me-1"></i>Votre mot passe doit contenir au minimum 8 caractères, 1 lettre majuscule, 1 lettre minuscule, 2 chiffres, et <span className="text-decoration-underline">pas de symboles.</span></Form.Text>
+          </Form.Group>
+          <Button variant="success" type="submit"><i className="fas fa-check-circle me-3"></i>Envoyer</Button>
+        </Form>
       </Container>
     )
   } else {
+    /*si l'utilisateur est connecté, on le redirige vers la page des posts*/
     window.location.href = "posts";
   }
 };
