@@ -1,40 +1,68 @@
+import Navbar from 'react-bootstrap/Navbar'
+import Container from 'react-bootstrap/Container'
+import Nav from 'react-bootstrap/Nav'
 import 'bootstrap';
 import logo from '../icon-left-font-monochrome-black.png';
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 function Banner() {
   const isLogged = localStorage.token;
   const isLogOut = () => {
     localStorage.clear();
-    window.location.href = "login";
   }
   if(!isLogged) {
     return (
-      <div className="text-center" id="banner">
-        <img src={ logo } alt="logo" width="400px"/> 
-        <ul className="list-unstyled"> 
-          <li className="my-5">
-            <Link className="h1 text-decoration-none border border-1 px-5 py-2 bg-info text-dark rounded-pill" to="/signUp">Inscription</Link>
-          </li>
-          <li className="mb-5">
-            <Link className="h1 text-decoration-none border border-1 px-5 py-2 bg-success text-dark rounded-pill" to="/login">Connexion</Link>
-          </li>
-        </ul>
+      <div>
+        <Navbar bg="light" expand="md" variant="light">
+          <Container>
+            <Navbar.Brand href="#0">
+              <img
+                alt=""
+                src= { logo }
+                width="250"
+                height="55"
+                className="d-inline-block align-top"
+              />{' '}
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse className="justify-content-center justify-content-md-end" id="basic-navbar-nav">
+              <Nav.Item className="btn btn-info rounded-pill p-0 me-3">
+                <Nav.Link className="text-white" href="/inscription"><i className="fas fa-user-plus me-3"></i>Inscription</Nav.Link>
+              </Nav.Item>
+              <Nav.Item className="btn btn-success rounded-pill p-0">
+                <Nav.Link className="text-white" href="/connexion"><i className="fas fa-sign-in-alt me-3"></i>Connexion</Nav.Link>
+              </Nav.Item>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
         <Outlet/>
       </div>
     )
   } else {
     return (
-      <div className="text-center" id="banner">
-        <img src={ logo } alt="logo" width="400px"/>  
-         <ul className="list-unstyled">
-         <li className="mb-5">
-            <Link className="h6 text-decoration-none border border-1 px-5 py-2 bg-success text-dark rounded-pill" to="/monProfil">Mon Profil</Link>
-          </li> 
-          <li className="mb-5">
-            <Link onClick={isLogOut} className="h6 text-decoration-none border border-1 px-5 py-2 bg-success text-dark rounded-pill" to="/">Déconnexion</Link>
-          </li>
-        </ul>
+      <div>
+        <Navbar bg="light" expand="md" variant="light">
+          <Container>
+            <Navbar.Brand href="#0">
+              <img
+                alt=""
+                src= { logo }
+                width="250"
+                height="55"
+                className="d-inline-block align-top"
+              />{' '}
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
+              <Nav.Item className="btn btn-info rounded-pill p-0 me-3">
+                <Nav.Link className="text-white" href="/profil">Mon Profil</Nav.Link>
+              </Nav.Item>
+              <Nav.Item className="btn btn-success rounded-pill p-0">
+                <Nav.Link onClick={ isLogOut } className="text-white" href="/connexion">Déconnexion</Nav.Link>
+              </Nav.Item>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
         <Outlet/>
       </div> 
     )

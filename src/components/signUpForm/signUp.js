@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import Axios from 'axios';
 import 'bootstrap';
+import Container from 'react-bootstrap/Container'
 
 function SignUp() {
   const [email, setEmail] = useState("");
@@ -25,7 +26,8 @@ function SignUp() {
   
   if(!isLogged) {
     return (
-      <form className="text-center border border-1 rounded-3 p-3 mt-5 bg-light shadow">
+      <Container>
+        <form className="text-center border border-1 rounded-3 p-3 mt-5 bg-light shadow">
         <div className="mb-3">
           <label htmlFor="firstName" className="form-label">Prénom :</label>
           <div className="input-group mb-3">
@@ -57,6 +59,7 @@ function SignUp() {
         <div id="errorMessage"></div>
         <input onClick={Register} className="btn btn-success rounded-pill px-5" value="S'inscrire" type="submit"/>
       </form>
+      </Container>
     )
   } else {
     window.location.href = "posts";

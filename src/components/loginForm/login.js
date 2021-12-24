@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import 'bootstrap';
+import Container from 'react-bootstrap/Container'
 import Axios from 'axios';
 
 function Login() {
@@ -26,24 +27,25 @@ function Login() {
   };
   if(!isLogged) {
     return (
-      <form onSubmit={login} className="text-center border border-1 rounded-3 p-3 mt-5 bg-light shadow">
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email :</label>
-          <div className="input-group mb-3">
-            <span className="input-group-text"><i className="fas fa-at"></i></span>
-            <input className="form-control" type="email" name="email" id="email" value={ email } onChange={(e) => setEmail(e.target.value)}/>
+      <Container>
+        <form onSubmit={login} className="text-center border border-1 rounded-3 p-3 mt-5 bg-light shadow">
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email :</label>
+            <div className="input-group mb-3">
+              <span className="input-group-text"><i className="fas fa-at"></i></span>
+              <input className="form-control" type="email" name="email" id="email" value={ email } onChange={(e) => setEmail(e.target.value)}/>
+            </div>
           </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Mot de passe :</label>
-          <div className="input-group mb-3">
-            <span className="input-group-text"><i className="fas fa-key"></i></span>
-            <input className="form-control" type="password" name="password" id="password" value={ password } onChange={(e) => setPassword(e.target.value)}/>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">Mot de passe :</label>
+            <div className="input-group mb-3">
+              <span className="input-group-text"><i className="fas fa-key"></i></span>
+              <input className="form-control" type="password" name="password" id="password" value={ password } onChange={(e) => setPassword(e.target.value)}/>
+            </div>
           </div>
-        </div>
-        <div id="errorMessage"></div>
-        <input className="btn btn-success rounded-pill px-5" value="Se Connecter" type="submit"/>
-      </form>
+          <button className="btn btn-success rounded-pill" type="submit"><i className="fas fa-check-circle me-3"></i>Valider</button>
+        </form>
+      </Container>
     )
   } else {
     window.location.href = "posts";
