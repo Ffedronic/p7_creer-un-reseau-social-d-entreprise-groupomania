@@ -21,7 +21,7 @@ const groupomaniaDBConnect = mysql.createConnection({
 exports.getPosts = (req, res, next) => {
     /*récupération de tous les posts présents dans la base de données en faisant une jointure avec la table users
     pour récupérer le prénom de l'auteur*/
-    const sqlGetPosts = `SELECT posts.id AS id, posts.title AS title, posts.subject AS subject, posts.img_url AS img_url, posts.date AS date, users.firstName AS author FROM posts JOIN users ON posts.author = users.id`;
+    const sqlGetPosts = `SELECT posts.id AS id, posts.title AS title, posts.subject AS subject, posts.img_url AS img_url, posts.date AS date, posts.author AS author, users.firstName AS authorFirstName FROM posts JOIN users ON posts.author = users.id`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlGetPosts, (error, result) => {
         if (error) {
