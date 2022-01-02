@@ -61,7 +61,7 @@ function Banner() {
       <div>
         <Navbar bg="light" expand="md" variant="light">
           <Container>
-            <Navbar.Brand href="#0">
+            <Navbar.Brand href="/posts">
               <img
                 alt=""
                 src= { logo }
@@ -76,7 +76,7 @@ function Banner() {
                 <Nav.Link className="text-white" href="/profil"><i className="far fa-id-card me-2"></i>Profil</Nav.Link>
               </Nav.Item>
               <Nav.Item className="btn btn-warning btn-sm rounded-pill p-0 me-3">
-                <Nav.Link className="text-white" href="/profil"><i className="far fa-envelope me-2"></i>Ajouter un sujet</Nav.Link>
+                <Nav.Link className="text-white" href="/nouveauPost"><i className="far fa-envelope me-2"></i>Ajouter un sujet</Nav.Link>
               </Nav.Item>
               <Nav.Item className="btn btn-success btn-sm rounded-pill p-0">
                 <Nav.Link onClick={ isLogOut } className="text-white" href="/connexion"><i className="fas fa-sign-out-alt me-2"></i>Déconnexion</Nav.Link>

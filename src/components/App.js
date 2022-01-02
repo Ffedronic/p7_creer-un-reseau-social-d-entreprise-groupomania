@@ -5,15 +5,18 @@ import Login from './loginForm/login';
 import Posts from './posts/post';
 import SignUp from './signUpForm/signUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import NewPost from './NewPost/NewPost';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Banner/>}>
+          <Route index element={<Login />} />
           <Route path="connexion" element={<Login />} />
           <Route path="inscription" element={<SignUp />} />
           <Route path="posts" element={<Posts />}/>
+          <Route path="nouveauPost" element={<NewPost />}/>
         </Route>
       </Routes>
     </BrowserRouter>    

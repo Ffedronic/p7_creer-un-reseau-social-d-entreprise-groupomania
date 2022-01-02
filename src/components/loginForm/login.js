@@ -31,6 +31,7 @@ function Login() {
     password: password
     })
     .then((response) => {
+      localStorage.setItem("userId", response.data.userId);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("isAdmin", response.data.isAdmin);
       window.location.href = "posts";

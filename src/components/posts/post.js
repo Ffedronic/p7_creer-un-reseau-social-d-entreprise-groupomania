@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //import des classes de bootstrap
 import 'bootstrap';
@@ -15,7 +15,7 @@ import Badge from 'react-bootstrap/Badge';
 
 function Post (props) {
     return (
-        <Card className="m-2">
+        <Card className="m-2 card">
             <Card.Header className="d-flex flex-row justify-content-between">
                 <div>
                     <span className="d-none">{ props.id }</span>
@@ -47,11 +47,13 @@ function Post (props) {
 
 function Posts() {
     const [items, setItems] = useState([]);
-    Axios.get('http://localhost:4000/api/posts')
+    useEffect(() => {
+        Axios.get('http://localhost:4000/api/posts')
     .then((response) =>{
         setItems(response.data.result);
     })
     .catch(error => console.log(error));
+    }, []);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return(
         <Container className="d-flex flex-wrap justify-content-center mt-5">

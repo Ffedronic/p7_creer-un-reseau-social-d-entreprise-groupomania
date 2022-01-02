@@ -68,15 +68,17 @@ exports.login = (req, res, next) => {
                         message: "mot de passe incorrect."
                     });
                 } else {
-                    /*si ok, création du token d'identification de l'utilisateur avec l'id fourni par son profil utilisateur
-                issu de la base de données*/
-                    const token = jwt.sign({
-                        userId: userProfil.id
-                    }, process.env.GROUPOMANIA_SECRET_KEY, {
-                        expiresIn: "168h"
-                    });
                     /*envoi du cookie contenant l'id de l'utilisateur, son token, son isAdmin*/
-                    res.status(200).json({ token: token, isAdmin: userProfil.isAdmin });
+                    res.status(200).json({
+                        userId: userProfil.id,
+                        token: jwt.sign({
+                        userId: userProfil.id
+                        }, 
+                        process.env.GROUPOMANIA_SECRET_KEY,
+                        {
+                        expiresIn: "168h"
+                        }),
+                    isAdmin: userProfil.isAdmin });
                 }
             })
             .catch((error) => res.status(500).json({
