@@ -55,22 +55,28 @@ function Posts() {
     .catch(error => console.log(error));
     }, []);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return(
-        <Container className="d-flex flex-wrap justify-content-center mt-5">
-            { items.map((post) => 
-            <Post 
-                key={post.id}
-                id={post.id}
-                author={post.authorFirstName}
-                authorId={post.author}
-                date={ new Date(post.date).toLocaleDateString("fr-FR", options)}
-                title={ post.title }
-                subject={post.subject}
-                imgUrl={post.img_url}
-                sumComments={post.author}
-                />
-            )}
-        </Container>
-    )
+    const isLogged = localStorage.getItem("token");
+
+    if(!isLogged) {
+        window.location.href = "connexion";
+    } else {
+        return(
+            <Container className="d-flex flex-wrap justify-content-center mt-5">
+                { items.map((post) => 
+                <Post 
+                    key={post.id}
+                    id={post.id}
+                    author={post.authorFirstName}
+                    authorId={post.author}
+                    date={ new Date(post.date).toLocaleDateString("fr-FR", options)}
+                    title={ post.title }
+                    subject={post.subject}
+                    imgUrl={post.img_url}
+                    sumComments={post.author}
+                    />
+                )}
+            </Container>
+        )
+    }
 }
 export default Posts ;

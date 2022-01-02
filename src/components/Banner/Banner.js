@@ -17,7 +17,7 @@ import Nav from 'react-bootstrap/Nav'
 function Banner() {
 
   /*vérification du log de l'utilisateur*/
-  const isLogged = localStorage.token;
+  const isLogged = localStorage.getItem("token");
   
   /*déconnexion de l'utilisateur en vidant le localStorage (token, isAdmin)*/
   const isLogOut = () => {

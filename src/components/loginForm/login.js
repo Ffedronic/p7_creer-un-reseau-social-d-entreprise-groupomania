@@ -21,10 +21,10 @@ function Login() {
   const [password, setPassword] = useState("");
 
   /*vérification du log de l'utilisateur*/
-  const isLogged = localStorage.token;
+  const isLogged = localStorage.getItem("token");
 
   /*requête Login : connexion de l'utilisateur, enregistrement dans le localStorage du token et de l'isAdmin, redirection vers la page des posts*/
-  const Login = (event) => {
+  const loginForm = (event) => {
     event.preventDefault();
     Axios.post("http://localhost:4000/api/auth/login", {
     email: email,
@@ -43,7 +43,7 @@ function Login() {
     return (
       /*formulaire de connexion avec les react-bootstrap components*/      
       <Container>
-        <Form onSubmit={ Login } className="border border-1 p-3 rounded-3 shadow bg-light mt-5">
+        <Form onSubmit={ loginForm } className="border border-1 p-3 rounded-3 shadow bg-light mt-5">
           <Form.Group className="mb-3" controlId="email">
             <Form.Label className="fw-bold">Email :</Form.Label>
             <InputGroup>
