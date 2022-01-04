@@ -8,6 +8,7 @@ dotenv.config();
 // middleware a appliquer à nos routes sauces à proteger
 module.exports = (req, res, next) => {
   try {
+    console.log(req.cookies);
     /* récupération du token issu du cookie userProfil de la requête envoyée par le client*/
     const token = req.headers.authorization.split(' ')[1];
     /*dechiffrement du token avec la fonction verify de jwt, le token, clé secrète*/

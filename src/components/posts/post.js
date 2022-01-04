@@ -14,6 +14,17 @@ import Image from 'react-bootstrap/Image';
 
 //Card component affichant un post
 function Post (props) {
+    /*fonction de suppression du post*/
+    const deletePost = (event) => {
+        event.preventDefault();
+        Axios.defaults.headers['Authorization'] =`Bearer ${localStorage.getItem("token")}`;
+        Axios.delete(`http://localhost:4000/api/posts/${props.id}`)
+        .then((result) => {
+            console.log(result);
+            window.location.href = "posts";
+        })
+        .catch(error => console.log(error));
+    };
     /* props: si l'utilisateur est l'auteur */
     const isAuthor = props.isAuthor ;
     if(isAuthor) {
@@ -45,7 +56,7 @@ function Post (props) {
                         <i className="far fa-edit me-1"></i>
                         <span className="d-none d-md-inline">Modifier</span>
                     </Button>
-                    <Button variant="danger" className="rounded-pill px-3 btn-sm" id="DeletePostButton">
+                    <Button onClick={ deletePost } variant="danger" className="rounded-pill px-3 btn-sm" id="DeletePostButton">
                         <i className="far fa-trash-alt"></i>
                         <span className="d-none d-md-inline">Supprimer</span>
                     </Button>
