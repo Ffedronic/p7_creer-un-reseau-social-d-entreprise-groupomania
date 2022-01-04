@@ -11,9 +11,46 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
-import Badge from 'react-bootstrap/Badge';
 
 function Post (props) {
+    const isAuthor = props.isAuthor ;
+    if(isAuthor) {
+        return (
+            <Card className="m-2 card">
+                <Card.Header className="d-flex flex-row justify-content-between">
+                    <div>
+                        <span className="d-none">{ props.id }</span>
+                        <span className="text-uppercase fw-bold">{ props.author }</span>
+                        <span className="d-none" id="authorId">{ props.authorId}</span>
+                    </div>
+                    <span className="ms-5">{ props.date }</span>
+                </Card.Header>
+                <Card.Img variant="top" as={ Image } src={ props.imgUrl } thumbnail />
+                <Card.Body>
+                    <Card.Title>{ props.title }</Card.Title>
+                    <Card.Text>{ props.subject }</Card.Text>
+                </Card.Body>
+                <Card.Footer className="d-flex flex-row justify-content-around">
+                    <Button variant="primary" className="rounded-pill me-2 btn-sm">
+                        <i className="far fa-comments me-1"></i>
+                        <span className="d-none d-md-inline">Commenter</span>
+                    </Button>
+                    <Button variant="warning" className="rounded-pill px-3 me-2 btn-sm" id="modifyPostButton">
+                        <i className="fas fa-eye me-1"></i>
+                        <span className="d-none d-md-inline">Voir</span>
+                    </Button>
+                    <Button variant="primary" className="rounded-pill me-2 btn-sm">
+                        <i className="far fa-edit me-1"></i>
+                        <span className="d-none d-md-inline">Modifier</span>
+                    </Button>
+                    <Button variant="danger" className="rounded-pill px-3 btn-sm" id="DeletePostButton">
+                        <i className="far fa-trash-alt"></i>
+                        <span className="d-none d-md-inline">Supprimer</span>
+                    </Button>
+                </Card.Footer>        
+            </Card>
+        )    
+    }
     return (
         <Card className="m-2 card">
             <Card.Header className="d-flex flex-row justify-content-between">
@@ -31,14 +68,12 @@ function Post (props) {
             </Card.Body>
             <Card.Footer className="d-flex flex-row justify-content-around">
                 <Button variant="primary" className="rounded-pill me-2 btn-sm">
-                    <i className="far fa-comments me-1"></i>Commentaires
-                    <Badge bg="secondary" className="rounded-circle">{ props.sumComments }</Badge>
+                    <i className="far fa-comments me-1"></i>
+                    <span className="d-none d-md-inline">Commenter</span>
                 </Button>
                 <Button variant="warning" className="rounded-pill px-3 me-2 btn-sm" id="modifyPostButton">
-                    <i className="far fa-edit"></i>
-                </Button>
-                <Button variant="danger" className="rounded-pill px-3 btn-sm" id="DeletePostButton">
-                    <i className="far fa-trash-alt"></i>
+                    <i className="fas fa-eye me-1"></i>
+                    <span className="d-none d-md-inline">Voir</span>
                 </Button>
             </Card.Footer>        
         </Card>
@@ -66,6 +101,7 @@ function Posts() {
                 <Post 
                     key={post.id}
                     id={post.id}
+                    isAuthor={ true }
                     author={post.authorFirstName}
                     authorId={post.author}
                     date={ new Date(post.date).toLocaleDateString("fr-FR", options)}
