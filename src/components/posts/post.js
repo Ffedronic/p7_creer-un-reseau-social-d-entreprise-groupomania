@@ -91,17 +91,38 @@ function Posts() {
     }, []);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const isLogged = localStorage.getItem("token");
-
+    const isAdmin = localStorage.getItem("isAdmin");
+    console.log(isAdmin);
     if(!isLogged) {
         window.location.href = "connexion";
     } else {
+        if(isAdmin > 0) {
+            return(
+                <Container className="d-flex flex-wrap justify-content-center mt-5">
+                    { items.map((post) => 
+                    <Post 
+                        key={post.id}
+                        id={post.id}
+                        isAuthor={ true }
+                        author={post.authorFirstName}
+                        authorId={post.author}
+                        date={ new Date(post.date).toLocaleDateString("fr-FR", options)}
+                        title={ post.title }
+                        subject={post.subject}
+                        imgUrl={post.img_url}
+                        sumComments={post.author}
+                        />
+                    )}
+                </Container>
+            )    
+        }
         return(
             <Container className="d-flex flex-wrap justify-content-center mt-5">
                 { items.map((post) => 
                 <Post 
                     key={post.id}
                     id={post.id}
-                    isAuthor={ true }
+                    isAuthor={ false }
                     author={post.authorFirstName}
                     authorId={post.author}
                     date={ new Date(post.date).toLocaleDateString("fr-FR", options)}
