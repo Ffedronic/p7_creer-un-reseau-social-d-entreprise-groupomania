@@ -17,7 +17,7 @@ function Post (props) {
     /*fonction de suppression du post*/
     const deletePost = (event) => {
         event.preventDefault();
-        Axios.defaults.headers['Authorization'] =`Bearer ${localStorage.getItem("token")}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${localStorage.getItem("token")} ${localStorage.getItem("isAdmin")}`;
         Axios.delete(`http://localhost:4000/api/posts/${props.id}`)
         .then((result) => {
             console.log(result);
