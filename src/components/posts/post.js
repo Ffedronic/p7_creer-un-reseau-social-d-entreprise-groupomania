@@ -11,9 +11,18 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
+import Modal from 'react-bootstrap/Modal';
 
 //Card component affichant un post
 function Post (props) {
+    
+    /*création du useState "show" pour l'affichage du modal*/
+    const [showModifyModal, setShowModifyModal] = useState(false);
+    /*création de la fonction handleClose pour fermer le modal*/
+    const handleCloseModifyModal = () => setShowModifyModal(false);
+    /*création de la fonction handleShow pour afficher le modal de modification */
+    const handleShowModifyModal = () => setShowModifyModal(true);
+
     /*fonction de suppression du post*/
     const deletePost = (event) => {
         event.preventDefault();
@@ -25,6 +34,7 @@ function Post (props) {
         })
         .catch(error => console.log(error));
     };
+    
     /* props: si l'utilisateur est l'auteur */
     const isAuthor = props.isAuthor ;
     if(isAuthor) {
@@ -52,10 +62,24 @@ function Post (props) {
                         <i className="fas fa-eye me-1"></i>
                         <span className="d-none d-md-inline">Voir</span>
                     </Button>
-                    <Button variant="primary" className="rounded-pill me-2 btn-sm">
+                    <Button onClick={ handleShowModifyModal } variant="primary" className="rounded-pill me-2 btn-sm">
                         <i className="far fa-edit me-1"></i>
                         <span className="d-none d-md-inline">Modifier</span>
                     </Button>
+                    <Modal fullscreen show={ showModifyModal } onHide={ handleCloseModifyModal }>
+                        <Modal.Header closeButton>
+                        <Modal.Title><span>Modifier le post :</span> { props.title }</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={ handleCloseModifyModal }>
+                                Close
+                            </Button>
+                            <Button variant="primary" onClick={ handleCloseModifyModal }>
+                                Save Changes
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                     <Button onClick={ deletePost } variant="danger" className="rounded-pill px-3 btn-sm" id="DeletePostButton">
                         <i className="far fa-trash-alt"></i>
                         <span className="d-none d-md-inline">Supprimer</span>

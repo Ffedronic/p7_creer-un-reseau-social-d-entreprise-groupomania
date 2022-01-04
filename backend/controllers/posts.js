@@ -63,7 +63,7 @@ exports.createOnePost = (req, res, next) => {
             author: res.locals.userId
         };
         /*création de la requête sql pour insérer le post dans la base de données dont l'id de l'auteur est fourni par le profil utilisateur issu du cookie d'authentification*/
-        const sqlCreateOnePost = `INSERT INTO posts (title, subject, img_url, author) VALUES ('${post.title}', '${post.subject}', '${post.img_url}', ${post.author})`;
+        const sqlCreateOnePost = `INSERT INTO posts (title, subject, img_url, author) VALUES ("${post.title}", "${post.subject}", "${post.img_url}", ${post.author})`;
         /*envoi de la requête au serveur sql*/
         groupomaniaDBConnect.query(sqlCreateOnePost, (error, result) => {
             if (error) {
@@ -84,7 +84,7 @@ exports.createOnePost = (req, res, next) => {
             author: res.locals.userId
         };
         /*création de la requête sql pour insérer un post dans la base de données dont l'id de l'auteur est fourni par le profil utilisateur issu du cookie d'authentification*/
-        const sqlCreateOnePost = `INSERT INTO posts (title, subject, author) VALUES ('${post.title}', '${post.subject}', ${post.author})`;
+        const sqlCreateOnePost = `INSERT INTO posts (title, subject, author) VALUES ("${post.title}", "${post.subject}", ${post.author})`;
         /*envoi de la requête au serveur sql*/
         groupomaniaDBConnect.query(sqlCreateOnePost, (error, result) => {
             if (error) {
@@ -109,7 +109,7 @@ exports.modifyOnePost = (req, res, next) => {
             img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         };
         /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = '${post.title}', subject = '${post.subject}', img_url = '${post.img_url}' WHERE id = '${req.params.id}' AND author ='${res.locals.userId}'`;
+        const sqlModifyOnePost = `UPDATE posts SET title = "${post.title}", subject = "${post.subject}", img_url = "${post.img_url}" WHERE id = "${req.params.id}" AND author ="${res.locals.userId}"`;
         /*envoi de la requête au serveur sql*/
         groupomaniaDBConnect.query(sqlModifyOnePost, (error) => {
             if (error) {
@@ -129,7 +129,7 @@ exports.modifyOnePost = (req, res, next) => {
             subject: req.body.subject
         };
         /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = '${post.title}', subject = '${post.subject}' WHERE id = '${req.params.id}' AND author ='${res.locals.userId}'`;
+        const sqlModifyOnePost = `UPDATE posts SET title = "${post.title}", subject = "${post.subject}" WHERE id = "${req.params.id}" AND author ="${res.locals.userId}"`;
         /*envoi de la requête au serveur sql*/
         groupomaniaDBConnect.query(sqlModifyOnePost, (error) => {
             if (error) {
