@@ -25,11 +25,10 @@ import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
 
 /**
- * ! Card component affichant un post
+ * ! Post component affichant un post
  */
 function Post (props) {
-    
-    
+     
     /**
      * * Création du useState pour l'affichage du modal de visualisation du post
     */
@@ -84,7 +83,7 @@ function Post (props) {
     };
     
      /**
-     * ? Si l'utilisateur est auteur du post
+     * ? Si l'utilisateur est auteur ou isAdmin du post
      */
     const isAuthor = props.isAuthor ;
     if(isAuthor) {   
@@ -181,7 +180,9 @@ function Post (props) {
             </Card>
         )    
     }
-    /*si l'utilisateur n'est pas l'auteur*/
+    /**
+     * ? Si l'utilisateur n'est pas isAdmin ou autheur du post
+     */
     return (
         <Card className="m-2 card">
             <Card.Header className="d-flex flex-row justify-content-between">
@@ -198,21 +199,62 @@ function Post (props) {
                 <Card.Text>{ props.subject }</Card.Text>
             </Card.Body>
             <Card.Footer className="d-flex flex-row justify-content-around">
-                <Button variant="warning" className="rounded-pill px-3 me-2 btn-sm" id="modifyPostButton">
-                    <i className="fas fa-eye me-1"></i>
-                    <span className="d-none d-md-inline">Voir</span>
+                {/*logique pour la visualisation du post avec ses commentaires*/}
+                <Button variant="warning" className="rounded-pill px-3 me-md-2 btn-sm" onClick={ handleShowModal }>
+                        <i className="fas fa-eye"></i>
+                        <span className="d-none d-md-inline ms-md-1">Voir</span>
                 </Button>
+                <Modal fullscreen show={ showModal } onHide={ handleCloseModal }>
+                        <Modal.Header closeButton>
+                        <Modal.Title>{ props.title }</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <Card>
+                            <Card.Img variant="top" as={ Image } src={ props.imgUrl } thumbnail />
+                            <Card.Body>
+                                <Card.Title>{ props.title }</Card.Title>
+                                <Card.Text>{ props.subject }</Card.Text>
+                            </Card.Body>
+                            <Card.Footer>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Item eventKey="0">
+                                        <Accordion.Header>Commentaires</Accordion.Header>
+                                        <Accordion.Body>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+                                        est laborum.
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                </Accordion>
+                            </Card.Footer>
+                          </Card>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <span className="text-capitalize">créé par {props.author}, le { props.date }</span>
+                        </Modal.Footer>
+                </Modal>
             </Card.Footer>        
         </Card>
     ) 
 }
 
-//Liste des Cards component affichant l'ensemble des posts selon si l'utilisateur est isAdmin ou isAuthor
+/**
+ * ! Posts component affichant la liste des posts issus de la base de données
+ */
 function Posts() {
     
-    /*Création du useState items contenant la liste des posts issue du serveur*/
+    /**
+     * * Création du useState items contenant la liste des posts à afficher
+    */
     const [items, setItems] = useState([]);
-    /*Création du useEffect effectuant la requête vers le serveur*/
+    
+    /**
+     * * Création du useEffect effectuant la requête vers le serveur
+    */
     useEffect(() => {
         Axios.get('http://localhost:4000/api/posts')
     .then((response) =>{
@@ -220,85 +262,125 @@ function Posts() {
     })
     .catch(error => console.log(error));
     }, []);
-    /*Options de conversion du datetime en date*/    
+
+    /**
+     * * Options de conversion du datetime en date
+     */    
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    /*Vérification du log de l'utilisateur*/
+
+    /**
+     * * Vérification du log de l'utilisateur
+     */
     const isLogged = localStorage.getItem("token");
-    /*Vérification du isAdmin de l'utilisateur*/
+
+    /**
+     * * Vérification du isAdmin de l'utilisateur
+     */
     const isAdmin = localStorage.getItem("isAdmin");
-    /*Vérification du userId de l'utilisateur et conversion en nombre*/
+
+    /**
+     * * Vérification du userId de l'utilisateur et conversion en nombre
+     */
     const userId =  Number(localStorage.getItem("userId"));
-    /*Si l'utilisateur n'est pas connecté, redirection vers la page de connexion*/
+
+    /**
+     * ? Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+    */
     if(!isLogged) {
         window.location.href = "connexion";
     } else {
-      /*Si l'utilisateur est connecté et qu'il est administrateur*/
+
+      /**
+       * ? Si l'utilisateur est connecté et qu'il est administrateur
+      */
         if(isAdmin > 0) {
-            /*Affichage de la liste des posts avec isAuthor === true*/
+            /**
+             * * Affichage de la liste des posts avec isAuthor === true
+            */
             return(
                 <Container className="d-flex flex-wrap justify-content-center mt-5">
                     { items.map((post) => 
                     <Post 
-                        key={post.id}
-                        id={post.id}
+                        key={ post.id }
+                        id={ post.id }
                         isAuthor={ true }
-                        author={post.authorFirstName}
-                        authorId={post.author}
-                        date={ new Date(post.date).toLocaleDateString("fr-FR", options)}
+                        author={ post.authorFirstName }
+                        authorId={ post.author }
+                        date={ new Date(post.date).toLocaleDateString("fr-FR", options) }
                         title={ post.title }
-                        subject={post.subject}
-                        imgUrl={post.img_url}
+                        subject={ post.subject }
+                        imgUrl={ post.img_url }
                         />
                     )}
                 </Container>
             )    
         }
-        /*Si l'utilisateur est connecté et qu'il n'est pas administrateur*/
-        /*Création de listItems qui contiendra la liste des posts à afficher*/
+
+        /**
+         * ? Si l'utilisateur n'est pas administrateur
+        */
+        /**
+         * * Création de listItems qui contiendra l'ensemble des posts à afficher
+        */
         var listItems = [] ;
-        /*Pour chaque item présent dans la liste des posts issus du serveur*/
+        /**
+         * * Pour chaque item présent dans la liste des posts issus du serveu
+        */
         for(let item of items) {
-            /*Si l'id de l'utilisateur correspond à l'id de l'auteur de l'item*/
+            /**
+             * * Si l'id de l'utilisateur correspond à l'id de l'auteur de l'item
+            */
             if(item.author === userId) {
-                /*Création d'une Card avec l'option isAuthor === true*/
+                /**
+                 * * Création d'une Card avec l'option isAuthor === true
+                */
                 const displayItem = 
                     <Post 
-                        key={item.id}
-                        id={item.id}
+                        key={ item.id }
+                        id={ item.id }
                         isAuthor={ true }
-                        author={item.authorFirstName}
-                        authorId={item.author}
+                        author={ item.authorFirstName }
+                        authorId={ item.author }
                         date={ new Date(item.date).toLocaleDateString("fr-FR", options)}
                         title={ item.title }
-                        subject={item.subject}
-                        imgUrl={item.img_url}
+                        subject={ item.subject }
+                        imgUrl={ item.img_url }
                     />;
-                /*Ajout de la Card à la liste des posts à afficher*/
+                /**
+                 * * Ajout de la Card à la liste des posts à afficher
+                */
                 listItems.push(displayItem);
             } else {
-                /*Si l'id de l'utilisateur ne correspond pas à l'id de l'auteur de l'item*/
-                /*Création d'une Card avec l'option isAuthor === false*/
+                /**
+                 * ? Si l'id de l'utilisateur ne correspond pas à l'id de l'auteur de l'item
+                 */
+                /**
+                 * * Création d'une Card avec l'option isAuthor === false
+                 */
                 const displayItem = 
                     <Post 
-                        key={item.id}
-                        id={item.id}
+                        key={ item.id }
+                        id={ item.id }
                         isAuthor={ false }
-                        author={item.authorFirstName}
-                        authorId={item.author}
+                        author={ item.authorFirstName }
+                        authorId={ item.author }
                         date={ new Date(item.date).toLocaleDateString("fr-FR", options)}
                         title={ item.title }
-                        subject={item.subject}
-                        imgUrl={item.img_url}
+                        subject={ item.subject }
+                        imgUrl={ item.img_url }
                     />;
-                /*Ajout de la Card à la liste des posts à afficher*/
+                /**
+                 * * Ajout de la Card à la liste des posts à afficher
+                */
                 listItems.push(displayItem);
             }
         }
         return(
-            /*Affichage de la liste des posts*/
+            /**
+             * ! Affichage de la liste des posts
+            */
             <Container className="d-flex flex-wrap justify-content-center mt-5">
-                <h1>Liste des posts</h1>
-                {listItems}
+                { listItems }
             </Container>
         )
     }
