@@ -1,29 +1,77 @@
+/**
+ * ! import du useState et useEffect
+ */
 import { useState, useEffect } from "react";
 
-//import des classes de bootstrap
+/**
+ * ! import des classes boostrap
+ */
 import 'bootstrap';
 
-//import axios
+/**
+ * ! import Axios
+ */
 import Axios from 'axios';
 
-//import des react-components
+/**
+ * ! import des react-boostrap components
+ */
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import Accordion from 'react-bootstrap/Accordion';
 
-//Card component affichant un post
+/**
+ * ! Card component affichant un post
+ */
 function Post (props) {
     
-    /*création du useState "show" pour l'affichage du modal*/
-    const [showModifyModal, setShowModifyModal] = useState(false);
-    /*création de la fonction handleClose pour fermer le modal*/
-    const handleCloseModifyModal = () => setShowModifyModal(false);
-    /*création de la fonction handleShow pour afficher le modal de modification */
-    const handleShowModifyModal = () => setShowModifyModal(true);
+    
+    /**
+     * * Création du useState pour l'affichage du modal de visualisation du post
+    */
+     const [showModal, setShowModal] = useState(false);
+    
+    /**
+     * * Création des fonctions pour ouvrir et fermer le modal de visualisation du post
+    */
+     const handleCloseModal = () => setShowModal(false);
+     const handleShowModal = () => setShowModal(true);
 
-    /*fonction de suppression du post*/
+    /**
+     * * Création des useStates pour l'affichage du modal de modification
+    */
+    const [showModifyModal, setShowModifyModal] = useState(false);
+    const [title, setTitle] = useState(`${props.title}`);
+    const [subject, setSubject] = useState(`${props.subject}`);
+    
+    /**
+     * * Création des fonctions pour ouvrir et fermer le modal de modification
+    */
+    const handleCloseModifyModal = () => setShowModifyModal(false);
+    const handleShowModifyModal = () => setShowModifyModal(true);
+    
+    /**
+     * * Création de la fonction d'envoi de la modification du post
+    */
+    const modifyOnePost = (event) => {
+        event.preventDefault();
+        const modifyFormData = new FormData(document.getElementById("postForm"));
+        Axios.defaults.headers['Authorization'] =`Bearer ${localStorage.getItem("token")} ${localStorage.getItem("isAdmin")}`;
+        Axios.put(`http://localhost:4000/api/posts/${props.id}`, modifyFormData)
+        .then((result) => {
+            console.log(result);
+            window.location.href = "posts";
+        })
+        .catch(error => console.log(error));
+    };
+
+     /**
+     * * Création de la fonction de suppression du post
+     */
     const deletePost = (event) => {
         event.preventDefault();
         Axios.defaults.headers['Authorization'] =`Bearer ${localStorage.getItem("token")} ${localStorage.getItem("isAdmin")}`;
@@ -35,9 +83,11 @@ function Post (props) {
         .catch(error => console.log(error));
     };
     
-    /* props: si l'utilisateur est l'auteur */
+     /**
+     * ? Si l'utilisateur est auteur du post
+     */
     const isAuthor = props.isAuthor ;
-    if(isAuthor) {
+    if(isAuthor) {   
         return (
             <Card className="m-2 card">
                 <Card.Header className="d-flex flex-row justify-content-between">
@@ -54,35 +104,78 @@ function Post (props) {
                     <Card.Text>{ props.subject }</Card.Text>
                 </Card.Body>
                 <Card.Footer className="d-flex flex-row justify-content-around">
-                    <Button variant="primary" className="rounded-pill me-2 btn-sm">
-                        <i className="far fa-comments me-1"></i>
-                        <span className="d-none d-md-inline">Commenter</span>
+                    {/*logique pour la visualisation du post avec ses commentaires*/}
+                    <Button variant="warning" className="rounded-pill px-3 me-md-2 btn-sm" onClick={ handleShowModal }>
+                        <i className="fas fa-eye"></i>
+                        <span className="d-none d-md-inline ms-md-1">Voir</span>
                     </Button>
-                    <Button variant="warning" className="rounded-pill px-3 me-2 btn-sm" id="modifyPostButton">
-                        <i className="fas fa-eye me-1"></i>
-                        <span className="d-none d-md-inline">Voir</span>
-                    </Button>
-                    <Button onClick={ handleShowModifyModal } variant="primary" className="rounded-pill me-2 btn-sm">
-                        <i className="far fa-edit me-1"></i>
-                        <span className="d-none d-md-inline">Modifier</span>
+                    <Modal fullscreen show={ showModal } onHide={ handleCloseModal }>
+                        <Modal.Header closeButton>
+                        <Modal.Title>{ props.title }</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <Card>
+                            <Card.Img variant="top" as={ Image } src={ props.imgUrl } thumbnail />
+                            <Card.Body>
+                                <Card.Title>{ props.title }</Card.Title>
+                                <Card.Text>{ props.subject }</Card.Text>
+                            </Card.Body>
+                            <Card.Footer>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Item eventKey="0">
+                                        <Accordion.Header>Commentaires</Accordion.Header>
+                                        <Accordion.Body>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+                                        est laborum.
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                </Accordion>
+                            </Card.Footer>
+                          </Card>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <span className="text-capitalize">créé par {props.author}, le { props.date }</span>
+                        </Modal.Footer>
+                    </Modal>
+                    {/*logique pour la modification du post */}
+                    <Button onClick={ handleShowModifyModal } variant="primary" className="rounded-pill px-3 me-md-2 btn-sm">
+                        <i className="far fa-edit"></i>
+                        <span className="d-none d-md-inline ms-md-1">Modifier</span>
                     </Button>
                     <Modal fullscreen show={ showModifyModal } onHide={ handleCloseModifyModal }>
                         <Modal.Header closeButton>
-                        <Modal.Title><span>Modifier le post :</span> { props.title }</Modal.Title>
+                        <Modal.Title><span className="text-decoration-underline">Modifier le post :</span> { props.title }</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={ handleCloseModifyModal }>
-                                Close
-                            </Button>
-                            <Button variant="primary" onClick={ handleCloseModifyModal }>
-                                Save Changes
-                            </Button>
-                        </Modal.Footer>
+                        <Modal.Body>
+                            <Form id="postForm" className="border border-1 rounded-3 border-black py-2 px-3 mt-3" onSubmit={ modifyOnePost }>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Titre</Form.Label>
+                                    <Form.Control name="title" id="title" type="text" value={ title } onChange={ (e) => setTitle(e.target.value) } />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Contenu</Form.Label>
+                                    <Form.Control name="subject" id="subject" type="text" value={ subject } onChange={ (e) => setSubject(e.target.value) } />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Image</Form.Label>
+                                    <Form.Control name="image" id="image" type="file" />
+                                    <Image src={ props.imgUrl } />
+                                </Form.Group>
+                                <Button variant="primary" type="submit">
+                                    Soumettre
+                                </Button>
+                            </Form>
+                        </Modal.Body>
                     </Modal>
-                    <Button onClick={ deletePost } variant="danger" className="rounded-pill px-3 btn-sm" id="DeletePostButton">
+                    {/*logique pour la suppression du post*/}
+                    <Button onClick={ deletePost } variant="danger" className="rounded-pill px-3 me-md-2 btn-sm">
                         <i className="far fa-trash-alt"></i>
-                        <span className="d-none d-md-inline">Supprimer</span>
+                        <span className="d-none d-md-inline ms-md-1">Supprimer</span>
                     </Button>
                 </Card.Footer>        
             </Card>
@@ -105,10 +198,6 @@ function Post (props) {
                 <Card.Text>{ props.subject }</Card.Text>
             </Card.Body>
             <Card.Footer className="d-flex flex-row justify-content-around">
-                <Button variant="primary" className="rounded-pill me-2 btn-sm">
-                    <i className="far fa-comments me-1"></i>
-                    <span className="d-none d-md-inline">Commenter</span>
-                </Button>
                 <Button variant="warning" className="rounded-pill px-3 me-2 btn-sm" id="modifyPostButton">
                     <i className="fas fa-eye me-1"></i>
                     <span className="d-none d-md-inline">Voir</span>
