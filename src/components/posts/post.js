@@ -25,6 +25,40 @@ import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
 
 /**
+ * ! Création des constantes issues du localStorage
+ */
+const token = localStorage.getItem("token");
+const isAdmin = localStorage.getItem("isAdmin");
+const userId =  Number(localStorage.getItem("userId"));
+
+
+/*function Comment(props) {
+    <Card>
+        <Card.Header>
+            <div>
+                Post {props.postId} : {props.postAuthor}
+            </div>
+            <div>
+                {props.postDate}
+            </div>
+        </Card.Header>
+        <Card.Body>
+            {props.postContent}
+        </Card.Body>
+        <Card.Footer>
+            <Button variant="primary" className="rounded-pill px-3 me-md-2 btn-sm">
+                <i className="far fa-edit"></i>
+                <span className="d-none d-md-inline ms-md-1">Modifier</span>
+            </Button>
+            <Button variant="danger" className="rounded-pill px-3 me-md-2 btn-sm">
+                <i className="far fa-trash-alt"></i>
+                <span className="d-none d-md-inline ms-md-1">Supprimer</span>
+            </Button>
+        </Card.Footer>
+    </Card>
+}*/
+
+/**
  * ! Post component affichant un post
  */
 function Post (props) {
@@ -41,7 +75,9 @@ function Post (props) {
      const handleShowModal = () => {                        //ouverture du modal de visualisation, import des commentaires
         setShowModal(true);
        Axios.get(`http://localhost:4000/api/posts/${props.id}/comments`)
-       .then((response) => console.log(response))
+       .then((response) => {
+           console.log(response);   
+       })
        .catch((error) => console.log(error));
      };
 
@@ -65,7 +101,7 @@ function Post (props) {
     const modifyOnePost = (event) => {
         event.preventDefault();
         const modifyFormData = new FormData(document.getElementById("postForm"));
-        Axios.defaults.headers['Authorization'] =`Bearer ${localStorage.getItem("token")} ${localStorage.getItem("isAdmin")}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
         Axios.put(`http://localhost:4000/api/posts/${props.id}`, modifyFormData)
         .then((result) => {
             console.log(result);
@@ -79,7 +115,7 @@ function Post (props) {
      */
     const deletePost = (event) => {
         event.preventDefault();
-        Axios.defaults.headers['Authorization'] =`Bearer ${localStorage.getItem("token")} ${localStorage.getItem("isAdmin")}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
         Axios.delete(`http://localhost:4000/api/posts/${props.id}`)
         .then((result) => {
             console.log(result);
@@ -133,13 +169,7 @@ function Post (props) {
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Commentaires</Accordion.Header>
                                         <Accordion.Body>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                                        est laborum.
+                                            lorem ipsilum
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>
@@ -229,13 +259,7 @@ function Post (props) {
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Commentaires</Accordion.Header>
                                         <Accordion.Body>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                                        est laborum.
+                                            lorem ipsilum
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>
@@ -278,24 +302,9 @@ function Posts() {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
     /**
-     * * Vérification du log de l'utilisateur
-     */
-    const isLogged = localStorage.getItem("token");
-
-    /**
-     * * Vérification du isAdmin de l'utilisateur
-     */
-    const isAdmin = localStorage.getItem("isAdmin");
-
-    /**
-     * * Vérification du userId de l'utilisateur et conversion en nombre
-     */
-    const userId =  Number(localStorage.getItem("userId"));
-
-    /**
      * ? Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
     */
-    if(!isLogged) {
+    if(!token) {
         window.location.href = "connexion";
     } else {
 
