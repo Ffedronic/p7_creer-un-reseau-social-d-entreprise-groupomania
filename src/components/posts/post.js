@@ -30,16 +30,22 @@ import Accordion from 'react-bootstrap/Accordion';
 function Post (props) {
      
     /**
-     * * Création du useState pour l'affichage du modal de visualisation du post
+     * * Création des useStates pour l'affichage du modal de visualisation du post
     */
      const [showModal, setShowModal] = useState(false);
     
     /**
-     * * Création des fonctions pour ouvrir et fermer le modal de visualisation du post
+     * * Création des fonctions nécessaires au modal de visualisation du post
     */
-     const handleCloseModal = () => setShowModal(false);
-     const handleShowModal = () => setShowModal(true);
+     const handleCloseModal = () => setShowModal(false);    //fermeture du modal de visualisation
+     const handleShowModal = () => {                        //ouverture du modal de visualisation, import des commentaires
+        setShowModal(true);
+       Axios.get(`http://localhost:4000/api/posts/${props.id}/comments`)
+       .then((response) => console.log(response))
+       .catch((error) => console.log(error));
+     };
 
+     
     /**
      * * Création des useStates pour l'affichage du modal de modification
     */
@@ -88,6 +94,9 @@ function Post (props) {
     const isAuthor = props.isAuthor ;
     if(isAuthor) {   
         return (
+            /**
+             * * Création du post sous forme de Card react-component
+             */
             <Card className="m-2 card">
                 <Card.Header className="d-flex flex-row justify-content-between">
                     <div>
@@ -110,7 +119,7 @@ function Post (props) {
                     </Button>
                     <Modal fullscreen show={ showModal } onHide={ handleCloseModal }>
                         <Modal.Header closeButton>
-                        <Modal.Title>{ props.title }</Modal.Title>
+                        <Modal.Title>Post n°{ props.id }</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <Card>
@@ -206,7 +215,7 @@ function Post (props) {
                 </Button>
                 <Modal fullscreen show={ showModal } onHide={ handleCloseModal }>
                         <Modal.Header closeButton>
-                        <Modal.Title>{ props.title }</Modal.Title>
+                        <Modal.Title>Post n°{ props.id }</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <Card>
