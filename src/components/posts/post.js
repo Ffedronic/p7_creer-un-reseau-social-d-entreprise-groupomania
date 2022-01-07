@@ -31,42 +31,84 @@ const token = localStorage.getItem("token");
 const isAdmin = localStorage.getItem("isAdmin");
 const userId =  Number(localStorage.getItem("userId"));
 
+/**
+* * Options de conversion du datetime en date
+*/    
+ const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
-/*function Comment(props) {
-    <Card>
-        <Card.Header>
-            <div>
-                Post {props.postId} : {props.postAuthor}
-            </div>
-            <div>
-                {props.postDate}
-            </div>
-        </Card.Header>
-        <Card.Body>
-            {props.postContent}
-        </Card.Body>
-        <Card.Footer>
-            <Button variant="primary" className="rounded-pill px-3 me-md-2 btn-sm">
-                <i className="far fa-edit"></i>
-                <span className="d-none d-md-inline ms-md-1">Modifier</span>
-            </Button>
-            <Button variant="danger" className="rounded-pill px-3 me-md-2 btn-sm">
-                <i className="far fa-trash-alt"></i>
-                <span className="d-none d-md-inline ms-md-1">Supprimer</span>
-            </Button>
-        </Card.Footer>
-    </Card>
-}*/
+
+/**
+ * ! Comment component affichant un commentaire
+ */
+function Comment(props) {
+    const isAuthor = props.isAuthor;
+    if(isAuthor) {
+        <Card>
+            <Card.Header>
+                <div>
+                    Post {props.commentId} : {props.commmentAuthor}
+                </div>
+                <div>
+                    {props.commentDate}
+                </div>
+            </Card.Header>
+            <Card.Body>
+                {props.commentContent}
+            </Card.Body>
+            <Card.Footer>
+                <Button variant="primary" className="rounded-pill px-3 me-md-2 btn-sm">
+                    <i className="far fa-edit"></i>
+                    <span className="d-none d-md-inline ms-md-1">Modifier</span>
+                </Button>
+                <Button variant="danger" className="rounded-pill px-3 me-md-2 btn-sm">
+                    <i className="far fa-trash-alt"></i>
+                    <span className="d-none d-md-inline ms-md-1">Supprimer</span>
+                </Button>
+            </Card.Footer>
+        </Card>
+    } else {
+        <Card>
+            <Card.Header>
+                <div>
+                    Post {props.commentId} : {props.commmentAuthor}
+                </div>
+                <div>
+                    {props.commentDate}
+                </div>
+            </Card.Header>
+            <Card.Body>
+                {props.commentContent}
+            </Card.Body>
+        </Card>
+    }
+}
 
 /**
  * ! Post component affichant un post
  */
 function Post (props) {
-     
+
+
+    /**
+     * *Création du useState pour la liste des commentaires
+     */ 
+    const [comments, setComments] = useState([]);
+    /**
+     * * listComments à afficher
+     */
+    var listComments = [];
     /**
      * * Création des useStates pour l'affichage du modal de visualisation du post
     */
      const [showModal, setShowModal] = useState(false);
+    
+     /**
+     * * Création des useStates pour l'affichage du modal de modification du post
+    */
+    const [showModifyModal, setShowModifyModal] = useState(false);
+    const [title, setTitle] = useState(`${props.title}`);
+    const [subject, setSubject] = useState(`${props.subject}`);
+    
     
     /**
      * * Création des fonctions nécessaires au modal de visualisation du post
@@ -76,18 +118,50 @@ function Post (props) {
         setShowModal(true);
        Axios.get(`http://localhost:4000/api/posts/${props.id}/comments`)
        .then((response) => {
-           console.log(response);   
+           setComments(response.data.result);
+           console.log(comments);
+           if(isAdmin > 0) {
+                listComments = comments.map((comment) =>
+                    <Comment
+                        isAuthor={ true }
+                        commentId={comment.id}
+                        commmentAuthor={comment.author}
+                        commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)}
+                        commentContent={comment.content}
+                    /> 
+                );
+                console.log(listComments);
+           } else {
+               for(let comment of comments) {
+                    if(Number(comment.authorId) === userId) {
+                        const displayComment =  <Comment
+                                                    isAuthor={ true }
+                                                    commentId={comment.id}
+                                                    commmentAuthor={comment.author}
+                                                    commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)}
+                                                    commentContent={comment.content}
+                                                />
+                         ;
+                    listComments.push(displayComment);
+                   } else {
+                        const displayComment =  <Comment
+                                                    isAuthor={ false }
+                                                    commentId={comment.id}
+                                                    commmentAuthor={comment.author}
+                                                    commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)}
+                                                    commentContent={comment.content}
+                                                />
+                        ;
+                        listComments.push(displayComment);
+                   }
+               }
+               console.log(listComments);
+           }
        })
        .catch((error) => console.log(error));
      };
 
      
-    /**
-     * * Création des useStates pour l'affichage du modal de modification
-    */
-    const [showModifyModal, setShowModifyModal] = useState(false);
-    const [title, setTitle] = useState(`${props.title}`);
-    const [subject, setSubject] = useState(`${props.subject}`);
     
     /**
      * * Création des fonctions pour ouvrir et fermer le modal de modification
@@ -169,7 +243,7 @@ function Post (props) {
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Commentaires</Accordion.Header>
                                         <Accordion.Body>
-                                            lorem ipsilum
+                                            { listComments }
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>
@@ -259,7 +333,7 @@ function Post (props) {
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Commentaires</Accordion.Header>
                                         <Accordion.Body>
-                                            lorem ipsilum
+                                            { listComments }
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>
@@ -295,11 +369,6 @@ function Posts() {
     })
     .catch(error => console.log(error));
     }, []);
-
-    /**
-     * * Options de conversion du datetime en date
-     */    
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
     /**
      * ? Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
