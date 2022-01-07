@@ -18,7 +18,7 @@ const groupomaniaDBConnect = mysql.createConnection({
 exports.getComments = (req, res, next) => {
     /*création de la requête sql pour selectionner les commentaires du post dans la base de données dont l'id est fourni
      par les paramètres de requête*/
-    const sqlGetComments = `SELECT comments.id AS id, users.id AS authorId, comments.date AS date, comments.content AS content, users.firstName FROM comments JOIN users ON comments.author = users.id WHERE post = '${req.params.id}'`;
+    const sqlGetComments = `SELECT comments.id AS id, users.id AS authorId, comments.date AS date, comments.content AS content, users.firstName AS firstName FROM comments JOIN users ON comments.author = users.id WHERE post = '${req.params.id}'`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlGetComments, (error, result) => {
         if (error) {

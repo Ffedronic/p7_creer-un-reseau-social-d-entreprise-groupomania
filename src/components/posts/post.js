@@ -40,7 +40,7 @@ const userId =  Number(localStorage.getItem("userId"));
 /**
  * ! Comment component affichant un commentaire
  */
-function Comment(props) {
+/*function Comment(props) {
     const isAuthor = props.isAuthor;
     if(isAuthor) {
         <Card>
@@ -81,87 +81,43 @@ function Comment(props) {
             </Card.Body>
         </Card>
     }
-}
+}*/
 
 /**
  * ! Post component affichant un post
  */
 function Post (props) {
-
-
-    /**
-     * *Création du useState pour la liste des commentaires
-     */ 
-    const [comments, setComments] = useState([]);
-    /**
-     * * listComments à afficher
-     */
-    var listComments = [];
+    
     /**
      * * Création des useStates pour l'affichage du modal de visualisation du post
     */
-     const [showModal, setShowModal] = useState(false);
-    
+    const [showModal, setShowModal] = useState(false);
+    const [commentToSend, setCommentToSend] = useState("");
+    const [comments, setComments] = useState([]);
+
+    /**
+     * * UseEffect qui télécharge les commentaires en fonction des posts
+     */
+    useEffect(() => {
+        Axios.get(`http://localhost:4000/api/posts/${props.id}/comments`)
+    .then((response) =>{
+        setComments(response.data.result);
+    })
+    .catch(error => console.log(error));
+    }, [props.id]);
+    console.log(comments);
+    /**
+     * * Création des fonctions nécessaires au modal de visualisation du post
+    */
+     const handleCloseModal = () => setShowModal(false);    //fermeture du modal de visualisation
+     const handleShowModal = () => setShowModal(true);
+
      /**
      * * Création des useStates pour l'affichage du modal de modification du post
     */
     const [showModifyModal, setShowModifyModal] = useState(false);
     const [title, setTitle] = useState(`${props.title}`);
     const [subject, setSubject] = useState(`${props.subject}`);
-    
-    
-    /**
-     * * Création des fonctions nécessaires au modal de visualisation du post
-    */
-     const handleCloseModal = () => setShowModal(false);    //fermeture du modal de visualisation
-     const handleShowModal = () => {                        //ouverture du modal de visualisation, import des commentaires
-        setShowModal(true);
-       Axios.get(`http://localhost:4000/api/posts/${props.id}/comments`)
-       .then((response) => {
-           setComments(response.data.result);
-           console.log(comments);
-           if(isAdmin > 0) {
-                listComments = comments.map((comment) =>
-                    <Comment
-                        isAuthor={ true }
-                        commentId={comment.id}
-                        commmentAuthor={comment.author}
-                        commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)}
-                        commentContent={comment.content}
-                    /> 
-                );
-                console.log(listComments);
-           } else {
-               for(let comment of comments) {
-                    if(Number(comment.authorId) === userId) {
-                        const displayComment =  <Comment
-                                                    isAuthor={ true }
-                                                    commentId={comment.id}
-                                                    commmentAuthor={comment.author}
-                                                    commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)}
-                                                    commentContent={comment.content}
-                                                />
-                         ;
-                    listComments.push(displayComment);
-                   } else {
-                        const displayComment =  <Comment
-                                                    isAuthor={ false }
-                                                    commentId={comment.id}
-                                                    commmentAuthor={comment.author}
-                                                    commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)}
-                                                    commentContent={comment.content}
-                                                />
-                        ;
-                        listComments.push(displayComment);
-                   }
-               }
-               console.log(listComments);
-           }
-       })
-       .catch((error) => console.log(error));
-     };
-
-     
     
     /**
      * * Création des fonctions pour ouvrir et fermer le modal de modification
@@ -243,7 +199,19 @@ function Post (props) {
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Commentaires</Accordion.Header>
                                         <Accordion.Body>
-                                            { listComments }
+                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                            <Form className="mt-3 mb-3 border border-1 p-3">
+                                                <Form.Group className="mt-3 mb-3">
+                                                    <Form.Label>Commenter le post</Form.Label>
+                                                    <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
+                                                </Form.Group>                
+                                                <Button variant="primary" type="submit">
+                                                    Envoyer
+                                                </Button>
+                                            </Form>
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>
@@ -333,7 +301,19 @@ function Post (props) {
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Commentaires</Accordion.Header>
                                         <Accordion.Body>
-                                            { listComments }
+                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                            <Form className="mt-3 mb-3 border border-1 p-3">
+                                                <Form.Group className="mt-3 mb-3">
+                                                    <Form.Label>Commenter le post</Form.Label>
+                                                    <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
+                                                </Form.Group>                
+                                                <Button variant="primary" type="submit">
+                                                    Envoyer
+                                                </Button>
+                                            </Form>                                        
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>
