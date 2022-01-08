@@ -40,48 +40,52 @@ const userId =  Number(localStorage.getItem("userId"));
 /**
  * ! Comment component affichant un commentaire
  */
-/*function Comment(props) {
+function Comment(props) {
     const isAuthor = props.isAuthor;
     if(isAuthor) {
-        <Card>
-            <Card.Header>
-                <div>
-                    Post {props.commentId} : {props.commmentAuthor}
-                </div>
-                <div>
-                    {props.commentDate}
-                </div>
-            </Card.Header>
-            <Card.Body>
-                {props.commentContent}
-            </Card.Body>
-            <Card.Footer>
-                <Button variant="primary" className="rounded-pill px-3 me-md-2 btn-sm">
-                    <i className="far fa-edit"></i>
-                    <span className="d-none d-md-inline ms-md-1">Modifier</span>
-                </Button>
-                <Button variant="danger" className="rounded-pill px-3 me-md-2 btn-sm">
-                    <i className="far fa-trash-alt"></i>
-                    <span className="d-none d-md-inline ms-md-1">Supprimer</span>
-                </Button>
-            </Card.Footer>
-        </Card>
+        return(
+            <Card>
+                <Card.Header>
+                    <div>
+                        Commentaire n°{props.commentId} : {props.commentAuthor}
+                    </div>
+                    <div>
+                        {props.commentDate}
+                    </div>
+                </Card.Header>
+                <Card.Body>
+                    {props.commentContent}
+                </Card.Body>
+                <Card.Footer>
+                    <Button variant="primary" className="rounded-pill px-3 me-md-2 btn-sm">
+                        <i className="far fa-edit"></i>
+                        <span className="d-none d-md-inline ms-md-1">Modifier</span>
+                    </Button>
+                    <Button variant="danger" className="rounded-pill px-3 me-md-2 btn-sm">
+                        <i className="far fa-trash-alt"></i>
+                        <span className="d-none d-md-inline ms-md-1">Supprimer</span>
+                    </Button>
+                </Card.Footer>
+            </Card>
+        )
     } else {
-        <Card>
-            <Card.Header>
-                <div>
-                    Post {props.commentId} : {props.commmentAuthor}
-                </div>
-                <div>
-                    {props.commentDate}
-                </div>
-            </Card.Header>
-            <Card.Body>
-                {props.commentContent}
-            </Card.Body>
-        </Card>
+        return(
+            <Card>
+                <Card.Header>
+                    <div>
+                        Post {props.commentId} : {props.commmentAuthor}
+                    </div>
+                    <div>
+                        {props.commentDate}
+                    </div>
+                </Card.Header>
+                <Card.Body>
+                    {props.commentContent}
+                </Card.Body>
+            </Card>
+        )
     }
-}*/
+}
 
 /**
  * ! Post component affichant un post
@@ -94,7 +98,7 @@ function Post (props) {
     const [showModal, setShowModal] = useState(false);
     const [commentToSend, setCommentToSend] = useState("");
     const [comments, setComments] = useState([]);
-
+    
     /**
      * * UseEffect qui télécharge les commentaires en fonction des posts
      */
@@ -105,13 +109,14 @@ function Post (props) {
     })
     .catch(error => console.log(error));
     }, [props.id]);
-    console.log(comments);
+    
     /**
      * * Création des fonctions nécessaires au modal de visualisation du post
     */
      const handleCloseModal = () => setShowModal(false);    //fermeture du modal de visualisation
-     const handleShowModal = () => setShowModal(true);
-
+     const handleShowModal = () => {
+        setShowModal(true);
+     }
      /**
      * * Création des useStates pour l'affichage du modal de modification du post
     */
@@ -199,6 +204,7 @@ function Post (props) {
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Commentaires</Accordion.Header>
                                         <Accordion.Body>
+                                            {comments.map((comment) => <Comment key={comment.id} isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} />)}
                                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                                             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                                             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
