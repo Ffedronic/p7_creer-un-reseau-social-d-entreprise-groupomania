@@ -16,9 +16,6 @@ router.get('/', commentsCtrl.getComments);
 //controller pour créer un commentaire sur un post dont l'id et l'id utilisateur sont fournis
 router.post('/', auth, commentsCtrl.createOneComment);
 
-//controller pour modifier un commentaire d'un post dont l'id et l'id utilisateur sont fournis
-router.put('/:id', auth, commentsCtrl.modifyOneComment);
-
 //controller pour supprimer un commentaire d'un post dont l'id et l'id utilisateur sont fournis
 router.delete('/:id', auth, commentsCtrl.deleteOneComment);
 

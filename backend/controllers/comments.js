@@ -53,24 +53,6 @@ exports.createOneComment = (req, res, next) => {
     });
 };
 
-//controller pour modifier un commentaire au sujet d'un post
-exports.modifyOneComment = (req, res, next) => {
-    /*création de la requête sql pour modifier un commentaire au sujet du post dans la base de données dont l'id est fourni
-    par les paramètres de requête*/
-    const sqlmodifyOneComment = `UPDATE comments SET content = '${req.body.content}' WHERE id = '${req.params.id}' AND author = '${res.locals.userId}'`;
-    /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlmodifyOneComment, (error) => {
-        if (error) {
-            res.status(500).json({
-                error
-            });
-        }
-        /*envoi du message de validation de la modification du commentaire*/
-        res.status(200).json({
-            message: "commentaire modifié."
-        });
-    });
-};
 
 //controller pour supprimer un commentaire d'un post dont l'id et l'id utilisateur sont fournis
 exports.deleteOneComment = (req, res, next) => {

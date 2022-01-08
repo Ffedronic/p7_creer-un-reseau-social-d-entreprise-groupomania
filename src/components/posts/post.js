@@ -44,23 +44,19 @@ function Comment(props) {
     const isAuthor = props.isAuthor;
     if(isAuthor) {
         return(
-            <Card>
-                <Card.Header>
+            <Card className="mb-3">
+                <Card.Header className="text-capitalize">
                     <div>
-                        Commentaire n°{props.commentId} : {props.commentAuthor}
+                        {props.commentAuthor}
                     </div>
                     <div>
-                        {props.commentDate}
+                    commenté le {props.commentDate}
                     </div>
                 </Card.Header>
                 <Card.Body>
                     {props.commentContent}
                 </Card.Body>
                 <Card.Footer>
-                    <Button variant="primary" className="rounded-pill px-3 me-md-2 btn-sm">
-                        <i className="far fa-edit"></i>
-                        <span className="d-none d-md-inline ms-md-1">Modifier</span>
-                    </Button>
                     <Button variant="danger" className="rounded-pill px-3 me-md-2 btn-sm">
                         <i className="far fa-trash-alt"></i>
                         <span className="d-none d-md-inline ms-md-1">Supprimer</span>
@@ -70,13 +66,13 @@ function Comment(props) {
         )
     } else {
         return(
-            <Card>
-                <Card.Header>
+            <Card className="mb-3">
+                <Card.Header className="text-capitalize">
                     <div>
-                        Post {props.commentId} : {props.commmentAuthor}
+                        {props.commentAuthor}
                     </div>
                     <div>
-                        {props.commentDate}
+                        commenté le {props.commentDate}
                     </div>
                 </Card.Header>
                 <Card.Body>
@@ -103,13 +99,40 @@ function Post (props) {
      * * UseEffect qui télécharge les commentaires en fonction des posts
      */
     useEffect(() => {
-        Axios.get(`http://localhost:4000/api/posts/${props.id}/comments`)
+        Axios.get(`http://localhost:4000/api/posts/${props.postId}/comments`)
     .then((response) =>{
         setComments(response.data.result);
     })
     .catch(error => console.log(error));
-    }, [props.id]);
+    }, [props.postId]);
     
+    /**
+     * * Génération de la liste des commentaires à afficher
+    */
+     var listComments= [];
+     /**
+      * ? Si je suis administrateur, isAuthor = true pour tous les commentaires
+      */
+     if(isAdmin > 0) {
+         listComments = comments.map((comment) => <Comment key={comment.id} isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} />) ;
+     } else {
+         for(let comment of comments){
+             /**
+             * ? Si je ne suis pas administrateur et que je suis l'auteur du commentaire, isAuthor = true pour le commentaire
+             */
+             if(Number(comment.authorId) === userId){
+                 const commentToDisplay = <Comment key={comment.id} isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} />;
+                 listComments.push(commentToDisplay);
+             /**
+             * ? Si je ne suis pas administrateur et que je ne suis pas l'auteur du commentaire, isAuthor = false pour le commentaire
+             */
+             } else {
+                 const commentToDisplay = <Comment key={comment.id} isAuthor={false} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} />;
+                 listComments.push(commentToDisplay);
+             }
+         }
+    }
+
     /**
      * * Création des fonctions nécessaires au modal de visualisation du post
     */
@@ -121,8 +144,8 @@ function Post (props) {
      * * Création des useStates pour l'affichage du modal de modification du post
     */
     const [showModifyModal, setShowModifyModal] = useState(false);
-    const [title, setTitle] = useState(`${props.title}`);
-    const [subject, setSubject] = useState(`${props.subject}`);
+    const [title, setTitle] = useState(`${props.postTitle}`);
+    const [subject, setSubject] = useState(`${props.postSubject}`);
     
     /**
      * * Création des fonctions pour ouvrir et fermer le modal de modification
@@ -137,7 +160,7 @@ function Post (props) {
         event.preventDefault();
         const modifyFormData = new FormData(document.getElementById("postForm"));
         Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
-        Axios.put(`http://localhost:4000/api/posts/${props.id}`, modifyFormData)
+        Axios.put(`http://localhost:4000/api/posts/${props.postId}`, modifyFormData)
         .then((result) => {
             console.log(result);
             window.location.href = "posts";
@@ -151,7 +174,7 @@ function Post (props) {
     const deletePost = (event) => {
         event.preventDefault();
         Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
-        Axios.delete(`http://localhost:4000/api/posts/${props.id}`)
+        Axios.delete(`http://localhost:4000/api/posts/${props.postId}`)
         .then((result) => {
             console.log(result);
             window.location.href = "posts";
@@ -159,11 +182,17 @@ function Post (props) {
         .catch(error => console.log(error));
     };
     
+    /**
+     * * Création de la constante isAuthor pour le post
+     */
+    const isAuthor = props.isAuthor ;
+
      /**
      * ? Si l'utilisateur est auteur ou isAdmin du post
      */
-    const isAuthor = props.isAuthor ;
-    if(isAuthor) {   
+
+    if(isAuthor) {
+           
         return (
             /**
              * * Création du post sous forme de Card react-component
@@ -171,16 +200,16 @@ function Post (props) {
             <Card className="m-2 card">
                 <Card.Header className="d-flex flex-row justify-content-between">
                     <div>
-                        <span className="d-none">{ props.id }</span>
-                        <span className="text-uppercase fw-bold">{ props.author }</span>
-                        <span className="d-none" id="authorId">{ props.authorId}</span>
+                        <span className="d-none">{ props.postId }</span>
+                        <span className="text-uppercase fw-bold">{ props.postAuthor }</span>
+                        <span className="d-none" id="authorId">{ props.postAuthorId}</span>
                     </div>
-                    <span className="ms-5">{ props.date }</span>
+                    <span className="ms-5">{ props.postDate }</span>
                 </Card.Header>
-                <Card.Img variant="top" as={ Image } src={ props.imgUrl } thumbnail />
+                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
                 <Card.Body>
-                    <Card.Title>{ props.title }</Card.Title>
-                    <Card.Text>{ props.subject }</Card.Text>
+                    <Card.Title>{ props.postTitle }</Card.Title>
+                    <Card.Text>{ props.postSubject }</Card.Text>
                 </Card.Body>
                 <Card.Footer className="d-flex flex-row justify-content-around">
                     {/*logique pour la visualisation du post avec ses commentaires*/}
@@ -190,25 +219,21 @@ function Post (props) {
                     </Button>
                     <Modal fullscreen show={ showModal } onHide={ handleCloseModal }>
                         <Modal.Header closeButton>
-                        <Modal.Title>Post n°{ props.id }</Modal.Title>
+                        <Modal.Title>Post n°{ props.postId }</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <Card>
-                            <Card.Img variant="top" as={ Image } src={ props.imgUrl } thumbnail />
+                            <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
                             <Card.Body>
-                                <Card.Title>{ props.title }</Card.Title>
-                                <Card.Text>{ props.subject }</Card.Text>
+                                <Card.Title>{ props.postTitle }</Card.Title>
+                                <Card.Text>{ props.postSubject }</Card.Text>
                             </Card.Body>
                             <Card.Footer>
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Commentaires</Accordion.Header>
                                         <Accordion.Body>
-                                            {comments.map((comment) => <Comment key={comment.id} isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} />)}
-                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                            {listComments}
                                             <Form className="mt-3 mb-3 border border-1 p-3">
                                                 <Form.Group className="mt-3 mb-3">
                                                     <Form.Label>Commenter le post</Form.Label>
@@ -225,7 +250,7 @@ function Post (props) {
                           </Card>
                         </Modal.Body>
                         <Modal.Footer>
-                            <span className="text-capitalize">créé par {props.author}, le { props.date }</span>
+                            <span className="text-capitalize">créé par {props.postAuthor}, le { props.postDate }</span>
                         </Modal.Footer>
                     </Modal>
                     {/*logique pour la modification du post */}
@@ -235,7 +260,7 @@ function Post (props) {
                     </Button>
                     <Modal fullscreen show={ showModifyModal } onHide={ handleCloseModifyModal }>
                         <Modal.Header closeButton>
-                        <Modal.Title><span className="text-decoration-underline">Modifier le post :</span> { props.title }</Modal.Title>
+                        <Modal.Title><span className="text-decoration-underline">Modifier le post :</span> { props.postTitle }</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <Form id="postForm" className="border border-1 rounded-3 border-black py-2 px-3 mt-3" onSubmit={ modifyOnePost }>
@@ -250,7 +275,7 @@ function Post (props) {
                                 <Form.Group className="mb-3">
                                     <Form.Label>Image</Form.Label>
                                     <Form.Control name="image" id="image" type="file" />
-                                    <Image src={ props.imgUrl } />
+                                    <Image src={ props.postImgUrl } />
                                 </Form.Group>
                                 <Button variant="primary" type="submit">
                                     Soumettre
@@ -270,69 +295,69 @@ function Post (props) {
     /**
      * ? Si l'utilisateur n'est pas isAdmin ou autheur du post
      */
-    return (
-        <Card className="m-2 card">
-            <Card.Header className="d-flex flex-row justify-content-between">
-                <div>
-                    <span className="d-none">{ props.id }</span>
-                    <span className="text-uppercase fw-bold">{ props.author }</span>
-                    <span className="d-none" id="authorId">{ props.authorId}</span>
-                </div>
-                <span className="ms-5">{ props.date }</span>
-            </Card.Header>
-            <Card.Img variant="top" as={ Image } src={ props.imgUrl } thumbnail />
-            <Card.Body>
-                <Card.Title>{ props.title }</Card.Title>
-                <Card.Text>{ props.subject }</Card.Text>
-            </Card.Body>
-            <Card.Footer className="d-flex flex-row justify-content-around">
-                {/*logique pour la visualisation du post avec ses commentaires*/}
-                <Button variant="warning" className="rounded-pill px-3 me-md-2 btn-sm" onClick={ handleShowModal }>
-                        <i className="fas fa-eye"></i>
-                        <span className="d-none d-md-inline ms-md-1">Voir</span>
-                </Button>
-                <Modal fullscreen show={ showModal } onHide={ handleCloseModal }>
+    else{ 
+        return (
+            <Card className="m-2 card">
+                <Card.Header className="d-flex flex-row justify-content-between">
+                    <div>
+                        <span className="d-none">{ props.postId }</span>
+                        <span className="text-uppercase fw-bold">{ props.postAuthor }</span>
+                        <span className="d-none" id="authorId">{ props.postAuthorId}</span>
+                    </div>
+                    <span className="ms-5">{ props.postDate }</span>
+                </Card.Header>
+                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
+                <Card.Body>
+                    <Card.Title>{ props.postTitle }</Card.Title>
+                    <Card.Text>{ props.postSubject }</Card.Text>
+                </Card.Body>
+                <Card.Footer className="d-flex flex-row justify-content-around">
+                    {/*logique pour la visualisation du post avec ses commentaires*/}
+                    <Button variant="warning" className="rounded-pill px-3 me-md-2 btn-sm" onClick={ handleShowModal }>
+                            <i className="fas fa-eye"></i>
+                            <span className="d-none d-md-inline ms-md-1">Voir</span>
+                    </Button>
+                    <Modal fullscreen show={ showModal } onHide={ handleCloseModal }>
                         <Modal.Header closeButton>
-                        <Modal.Title>Post n°{ props.id }</Modal.Title>
+                        <Modal.Title>Post n°{ props.postId }</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                          <Card>
-                            <Card.Img variant="top" as={ Image } src={ props.imgUrl } thumbnail />
-                            <Card.Body>
-                                <Card.Title>{ props.title }</Card.Title>
-                                <Card.Text>{ props.subject }</Card.Text>
-                            </Card.Body>
-                            <Card.Footer>
-                                <Accordion defaultActiveKey="0">
-                                    <Accordion.Item eventKey="0">
-                                        <Accordion.Header>Commentaires</Accordion.Header>
-                                        <Accordion.Body>
-                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                                            <Form className="mt-3 mb-3 border border-1 p-3">
-                                                <Form.Group className="mt-3 mb-3">
-                                                    <Form.Label>Commenter le post</Form.Label>
-                                                    <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
-                                                </Form.Group>                
-                                                <Button variant="primary" type="submit">
-                                                    Envoyer
-                                                </Button>
-                                            </Form>                                        
-                                        </Accordion.Body>
-                                    </Accordion.Item>
-                                </Accordion>
-                            </Card.Footer>
-                          </Card>
+                            <Card>
+                                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
+                                <Card.Body>
+                                    <Card.Title>{ props.postTitle }</Card.Title>
+                                    <Card.Text>{ props.postSubject }</Card.Text>
+                                </Card.Body>
+                                <Card.Footer>
+                                    <Accordion defaultActiveKey="0">
+                                        <Accordion.Item eventKey="0">
+                                            <Accordion.Header>Commentaires</Accordion.Header>
+                                            <Accordion.Body>
+                                                { listComments }
+                                                <Form className="mt-3 mb-3 border border-1 p-3">
+                                                    <Form.Group className="mt-3 mb-3">
+                                                        <Form.Label>Commenter le post</Form.Label>
+                                                        <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
+                                                    </Form.Group>                
+                                                    <Button variant="primary" type="submit">
+                                                        Envoyer
+                                                    </Button>
+                                                </Form>                                        
+                                            </Accordion.Body>
+                                        </Accordion.Item>
+                                    </Accordion>
+                                </Card.Footer>
+                            </Card>
                         </Modal.Body>
                         <Modal.Footer>
-                            <span className="text-capitalize">créé par {props.author}, le { props.date }</span>
+                            <span className="text-capitalize">créé par {props.postAuthor}, le { props.postDate }</span>
                         </Modal.Footer>
-                </Modal>
-            </Card.Footer>        
-        </Card>
-    ) 
+                    </Modal>
+                </Card.Footer>        
+            </Card>
+        ) 
+    }
+    
 }
 
 /**
@@ -375,14 +400,14 @@ function Posts() {
                     { items.map((post) => 
                     <Post 
                         key={ post.id }
-                        id={ post.id }
+                        postId={ post.id }
                         isAuthor={ true }
-                        author={ post.authorFirstName }
-                        authorId={ post.author }
-                        date={ new Date(post.date).toLocaleDateString("fr-FR", options) }
-                        title={ post.title }
-                        subject={ post.subject }
-                        imgUrl={ post.img_url }
+                        postAuthor={ post.authorFirstName }
+                        postAuthorId={ post.author }
+                        postDate={ new Date(post.date).toLocaleDateString("fr-FR", options) }
+                        postTitle={ post.title }
+                        postSubject={ post.subject }
+                        postImgUrl={ post.img_url }
                         />
                     )}
                 </Container>
@@ -410,14 +435,14 @@ function Posts() {
                 const displayItem = 
                     <Post 
                         key={ item.id }
-                        id={ item.id }
+                        postId={ item.id }
                         isAuthor={ true }
-                        author={ item.authorFirstName }
-                        authorId={ item.author }
-                        date={ new Date(item.date).toLocaleDateString("fr-FR", options)}
-                        title={ item.title }
-                        subject={ item.subject }
-                        imgUrl={ item.img_url }
+                        postAuthor={ item.authorFirstName }
+                        postAuthorId={ item.author }
+                        postDate={ new Date(item.date).toLocaleDateString("fr-FR", options)}
+                        postTitle={ item.title }
+                        postSubject={ item.subject }
+                        postImgUrl={ item.img_url }
                     />;
                 /**
                  * * Ajout de la Card à la liste des posts à afficher
@@ -433,14 +458,14 @@ function Posts() {
                 const displayItem = 
                     <Post 
                         key={ item.id }
-                        id={ item.id }
+                        postId={ item.id }
                         isAuthor={ false }
-                        author={ item.authorFirstName }
-                        authorId={ item.author }
-                        date={ new Date(item.date).toLocaleDateString("fr-FR", options)}
-                        title={ item.title }
-                        subject={ item.subject }
-                        imgUrl={ item.img_url }
+                        postAuthor={ item.authorFirstName }
+                        postAuthorId={ item.author }
+                        postDate={ new Date(item.date).toLocaleDateString("fr-FR", options)}
+                        postTitle={ item.title }
+                        postSubject={ item.subject }
+                        postImgUrl={ item.img_url }
                     />;
                 /**
                  * * Ajout de la Card à la liste des posts à afficher
