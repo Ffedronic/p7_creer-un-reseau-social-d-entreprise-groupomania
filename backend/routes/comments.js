@@ -13,6 +13,9 @@ const auth = require('../middlewares/auth');
 //route pour récupérer tous les commentaires d'un post dont l'id est fourni
 router.get('/', commentsCtrl.getComments);
 
+//route pour récupérer tous les commentaires d'un post dont l'id est fourni
+router.get('/:id', commentsCtrl.getOneComment);
+
 //controller pour créer un commentaire sur un post dont l'id et l'id utilisateur sont fournis
 router.post('/', auth, commentsCtrl.createOneComment);
 

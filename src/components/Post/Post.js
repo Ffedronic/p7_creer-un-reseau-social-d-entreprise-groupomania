@@ -112,6 +112,16 @@ function Post(props) {
         setShowModal(true);
         DisplayComment(comments);
     };
+    const sendNewComment = (event) => {
+        event.preventDefault();
+        const newComment = { content: commentToSend };
+        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
+        Axios.post(`http://localhost:4000/api/posts/${props.postId}/comments`, newComment)
+            .then((response) => {
+                console.log(response.data.result.insertId);
+            })
+        .catch(error => console.log(error));
+    };
 
     /**
     * * Création des useStates pour l'affichage du modal de modification du post
@@ -207,7 +217,7 @@ function Post(props) {
                                                 <ul className="list-unstyled">
                                                     { list }
                                                 </ul>
-                                                <Form className="mt-3 mb-3 border border-1 p-3">
+                                                <Form onSubmit={ sendNewComment } className="mt-3 mb-3 border border-1 p-3">
                                                     <Form.Group className="mt-3 mb-3">
                                                         <Form.Label>Commenter le post</Form.Label>
                                                         <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
@@ -309,7 +319,7 @@ function Post(props) {
                                                 <ul className="list-unstyled">
                                                     { list }
                                                 </ul>
-                                                <Form className="mt-3 mb-3 border border-1 p-3">
+                                                <Form onSubmit={ sendNewComment } className="mt-3 mb-3 border border-1 p-3">
                                                     <Form.Group className="mt-3 mb-3">
                                                         <Form.Label>Commenter le post</Form.Label>
                                                         <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
