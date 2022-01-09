@@ -104,21 +104,36 @@ function Post(props) {
      /**
       * * Création des fonctions nécessaires au modal de visualisation du post
      */
-    const HandleCloseModal = () => {
+    const HandleCloseModal = () => {        //fermeture du modal de visualisation du post
         setShowModal(false);
         window.location.reload();
     };
-    const handleShowModal = () => {
+    const handleShowModal = () => {         //ouverture du modal de visualisation du post
         setShowModal(true);
         DisplayComment(comments);
     };
-    const sendNewComment = (event) => {
+    const sendNewComment = (event) => {     //requête d'envoi et mise à jour de la liste des commentaires
         event.preventDefault();
         const newComment = { content: commentToSend };
         Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
+        /**
+         * * Envoi du commentaire au serveur de la base de données
+         */
         Axios.post(`http://localhost:4000/api/posts/${props.postId}/comments`, newComment)
             .then((response) => {
                 console.log(response.data.result.insertId);
+                /**
+                 * * Récupération du nouveau commentaire de la base de données
+                 */
+                Axios.get(`http://localhost:4000/api/posts/${props.postId}/comments/${response.data.result.insertId}`)
+                    .then((response) => {
+                        /**
+                         * * Mise à jour visuelle de la liste des commentaires associée au post
+                         */
+                        const newCommentToDisplay = response.data.result[0] ;
+                        comments.push(newCommentToDisplay);
+                        DisplayComment(comments);
+                    });
             })
         .catch(error => console.log(error));
     };

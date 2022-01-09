@@ -38,7 +38,7 @@ exports.getComments = (req, res, next) => {
 exports.getOneComment = (req, res, next) => {
     /*création de la requête sql pour selectionner les commentaires du post dans la base de données dont l'id est fourni
      par les paramètres de requête*/
-    const sqlGetComments = `SELECT comments.id AS id, users.id AS authorId, comments.date AS date, comments.content AS content, users.firstName AS firstName FROM comments JOIN users ON comments.author = users.id WHERE id = '${req.params.id}'`;
+    const sqlGetComments = `SELECT comments.id AS id, users.id AS authorId, comments.date AS date, comments.content AS content, users.firstName AS firstName FROM comments JOIN users ON comments.author = users.id WHERE comments.id = '${req.params.id}'`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlGetComments, (error, result) => {
         if (error) {
@@ -58,7 +58,7 @@ exports.getOneComment = (req, res, next) => {
 exports.createOneComment = (req, res, next) => {
     /*création de la requête sql pour créer un commentaire au sujet du post dans la base de données dont l'id est fourni
     par les paramètres de requête*/
-    const sqlCreateOneComment = `INSERT INTO comments (content, author, post) VALUES ('${req.body.content}', '${res.locals.userId}', '${req.params.id}')`;
+    const sqlCreateOneComment = `INSERT INTO comments (content, author, post) VALUES ("${req.body.content}", "${res.locals.userId}", "${req.params.id}")`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlCreateOneComment, (error, result) => {
         if (error) {
