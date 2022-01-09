@@ -6,7 +6,7 @@ import Posts from './ListofPosts/ListOfPosts';
 import SignUp from './signUpForm/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NewPost from './NewPost/NewPost';
-
+import MyProfil from './MyProfil/MyProfil';
 function App() {
   return (
     <BrowserRouter>
@@ -17,6 +17,7 @@ function App() {
           <Route path="inscription" element={<SignUp />} />
           <Route path="posts" element={<Posts />}/>
           <Route path="nouveauPost" element={<NewPost />}/>
+          <Route path="monProfil" element={<MyProfil />}/>
         </Route>
       </Routes>
     </BrowserRouter>    
