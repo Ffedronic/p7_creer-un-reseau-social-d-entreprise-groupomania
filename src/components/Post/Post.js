@@ -17,9 +17,10 @@
  * ! Import de Comment component
  */
 import Comment from "../Comment/Comment"
- /**
-  * ! import des react-boostrap components
-  */
+ 
+/**
+* ! import des react-boostrap components
+*/
  import Card from 'react-bootstrap/Card';
  import Button from 'react-bootstrap/Button';
  import Image from 'react-bootstrap/Image';
@@ -43,7 +44,7 @@ import Comment from "../Comment/Comment"
  /**
   * ! Post component affichant un post
   */
- function Post (props) {
+ function Post(props) {
      
      /**
       * * Création des useStates pour l'affichage du modal de visualisation du post
@@ -56,9 +57,9 @@ import Comment from "../Comment/Comment"
       * * UseEffect qui télécharge les commentaires en fonction des posts
       */
      useEffect(() => {
-         Axios.get(`http://localhost:4000/api/posts/${props.postId}/comments`)
-     .then((response) =>{
-         setComments(response.data.result);
+        Axios.get(`http://localhost:4000/api/posts/${props.postId}/comments`)
+        .then((response) =>{
+        setComments(response.data.result);
      })
      .catch(error => console.log(error));
      }, [props.postId]);
@@ -93,10 +94,15 @@ import Comment from "../Comment/Comment"
      /**
       * * Création des fonctions nécessaires au modal de visualisation du post
      */
-      const handleCloseModal = () => setShowModal(false);    //fermeture du modal de visualisation
-      const handleShowModal = () => {
-         setShowModal(true);
-      }
+    const HandleCloseModal = () => {
+        setShowModal(false);
+        window.location.href = "posts";
+    };
+    //fermeture du modal de visualisation
+    const handleShowModal = () => {
+        setShowModal(true);
+    };
+
       /**
       * * Création des useStates pour l'affichage du modal de modification du post
      */
@@ -174,7 +180,7 @@ import Comment from "../Comment/Comment"
                          <i className="fas fa-eye"></i>
                          <span className="d-none d-md-inline ms-md-1">Voir</span>
                      </Button>
-                     <Modal fullscreen show={ showModal } onHide={ handleCloseModal }>
+                     <Modal fullscreen show={ showModal } onHide={ HandleCloseModal }>
                          <Modal.Header closeButton>
                          <Modal.Title>Post n°{ props.postId }</Modal.Title>
                          </Modal.Header>
@@ -274,7 +280,7 @@ import Comment from "../Comment/Comment"
                              <i className="fas fa-eye"></i>
                              <span className="d-none d-md-inline ms-md-1">Voir</span>
                      </Button>
-                     <Modal fullscreen show={ showModal } onHide={ handleCloseModal }>
+                     <Modal fullscreen show={ showModal } onHide={ HandleCloseModal }>
                          <Modal.Header closeButton>
                          <Modal.Title>Post n°{ props.postId }</Modal.Title>
                          </Modal.Header>
