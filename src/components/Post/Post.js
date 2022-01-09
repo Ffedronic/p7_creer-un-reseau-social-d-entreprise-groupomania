@@ -75,7 +75,7 @@ function Post(props) {
         * ? Si je suis administrateur, isAuthor = true pour tous les commentaires
         */
         if(isAdmin > 0) {
-            listComments = comments.map((comment) => <Comment key={comment.id} isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} />) ;
+            listComments = comments.map((comment) => <li key={comment.id}><Comment isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} /></li>) ;
             setList(listComments);
         } else {
             /**
@@ -86,17 +86,18 @@ function Post(props) {
                 * ? Si je suis l'auteur du commentaire, isAuthor = true pour le commentaire
                 */
                 if(Number(comment.authorId) === userId){
-                    const commentToDisplay = <Comment key={comment.id} isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} />;
+                    const commentToDisplay = <li key={comment.id}><Comment isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} /></li> ;
                     listComments.push(commentToDisplay);
                     /**
                     * ? Si je ne suis pas l'auteur du commentaire, isAuthor = false pour le commentaire
                     */
                 } else {
-                    const commentToDisplay = <Comment key={comment.id} isAuthor={false} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} />;
+                    const commentToDisplay = <li key={comment.id}><Comment isAuthor={false} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} /></li>;
                     listComments.push(commentToDisplay);
                 }
             }
         }
+        console.log(listComments);
         setList(listComments);
     };
      
@@ -203,7 +204,9 @@ function Post(props) {
                                         <Accordion.Item eventKey="0">
                                             <Accordion.Header>Commentaires</Accordion.Header>
                                             <Accordion.Body>
-                                                {list}
+                                                <ul className="list-unstyled">
+                                                    { list }
+                                                </ul>
                                                 <Form className="mt-3 mb-3 border border-1 p-3">
                                                     <Form.Group className="mt-3 mb-3">
                                                         <Form.Label>Commenter le post</Form.Label>
@@ -303,7 +306,9 @@ function Post(props) {
                                         <Accordion.Item eventKey="0">
                                             <Accordion.Header>Commentaires</Accordion.Header>
                                             <Accordion.Body>
-                                                { list }
+                                                <ul className="list-unstyled">
+                                                    { list }
+                                                </ul>
                                                 <Form className="mt-3 mb-3 border border-1 p-3">
                                                     <Form.Group className="mt-3 mb-3">
                                                         <Form.Label>Commenter le post</Form.Label>
