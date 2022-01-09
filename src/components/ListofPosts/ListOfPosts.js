@@ -1,32 +1,32 @@
 /**
- * ! import du useState et useEffect
- */
+* ! import du useState et useEffect
+*/
 import { useState, useEffect } from "react";
 
 /**
- * ! import du schéma Post
- */
+* ! import du schéma Post
+*/
 import Post from "../Post/Post";
 
 /**
- * ! import des classes boostrap
- */
+* ! import des classes boostrap
+*/
 import 'bootstrap';
 
 /**
- * ! import Axios
- */
+* ! import Axios
+*/
 import Axios from 'axios';
 
 /**
- * ! import des react-boostrap components
- */
+* ! import des react-boostrap components
+*/
 import Container from 'react-bootstrap/Container';
 
 
 /**
- * ! Création des constantes issues du localStorage
- */
+* ! Création des constantes issues du localStorage
+*/
 const token = localStorage.getItem("token");
 const isAdmin = localStorage.getItem("isAdmin");
 const userId =  Number(localStorage.getItem("userId"));
@@ -37,39 +37,39 @@ const userId =  Number(localStorage.getItem("userId"));
  const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
 /**
- * ! Posts component affichant la liste des posts issus de la base de données
- */
+* ! Posts component affichant la liste des posts issus de la base de données
+*/
 function Posts() {
     
     /**
-     * * Création du useState items contenant la liste des posts à afficher
+    * * Création du useState items contenant la liste des posts à afficher
     */
     const [items, setItems] = useState([]);
     
     /**
-     * * Création du useEffect effectuant la requête vers le serveur
+    * * Création du useEffect effectuant la requête vers le serveur
     */
     useEffect(() => {
         Axios.get('http://localhost:4000/api/posts')
-    .then((response) =>{
-        setItems(response.data.result);
-    })
-    .catch(error => console.log(error));
+        .then((response) =>{
+            setItems(response.data.result);
+        })
+        .catch(error => console.log(error));
     }, []);
 
     /**
-     * ? Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+    * ? Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
     */
     if(!token) {
         window.location.href = "connexion";
     } else {
 
-      /**
-       * ? Si l'utilisateur est connecté et qu'il est administrateur
-      */
+        /**
+        * ? Si l'utilisateur est connecté et qu'il est administrateur
+        */
         if(isAdmin > 0) {
             /**
-             * * Affichage de la liste des posts avec isAuthor === true
+            * * Affichage de la liste des posts avec isAuthor === true
             */
             return(
                 <Container className="d-flex flex-wrap justify-content-center mt-5">
@@ -91,22 +91,22 @@ function Posts() {
         }
 
         /**
-         * ? Si l'utilisateur n'est pas administrateur
+        * ? Si l'utilisateur n'est pas administrateur
         */
         /**
-         * * Création de listItems qui contiendra l'ensemble des posts à afficher
+        * * Création de listItems qui contiendra l'ensemble des posts à afficher
         */
         var listItems = [] ;
         /**
-         * * Pour chaque item présent dans la liste des posts issus du serveu
+        * * Pour chaque item présent dans la liste des posts issus du serveu
         */
         for(let item of items) {
             /**
-             * * Si l'id de l'utilisateur correspond à l'id de l'auteur de l'item
+            * * Si l'id de l'utilisateur correspond à l'id de l'auteur de l'item
             */
             if(item.author === userId) {
                 /**
-                 * * Création d'une Card avec l'option isAuthor === true
+                * * Création d'une Card avec l'option isAuthor === true
                 */
                 const displayItem = 
                     <Post 
@@ -121,16 +121,16 @@ function Posts() {
                         postImgUrl={ item.img_url }
                     />;
                 /**
-                 * * Ajout de la Card à la liste des posts à afficher
+                * * Ajout de la Card à la liste des posts à afficher
                 */
                 listItems.push(displayItem);
             } else {
                 /**
-                 * ? Si l'id de l'utilisateur ne correspond pas à l'id de l'auteur de l'item
-                 */
+                * ? Si l'id de l'utilisateur ne correspond pas à l'id de l'auteur de l'item
+                */
                 /**
-                 * * Création d'une Card avec l'option isAuthor === false
-                 */
+                * * Création d'une Card avec l'option isAuthor === false
+                */
                 const displayItem = 
                     <Post 
                         key={ item.id }
@@ -144,14 +144,14 @@ function Posts() {
                         postImgUrl={ item.img_url }
                     />;
                 /**
-                 * * Ajout de la Card à la liste des posts à afficher
+                * * Ajout de la Card à la liste des posts à afficher
                 */
                 listItems.push(displayItem);
             }
         }
         return(
             /**
-             * ! Affichage de la liste des posts
+            * ! Affichage de la liste des posts
             */
             <Container className="d-flex flex-wrap justify-content-center mt-5">
                 { listItems }

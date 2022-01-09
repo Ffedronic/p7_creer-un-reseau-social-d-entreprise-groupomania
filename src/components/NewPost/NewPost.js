@@ -1,24 +1,48 @@
-//import de react
+/**
+ * ! Import du useState
+ */
 import { useState } from "react";
 
-//import des classes de bootstrap
+/**
+ * ! Import des classes de bootstrap
+ */
 import 'bootstrap';
 
-//import Axios pour effectuer les requêtes
+/**
+ * ! Import Axios
+ */
 import Axios from 'axios';
-//import des react-bootstrap components
+
+/**
+ * ! Import des react-bootstrap components
+ */
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
+/**
+* ! Création des constantes issues du localStorage
+*/
+const token = localStorage.getItem("token");
+
+/**
+ * ! NewPost component pour créer un nouveau post
+ */
 function NewPost() {
+
+    /**
+     * * Création des useState pour récupérer le titre et le sujet du nouveau post
+     */
     const [title, setTitle] = useState();
     const [subject, setSubject] = useState();
 
+    /**
+     * * Création de la fonction de soumission du formulaire au serveur de la base de données 
+     */
     const postFormSubmit = (event) => {
         event.preventDefault();
         const postFormData = new FormData(document.getElementById("postForm"));
-        Axios.defaults.headers['Authorization'] =`Bearer ${localStorage.getItem("token")}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${ token }`;
         Axios.post("http://localhost:4000/api/posts", postFormData)
         .then((result) => {
             console.log(result);
@@ -26,6 +50,10 @@ function NewPost() {
         })
         .catch(error => console.log(error));
     };
+
+    /**
+     * * Création du formulaire de soumission du nouveau post
+     */
     return(
         <Container>
             <Form id="postForm" className="border border-1 rounded-3 border-black py-2 px-3 mt-3" onSubmit={ postFormSubmit }>

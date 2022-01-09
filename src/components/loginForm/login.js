@@ -1,29 +1,48 @@
-//import de react
+/**
+* ! Import de react, useState
+*/
 import React, {useState} from "react";
 
-//import des classes de bootstrap
+/**
+* ! Import des classes de bootstrap
+*/
 import 'bootstrap';
 
-//import Axios pour effectuer les requêtes
+/**
+ * ! Import Axios pour effectuer les requêtes
+ */
 import Axios from 'axios';
 
-//import des react-bootstrap components
+/**
+ * ! Import des react-bootstrap components
+ */
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-//composant React Login servant à se logger
+/**
+ * ! Login component servant à se logger
+ */
 function Login() {
   
-  /*Création des useStates email et password*/
+  /**
+   * * Création des useStates email et password
+   */
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  /*vérification du log de l'utilisateur*/
+  /**
+   * * Vérification du log de l'utilisateur
+   */
   const isLogged = localStorage.getItem("token");
 
-  /*requête Login : connexion de l'utilisateur, enregistrement dans le localStorage du token et de l'isAdmin, redirection vers la page des posts*/
+  /**
+   * * Requête Login : 
+   * * connexion de l'utilisateur, 
+   * * enregistrement dans le localStorage du token et de l'isAdmin, 
+   * * redirection vers la page des posts 
+   */
   const loginForm = (event) => {
     event.preventDefault();
     Axios.post("http://localhost:4000/api/auth/login", {
@@ -38,10 +57,14 @@ function Login() {
     })
   };
     
-  /*si l'utilisateur n'est pas connecté,*/
+  /**
+   * ? Si l'utilisateur n'est pas connecté,
+  */
   if(!isLogged) {
     return (
-      /*formulaire de connexion avec les react-bootstrap components*/      
+      /**
+       * * Affichage du formulaire de connexion avec les react-bootstrap components 
+       */      
       <Container>
         <Form onSubmit={ loginForm } className="border border-1 p-3 rounded-3 shadow bg-light mt-5">
           <Form.Group className="mb-3" controlId="email">
@@ -64,7 +87,9 @@ function Login() {
       </Container>
     )
   } else {
-    /*si l'utilisateur est connecté, on le redirige vers la page des posts*/
+    /**
+     * ? Si l'utilisateur est connecté, on le redirige vers la page des posts
+     */
     window.location.href = "posts";
   }
 };
