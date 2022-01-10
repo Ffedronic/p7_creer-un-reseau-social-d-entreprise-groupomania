@@ -91,7 +91,7 @@ exports.login = (req, res, next) => {
 exports.getMyProfil = (req, res, next) => {
     /*création de la requête sql pour rechercher le prénom, nom et email de l'utilisateur dans la base données à partir de son id 
     fourni par le profil utilisateur*/
-    const sqlSearchMyProfil = `SELECT firstName, lastName, email FROM users WHERE id = '${res.locals.userId}'`;
+    const sqlSearchMyProfil = `SELECT id, firstName, lastName, email FROM users WHERE id = '${res.locals.userId}'`;
     /*envoi de la requête au serveur sql*/
     groupomaniaDBConnect.query(sqlSearchMyProfil, (error, result) => {
         if (error) {
@@ -113,7 +113,7 @@ exports.modifyMyProfil = (req, res, next) => {
     fourni par le profil utilisateur*/
     const sqlUpdateMyProfil = `UPDATE users SET firstName = '${req.body.firstName}', lastName = '${req.body.lastName}', email = '${req.body.email}' WHERE id = '${res.locals.userId}'`;
     /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlUpdateMyProfil, (error) => {
+    groupomaniaDBConnect.query(sqlUpdateMyProfil, (error, result) => {
         if (error) {
             console.log(error);
             res.status(500).json({
@@ -122,7 +122,7 @@ exports.modifyMyProfil = (req, res, next) => {
         }
         /*envoi du résultat de la requête sql*/
         res.status(200).json({
-            message: "le profil a été modifié."
+            result
         });
     });
 };
@@ -132,18 +132,16 @@ exports.deleteMyProfil = (req, res, next) => {
     /*création de la requête sql pour supprimer l'utilisateur de la base de données à partir de son id fourni par le profil utilisateur*/
     const sqlDeleteMyProfil = `DELETE FROM users WHERE id = '${res.locals.userId}'`;
     /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlDeleteMyProfil, (error) => {
+    groupomaniaDBConnect.query(sqlDeleteMyProfil, (error, result) => {
         if (error) {
             console.log(error);
             res.status(500).json({
                 error
             });
         }
-        /*suppression du cookie d'authentification*/
-        res.clearCookie("userProfil");
         /*envoi du message de validation de la suppression du profil dans la base de données*/
         res.status(200).json({
-            message: "le profil a été supprimé."
+            result
         });
     });
 };
