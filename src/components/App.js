@@ -6,7 +6,6 @@ import Posts from './ListofPosts/ListOfPosts';
 import SignUp from './signUpForm/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NewPost from './NewPost/NewPost';
-import MyProfil from './MyProfil/MyProfil';
 import Profil from './profil/Profil'
 
 function App() {
@@ -19,7 +18,6 @@ function App() {
           <Route path="inscription" element={<SignUp />} />
           <Route path="posts" element={<Posts />} />
           <Route path="nouveauPost" element={<NewPost />} />
-          <Route path="monProfil" element={<MyProfil />} />
           <Route path="profil/:id" element={<Profil />} />
         </Route>
       </Routes>

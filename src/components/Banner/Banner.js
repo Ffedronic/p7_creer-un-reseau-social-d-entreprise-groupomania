@@ -18,6 +18,7 @@ function Banner() {
 
   /*vérification du log de l'utilisateur*/
   const isLogged = localStorage.getItem("token");
+  const profilHref = `/profil/${Number(localStorage.getItem("userId"))}`;
   
   /*déconnexion de l'utilisateur en vidant le localStorage (token, isAdmin)*/
   const isLogOut = () => {
@@ -73,7 +74,7 @@ function Banner() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
               <Nav.Item className="btn btn-primary btn-sm rounded-pill p-0 me-3">
-                <Nav.Link className="text-white" href="/monProfil"><i className="far fa-id-card me-2"></i>Profil</Nav.Link>
+                <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-2"></i>Profil</Nav.Link>
               </Nav.Item>
               <Nav.Item className="btn btn-warning btn-sm rounded-pill p-0 me-3">
                 <Nav.Link className="text-white" href="/nouveauPost"><i className="far fa-envelope me-2"></i>Ajouter un sujet</Nav.Link>

@@ -19,20 +19,14 @@ router.post('/signup', passwordValidator, userCtrl.signUp);
 //route pour la connexion d'un utilisateur à l'application
 router.post('/login', passwordValidator, userCtrl.login);
 
-//route pour accéder à son profil utilisateur
-router.get('/myProfil', auth, userCtrl.getMyProfil);
-
 //route pour modifier son profil utilisateur
-router.put('/myProfil', auth, userCtrl.modifyMyProfil);
+router.put('/:id', auth, userCtrl.modifyProfil);
 
 //route supprimer mon profil d'utilisateur
-router.delete('/myProfil', auth, userCtrl.deleteMyProfil);
+router.delete('/:id', auth, userCtrl.deleteProfil);
 
 //route pour voir le profil d'un utilisateur
-router.get('/:id', auth, userCtrl.getUserProfil);
-
-//route pour supprimer le profil d'un utilisateur
-router.delete('/:id', auth, userCtrl.deleteUserProfil);
+router.get('/:id', auth, userCtrl.getProfil);
 
 
 module.exports = router;
