@@ -7,20 +7,24 @@ import SignUp from './signUpForm/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NewPost from './NewPost/NewPost';
 import MyProfil from './MyProfil/MyProfil';
+import Profil from './profil/Profil'
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Banner/>}>
+        <Route path="/" element={<Banner/>} >
           <Route index element={<Login />} />
           <Route path="connexion" element={<Login />} />
           <Route path="inscription" element={<SignUp />} />
-          <Route path="posts" element={<Posts />}/>
-          <Route path="nouveauPost" element={<NewPost />}/>
-          <Route path="monProfil" element={<MyProfil />}/>
+          <Route path="posts" element={<Posts />} />
+          <Route path="nouveauPost" element={<NewPost />} />
+          <Route path="monProfil" element={<MyProfil />} />
+          <Route path="profil/:id" element={<Profil />} />
         </Route>
       </Routes>
-    </BrowserRouter>    
+      <h2>footer</h2>
+    </BrowserRouter>  
   )
 }
 

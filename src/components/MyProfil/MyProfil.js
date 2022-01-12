@@ -1,3 +1,13 @@
+/*import { useParams } from 'react-router-dom';
+function Profil() {
+    const params = useParams();
+    return(
+        <div>
+            <p>profil {params.id} </p>
+        </div>
+    )
+}*/
+
 /**
 * ! import du useState et useEffect
 */
@@ -82,7 +92,7 @@ function MyProfil() {
         setLastName(profil.lastName);
         setEmail(profil.email);
     };
-    const modifyMyProfil = (event) => {         //Modifie le profil utilisateur dans la base données
+    const modifyMyProfil = (event) => {         //Modifie son profil utilisateur dans la base données
         event.preventDefault();
         const newProfil = {
             firstName : firstName,
@@ -97,7 +107,7 @@ function MyProfil() {
         })
         .catch(error => console.log(error));
     };
-    const deleteMyProfil = (event) => {         //Supprime le profil utilisateur de la base de données, vide le localStorage et ramène vers la page de connexion
+    const deleteMyProfil = (event) => {         //Supprime son profil utilisateur de la base de données, vide le localStorage et ramène vers la page de connexion
         Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
         Axios.delete('http://localhost:4000/api/auth/myProfil')
         .then(() => {

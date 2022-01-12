@@ -184,7 +184,8 @@ function Post(props) {
     * * Création de la constante isAuthor pour le post
     */
     const isAuthor = props.isAuthor ;
- 
+    
+    const route = `/profil/${props.postAuthorId}`;
     /**
     * ? Si l'utilisateur est auteur ou isAdmin du post
     */
@@ -197,7 +198,7 @@ function Post(props) {
                 <Card.Header className="d-flex flex-row justify-content-between">
                     <div>
                         <span className="d-none">{ props.postId }</span>
-                        <span className="text-uppercase fw-bold">{ props.postAuthor }</span>
+                        <a href={ route } className="text-uppercase fw-bold">{ props.postAuthor }</a>
                         <span className="d-none" id="authorId">{ props.postAuthorId}</span>
                     </div>
                     <span className="ms-5">{ props.postDate }</span>
@@ -299,7 +300,7 @@ function Post(props) {
                 <Card.Header className="d-flex flex-row justify-content-between">
                     <div>
                         <span className="d-none">{ props.postId }</span>
-                        <span className="text-uppercase fw-bold">{ props.postAuthor }</span>
+                        <a href={route} className="text-uppercase fw-bold">{ props.postAuthor }</a>
                         <span className="d-none" id="authorId">{ props.postAuthorId}</span>
                     </div>
                     <span className="ms-5">{ props.postDate }</span>
