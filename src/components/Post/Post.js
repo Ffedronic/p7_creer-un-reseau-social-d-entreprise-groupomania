@@ -235,7 +235,7 @@ function Post(props) {
                                                 </ul>
                                                 <Form onSubmit={ sendNewComment } className="mt-3 mb-3 border border-1 p-3">
                                                     <Form.Group className="mt-3 mb-3">
-                                                        <Form.Label>Commenter le post</Form.Label>
+                                                        <Form.Label htmlFor="comment">Commenter le post</Form.Label>
                                                         <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
                                                     </Form.Group>                
                                                     <Button variant="primary" type="submit">
@@ -264,15 +264,15 @@ function Post(props) {
                         <Modal.Body>
                             <Form id="postForm" className="border border-1 rounded-3 border-black py-2 px-3 mt-3" onSubmit={ modifyOnePost }>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Titre</Form.Label>
+                                    <Form.Label htmlFor="title">Titre</Form.Label>
                                     <Form.Control name="title" id="title" type="text" value={ title } onChange={ (e) => setTitle(e.target.value) } />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Contenu</Form.Label>
+                                    <Form.Label htmlFor="subject">Contenu</Form.Label>
                                     <Form.Control name="subject" id="subject" type="text" value={ subject } onChange={ (e) => setSubject(e.target.value) } />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Image</Form.Label>
+                                    <Form.Label htmlFor="image">Image</Form.Label>
                                     <Form.Control name="image" id="image" type="file" />
                                     <Image src={ props.postImgUrl } />
                                 </Form.Group>
@@ -337,7 +337,7 @@ function Post(props) {
                                                 </ul>
                                                 <Form onSubmit={ sendNewComment } className="mt-3 mb-3 border border-1 p-3">
                                                     <Form.Group className="mt-3 mb-3">
-                                                        <Form.Label>Commenter le post</Form.Label>
+                                                        <Form.Label htmlFor="comment">Commenter le post</Form.Label>
                                                         <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
                                                     </Form.Group>                
                                                     <Button variant="primary" type="submit">

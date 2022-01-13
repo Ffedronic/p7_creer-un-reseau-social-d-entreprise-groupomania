@@ -166,15 +166,15 @@ function Profil() {
                                     <Modal.Body>
                                         <Form id="postForm" className="border border-1 rounded-3 border-black py-2 px-3 mt-3" onSubmit={ modifyMyProfil }>
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Prénom :</Form.Label>
+                                                <Form.Label htmlFor="firstName">Prénom :</Form.Label>
                                                 <Form.Control name="firstName" id="firstName" type="text" value={ firstName } onChange={ (e) => setFirstName(e.target.value) } />
                                             </Form.Group>
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Nom :</Form.Label>
+                                                <Form.Label htmlFor="lastName">Nom :</Form.Label>
                                                 <Form.Control name="lastName" id="lastName" type="text" value={ lastName } onChange={ (e) => setLastName(e.target.value) } />
                                             </Form.Group>
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Email :</Form.Label>
+                                                <Form.Label htmlFor="email">Email :</Form.Label>
                                                 <Form.Control name="email" id="email" type="text" value={ email } onChange={ (e) => setEmail(e.target.value) } />
                                             </Form.Group>
                                             <Button variant="primary" type="submit">

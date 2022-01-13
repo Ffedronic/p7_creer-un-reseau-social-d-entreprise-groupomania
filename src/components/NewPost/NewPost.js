@@ -72,15 +72,15 @@ function NewPost() {
         <Container>
             <Form id="postForm" className="border border-1 rounded-3 border-black py-2 px-3 mt-3" onSubmit={ postFormSubmit }>
                 <Form.Group className="mb-3">
-                    <Form.Label>Titre</Form.Label>
+                    <Form.Label htmlFor="title">Titre :</Form.Label>
                     <Form.Control name="title" id="title" type="text" placeholder="Entrez le titre ici" value={ title } onChange={(e) => setTitle(e.target.value)} />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Contenu</Form.Label>
+                    <Form.Label htmlFor="subject">Contenu :</Form.Label>
                     <Form.Control name="subject" id="subject" type="text" placeholder="Entrez le contenu ici" value={ subject } onChange={(e) => setSubject(e.target.value)} />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Image</Form.Label>
+                    <Form.Label htmlFor="image">Image :</Form.Label>
                     <Form.Control name="image" id="image" type="file" />
                 </Form.Group>
                 <Button variant="primary" type="submit">

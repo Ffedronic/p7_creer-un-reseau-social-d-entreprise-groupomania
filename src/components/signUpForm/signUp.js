@@ -66,39 +66,39 @@ function SignUp() {
       <Container>
         <Form onSubmit={ Register } className="border border-1 p-3 rounded-3 shadow bg-light mt-5">
           <Form.Group className="mb-3" controlId="firstName">
-            <Form.Label className="fw-bold">Prénom :</Form.Label>
+            <Form.Label htmlFor="firstName" className="fw-bold">Prénom :</Form.Label>
             <InputGroup>
               <InputGroup.Text>
                 <i className="fas fa-user"></i>
               </InputGroup.Text>
-              <Form.Control required type="text" name="firstName" value={ firstName } onChange={(e) => setFirstName(e.target.value)} />
+              <Form.Control required type="text" id="firstName" name="firstName" value={ firstName } onChange={(e) => setFirstName(e.target.value)} />
             </InputGroup>
           </Form.Group>
           <Form.Group className="mb-3" controlId="lastName">
-            <Form.Label className="fw-bold">Nom :</Form.Label>
+            <Form.Label htmlFor="lastName" className="fw-bold">Nom :</Form.Label>
             <InputGroup>
               <InputGroup.Text>
                 <i className="far fa-user"></i>
               </InputGroup.Text>
-              <Form.Control required type="text" name="lastName" value={ lastName } onChange={(e) => setLastName(e.target.value)} />
+              <Form.Control required type="text" id="lastName" name="lastName" value={ lastName } onChange={(e) => setLastName(e.target.value)} />
             </InputGroup>
           </Form.Group>
           <Form.Group className="mb-3" controlId="email">
-            <Form.Label className="fw-bold">Email :</Form.Label>
+            <Form.Label htmlFor="email" className="fw-bold">Email :</Form.Label>
             <InputGroup>
               <InputGroup.Text>
                 <i className="fas fa-at"></i>
               </InputGroup.Text>
-              <Form.Control required type="email" name="email" value={ email } onChange={(e) => setEmail(e.target.value)} placeholder="exemple@groupomania.com" />
+              <Form.Control required type="email" id="email" name="email" value={ email } onChange={(e) => setEmail(e.target.value)} placeholder="exemple@groupomania.com" />
             </InputGroup>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label className="fw-bold">Mot de passe :</Form.Label>
+            <Form.Label htmlFor="password" className="fw-bold">Mot de passe :</Form.Label>
             <InputGroup className="mb-3">
               <InputGroup.Text>
                 <i className="fas fa-lock"></i>
               </InputGroup.Text>
-              <Form.Control required type="password" name="password" value={ password } onChange={(e) => setPassword(e.target.value)} placeholder="entrez votre mot de passe" />
+              <Form.Control required type="password" id="password" name="password" value={ password } onChange={(e) => setPassword(e.target.value)} placeholder="entrez votre mot de passe" />
             </InputGroup>
             <Form.Text className="text-muted">
               <i className="fas fa-exclamation-circle me-1"></i>
