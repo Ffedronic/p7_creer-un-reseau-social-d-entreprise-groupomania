@@ -115,7 +115,14 @@ function Profil() {
         .catch(error => console.log(error));
     };
 
+
     /**
+     * ? Si l'utilisateur n'est pas loggé
+     */
+    if(!token) {
+        window.location.href = "/connexion";
+    } else {
+        /**
      * * Création de la carte du profil de l'utilisateur
      */
     /**
@@ -221,6 +228,7 @@ function Profil() {
                 </Card>
             </Container>
         )
+    }
     }
     
 }

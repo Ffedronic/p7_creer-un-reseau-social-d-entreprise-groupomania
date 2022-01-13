@@ -52,6 +52,20 @@ function NewPost() {
     };
 
     /**
+     * Récupération du statut du log de l'utilisateur
+     */
+    const isLogged = localStorage.getItem("token");
+
+    /**
+     * ? Si l'utilisateur n'est pas loggé
+     */
+    if(!isLogged) {
+        window.location.href = "connexion";
+    /**
+     * ? Si l'utilisateur est loggé
+     */
+    } else {
+        /**
      * * Création du formulaire de soumission du nouveau post
      */
     return(
@@ -75,6 +89,8 @@ function NewPost() {
             </Form>
         </Container>
     )
+    }
+    
 };
 
 export default NewPost;

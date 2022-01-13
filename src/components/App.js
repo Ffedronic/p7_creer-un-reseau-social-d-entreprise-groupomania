@@ -19,9 +19,9 @@ function App() {
           <Route path="posts" element={<Posts />} />
           <Route path="nouveauPost" element={<NewPost />} />
           <Route path="profil/:id" element={<Profil />} />
+          <Route path="*" element={<Login />} />
         </Route>
       </Routes>
-      <h2>footer</h2>
     </BrowserRouter>  
   )
 }
