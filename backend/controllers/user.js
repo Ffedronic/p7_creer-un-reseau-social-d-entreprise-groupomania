@@ -26,9 +26,9 @@ exports.signUp = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then((hash) => {
             /*création de la requête sql pour créer le profil utilisateur dans la base de données sql*/
-            const sqlCreateUser = `INSERT INTO users (firstName, lastName, email, password, isAdmin) VALUES ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${hash}', '0')`;
+            const sqlCreateUser = `INSERT INTO users (firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)`;
             /*envoi de la requête au serveur*/
-            groupomaniaDBConnect.query(sqlCreateUser, (error, result) => {
+            groupomaniaDBConnect.query(sqlCreateUser, [req.body.firstName, req.body.lastName, req.body.email, hash, 0], (error, result) => {
                 /*si l'insertion est impossible*/
                 if (error) {
                     throw error;
@@ -49,9 +49,9 @@ exports.signUp = (req, res, next) => {
 exports.login = (req, res, next) => {
     /*création de la requête sql pour rechercher le profil utilisateur dans la base de données sql à partir de 
     l'email fourni par l'application*/
-    const sqlSearchUser = `SELECT * FROM users WHERE email = '${req.body.email}'`;
+    const sqlSearchUser = `SELECT * FROM users WHERE email = ?`;
     /*envoi de la requête au serveur*/
-    groupomaniaDBConnect.query(sqlSearchUser, (error, result) => {
+    groupomaniaDBConnect.query(sqlSearchUser, [req.body.email], (error, result) => {
         if (error) {
             throw error;
         }
@@ -91,9 +91,9 @@ exports.login = (req, res, next) => {
 exports.modifyProfil = (req, res, next) => {
     /*création de la requête sql pour mettre à jour le prénom, nom et email de l'utilisateur dans la base de données à partir de son id 
     fourni par le profil utilisateur*/
-    const sqlUpdateMyProfil = `UPDATE users SET firstName = '${req.body.firstName}', lastName = '${req.body.lastName}', email = '${req.body.email}' WHERE id = '${req.params.id}'`;
+    const sqlUpdateMyProfil = `UPDATE users SET firstName = ?, lastName = ?, email = ? WHERE id = ?`;
     /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlUpdateMyProfil, (error, result) => {
+    groupomaniaDBConnect.query(sqlUpdateMyProfil, [req.body.firstName, req.body.lastName, req.body.email, req.params.id], (error, result) => {
         if (error) {
             console.log(error);
             res.status(500).json({
@@ -110,9 +110,9 @@ exports.modifyProfil = (req, res, next) => {
 //controller pour supprimer son profil utilisateur
 exports.deleteProfil = (req, res, next) => {
     /*création de la requête sql pour supprimer l'utilisateur de la base de données à partir de son id fourni par le profil utilisateur*/
-    const sqlDeleteMyProfil = `DELETE FROM users WHERE id = '${req.params.id}'`;
+    const sqlDeleteMyProfil = `DELETE FROM users WHERE id = ?`;
     /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlDeleteMyProfil, (error, result) => {
+    groupomaniaDBConnect.query(sqlDeleteMyProfil, [req.params.id], (error, result) => {
         if (error) {
             console.log(error);
             res.status(500).json({
@@ -130,9 +130,9 @@ exports.deleteProfil = (req, res, next) => {
 exports.getProfil = (req, res, next) => {
     /*création de la requête sql pour récupérer le prénom, le nom, l'email de l'utilisateur dans la base de données
     dont l'id est fourni par les paramètres de la requete client*/
-    const sqlSearchUserProfil = `SELECT id, firstName, lastName, email FROM users WHERE id = '${req.params.id}'`;
+    const sqlSearchUserProfil = `SELECT id, firstName, lastName, email FROM users WHERE id = ?`;
     /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlSearchUserProfil, (error, result) => {
+    groupomaniaDBConnect.query(sqlSearchUserProfil, [req.params.id], (error, result) => {
         if (error) {
             console.log(error);
             res.status(500).json({

@@ -1,8 +1,7 @@
 /**
 * ! import des classes boostrap
 */
-import 'bootstrap';
- 
+import 'bootstrap'; 
  
 /**
 * ! import Axios

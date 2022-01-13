@@ -71,14 +71,14 @@ function Login() {
             <Form.Label className="fw-bold">Email :</Form.Label>
             <InputGroup>
               <InputGroup.Text><i className="fas fa-at"></i></InputGroup.Text>
-              <Form.Control type="email" name="email" value={ email } onChange={(e) => setEmail(e.target.value)} placeholder="exemple@groupomania.com" />
+              <Form.Control required type="email" name="email" value={ email } onChange={(e) => setEmail(e.target.value)} placeholder="exemple@groupomania.com" />
             </InputGroup>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label className="fw-bold">Mot de passe :</Form.Label>
             <InputGroup className="mb-3">
               <InputGroup.Text><i className="fas fa-lock"></i></InputGroup.Text>
-              <Form.Control type="password" name="password" value={ password } onChange={(e) => setPassword(e.target.value)} placeholder="entrez votre mot de passe" />
+              <Form.Control required type="password" name="password" value={ password } onChange={(e) => setPassword(e.target.value)} placeholder="entrez votre mot de passe" />
             </InputGroup>
             <Form.Text className="text-muted"><i className="fas fa-exclamation-circle me-1"></i>Votre mot passe doit contenir au minimum 8 caractères, 1 lettre majuscule, 1 lettre minuscule, 2 chiffres, et <span className="text-decoration-underline">pas de symboles.</span></Form.Text>
           </Form.Group>

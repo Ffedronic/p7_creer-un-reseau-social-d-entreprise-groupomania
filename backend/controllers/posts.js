@@ -38,9 +38,9 @@ exports.getPosts = (req, res, next) => {
 exports.getOnePost = (req, res, next) => {
     /*récupération du post présent dans la base de données dont l'id est fourni par les paramètres de requête client en faisant une jointure avec la table users
     pour récupérer le prénom de l'auteur*/
-    const sqlGetOnePost = `SELECT posts.title AS title, posts.subject AS subject, posts.img_url AS img_url, posts.date AS date, posts.author AS authorId, users.firstName AS authorFirstName FROM posts JOIN users ON posts.author = users.id WHERE posts.id = '${req.params.id}'`;
+    const sqlGetOnePost = `SELECT posts.title AS title, posts.subject AS subject, posts.img_url AS img_url, posts.date AS date, posts.author AS authorId, users.firstName AS authorFirstName FROM posts JOIN users ON posts.author = users.id WHERE posts.id = ?`;
     /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlGetOnePost, (error, result) => {
+    groupomaniaDBConnect.query(sqlGetOnePost, [req.params.id], (error, result) => {
         if (error) {
             throw error;
         }
@@ -63,9 +63,9 @@ exports.createOnePost = (req, res, next) => {
             author: res.locals.userId
         };
         /*création de la requête sql pour insérer le post dans la base de données dont l'id de l'auteur est fourni par le profil utilisateur issu du cookie d'authentification*/
-        const sqlCreateOnePost = `INSERT INTO posts (title, subject, img_url, author) VALUES ("${post.title}", "${post.subject}", "${post.img_url}", ${post.author})`;
+        const sqlCreateOnePost = `INSERT INTO posts (title, subject, img_url, author) VALUES ( ?, ?, ?, ?)`;
         /*envoi de la requête au serveur sql*/
-        groupomaniaDBConnect.query(sqlCreateOnePost, (error, result) => {
+        groupomaniaDBConnect.query(sqlCreateOnePost, [post.title, post.subject, post.img_url, post.author], (error, result) => {
             if (error) {
                 throw error;
             }
@@ -84,9 +84,9 @@ exports.createOnePost = (req, res, next) => {
             author: res.locals.userId
         };
         /*création de la requête sql pour insérer un post dans la base de données dont l'id de l'auteur est fourni par le profil utilisateur issu du cookie d'authentification*/
-        const sqlCreateOnePost = `INSERT INTO posts (title, subject, author) VALUES ("${post.title}", "${post.subject}", ${post.author})`;
+        const sqlCreateOnePost = `INSERT INTO posts (title, subject, author) VALUES ( ?, ?, ?)`;
         /*envoi de la requête au serveur sql*/
-        groupomaniaDBConnect.query(sqlCreateOnePost, (error, result) => {
+        groupomaniaDBConnect.query(sqlCreateOnePost, [post.title, post.subject, post.author], (error, result) => {
             if (error) {
                 throw error;
             }
@@ -109,9 +109,9 @@ exports.modifyOnePost = (req, res, next) => {
             img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         };
         /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = "${post.title}", subject = "${post.subject}", img_url = "${post.img_url}" WHERE id = "${req.params.id}" AND author ="${res.locals.userId}"`;
+        const sqlModifyOnePost = `UPDATE posts SET title = ?, subject = ?, img_url = ? WHERE id = ? AND author = ?`;
         /*envoi de la requête au serveur sql*/
-        groupomaniaDBConnect.query(sqlModifyOnePost, (error) => {
+        groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, post.img_url, req.params.id, res.locals.userId], (error) => {
             if (error) {
                 throw error;
             }
@@ -129,9 +129,9 @@ exports.modifyOnePost = (req, res, next) => {
             subject: req.body.subject
         };
         /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = "${post.title}", subject = "${post.subject}" WHERE id = "${req.params.id}" AND author ="${res.locals.userId}"`;
+        const sqlModifyOnePost = `UPDATE posts SET title = ?,  subject = ? WHERE id = ? AND author = ?`;
         /*envoi de la requête au serveur sql*/
-        groupomaniaDBConnect.query(sqlModifyOnePost, (error) => {
+        groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, req.params.id, res.locals.userId], (error) => {
             if (error) {
                 throw error;
             }
@@ -146,9 +146,9 @@ exports.modifyOnePost = (req, res, next) => {
 //controller pour supprimer un post
 exports.deleteOnePost = (req, res, next) => {
     /*création de la requête sql pour sélectionner le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-    const sqlGetPosts = `SELECT * FROM posts WHERE id = '${req.params.id}'`;
+    const sqlGetPosts = `SELECT * FROM posts WHERE id = ?`;
     /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlGetPosts, (error, result) => {
+    groupomaniaDBConnect.query(sqlGetPosts, [req.params.id], (error, result) => {
         if (error) {
             throw error;
         }
@@ -161,9 +161,9 @@ exports.deleteOnePost = (req, res, next) => {
             fs.unlink(`images/${filename}`, () => {
                 /*création de la requête sql pour supprimer le post dans la base de données dont l'id est fourni par 
                 les paramètres de la requête*/
-                const sqlDeleteOnePost = `DELETE FROM posts WHERE id = '${req.params.id}'`;
+                const sqlDeleteOnePost = `DELETE FROM posts WHERE id = ?`;
                 /*envoi de la requête au serveur sql*/
-                groupomaniaDBConnect.query(sqlDeleteOnePost, (error, result) => {
+                groupomaniaDBConnect.query(sqlDeleteOnePost, [req.params.id], (error, result) => {
                     if (error) {
                         throw error;
                     }
@@ -179,9 +179,9 @@ exports.deleteOnePost = (req, res, next) => {
             fs.unlink(`images/${filename}`, () => {
                 /*création de la requête sql pour supprimer le post dans la base de données dont l'id est fourni par 
                 les paramètres de la requête*/
-                const sqlDeleteOnePost = `DELETE FROM posts WHERE id = '${req.params.id}' AND author = '${res.locals.userId}'`;
+                const sqlDeleteOnePost = `DELETE FROM posts WHERE id = ? AND author = ?`;
                 /*envoi de la requête au serveur sql*/
-                groupomaniaDBConnect.query(sqlDeleteOnePost, (error, result) => {
+                groupomaniaDBConnect.query(sqlDeleteOnePost, [req.params.id, res.locals.userId], (error, result) => {
                     if (error) {
                         throw error;
                     }

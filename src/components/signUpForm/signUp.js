@@ -71,7 +71,7 @@ function SignUp() {
               <InputGroup.Text>
                 <i className="fas fa-user"></i>
               </InputGroup.Text>
-              <Form.Control type="text" name="firstName" value={ firstName } onChange={(e) => setFirstName(e.target.value)} />
+              <Form.Control required type="text" name="firstName" value={ firstName } onChange={(e) => setFirstName(e.target.value)} />
             </InputGroup>
           </Form.Group>
           <Form.Group className="mb-3" controlId="lastName">
@@ -80,7 +80,7 @@ function SignUp() {
               <InputGroup.Text>
                 <i className="far fa-user"></i>
               </InputGroup.Text>
-              <Form.Control type="text" name="lastName" value={ lastName } onChange={(e) => setLastName(e.target.value)} />
+              <Form.Control required type="text" name="lastName" value={ lastName } onChange={(e) => setLastName(e.target.value)} />
             </InputGroup>
           </Form.Group>
           <Form.Group className="mb-3" controlId="email">
@@ -89,7 +89,7 @@ function SignUp() {
               <InputGroup.Text>
                 <i className="fas fa-at"></i>
               </InputGroup.Text>
-              <Form.Control type="email" name="email" value={ email } onChange={(e) => setEmail(e.target.value)} placeholder="exemple@groupomania.com" />
+              <Form.Control required type="email" name="email" value={ email } onChange={(e) => setEmail(e.target.value)} placeholder="exemple@groupomania.com" />
             </InputGroup>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -98,7 +98,7 @@ function SignUp() {
               <InputGroup.Text>
                 <i className="fas fa-lock"></i>
               </InputGroup.Text>
-              <Form.Control type="password" name="password" value={ password } onChange={(e) => setPassword(e.target.value)} placeholder="entrez votre mot de passe" />
+              <Form.Control required type="password" name="password" value={ password } onChange={(e) => setPassword(e.target.value)} placeholder="entrez votre mot de passe" />
             </InputGroup>
             <Form.Text className="text-muted">
               <i className="fas fa-exclamation-circle me-1"></i>
