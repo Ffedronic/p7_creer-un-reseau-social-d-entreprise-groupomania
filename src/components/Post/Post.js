@@ -1,4 +1,8 @@
 /**
+ * * import scss
+ */
+import './Post.scss'
+/**
 * ! import du useState et useEffect
 */
 import { useState, useEffect } from "react";
@@ -27,7 +31,7 @@ import Image from 'react-bootstrap/Image';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
- 
+
 /**
 * ! Création des constantes issues du localStorage
 */
@@ -194,23 +198,25 @@ function Post(props) {
             /**
             * * Création du post sous forme de Card react-component
             */
-            <Card className="m-2 card">
+           <li>
+                <Card className="m-2 card">
                 <Card.Header className="d-flex flex-row justify-content-between">
                     <div>
-                        <span className="d-none">{ props.postId }</span>
-                        <a href={ route } className="text-uppercase fw-bold">{ props.postAuthor }</a>
-                        <span className="d-none" id="authorId">{ props.postAuthorId}</span>
-                    </div>
+                        <h2 className="text-capitalize fw-bold h6"><a href={route}>{ props.postAuthor }</a></h2>                    </div>
                     <span className="ms-5">{ props.postDate }</span>
                 </Card.Header>
-                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
-                <Card.Body>
-                    <Card.Title>{ props.postTitle }</Card.Title>
-                    <Card.Text>{ props.postSubject }</Card.Text>
+                <Card.Body className="d-flex flex-row justify-content-between">
+                    <div>
+                        <Card.Title className="title">{ props.postTitle }</Card.Title>
+                        <Card.Text>{ props.postSubject }</Card.Text>
+                    </div>
+                    <div className="divImg">
+                        <Card.Img className="cardImg" alt={ props.postTitle } src={ props.postImgUrl } />
+                    </div>
                 </Card.Body>
                 <Card.Footer className="d-flex flex-row justify-content-around">
                     {/*logique pour la visualisation du post avec ses commentaires*/}
-                    <Button variant="warning" className="rounded-pill px-3 me-md-2 btn-sm" onClick={ handleShowModal }>
+                    <Button variant="warning" className="rounded-pill px-md-3 me-md-2 btn-sm" onClick={ handleShowModal }>
                         <i className="fas fa-eye"></i>
                         <span className="d-none d-md-inline ms-md-1">Voir</span>
                     </Button>
@@ -218,42 +224,40 @@ function Post(props) {
                         <Modal.Header closeButton>
                             <Modal.Title>Post n°{ props.postId }</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>
-                            <Card>
-                                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
+                        <Modal.Body className="d-lg-flex flex-lg-row justify-content-lg-between">
+                            <Card style={{width: "55%"}} className="mb-3 border border-1">
+                                <Card.Img style={{width: "100%", height: "100%"}} variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
                                 <Card.Body>
                                     <Card.Title>{ props.postTitle }</Card.Title>
                                     <Card.Text>{ props.postSubject }</Card.Text>
                                 </Card.Body>
-                                <Card.Footer>
-                                    <Accordion defaultActiveKey="0">
-                                        <Accordion.Item eventKey="0">
-                                            <Accordion.Header>Commentaires</Accordion.Header>
-                                            <Accordion.Body>
-                                                <ul className="list-unstyled">
-                                                    { list }
-                                                </ul>
-                                                <Form onSubmit={ sendNewComment } className="mt-3 mb-3 border border-1 p-3">
-                                                    <Form.Group className="mt-3 mb-3">
-                                                        <Form.Label htmlFor="comment">Commenter le post</Form.Label>
-                                                        <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
-                                                    </Form.Group>                
-                                                    <Button variant="primary" type="submit">
-                                                        Envoyer
-                                                    </Button>
-                                                </Form>
-                                            </Accordion.Body>
-                                        </Accordion.Item>
-                                    </Accordion>
-                                </Card.Footer>
                             </Card>
+                            <Accordion style={{width: "40%"}} defaultActiveKey="0">
+                                <Accordion.Item eventKey="0">
+                                    <Accordion.Header>Commentaires</Accordion.Header>
+                                    <Accordion.Body>
+                                        <ul className="list-unstyled">
+                                            { list }
+                                        </ul>
+                                        <Form onSubmit={ sendNewComment } className="mt-3 mb-3 border border-1 p-3">
+                                            <Form.Group className="mt-3 mb-3">
+                                                <Form.Label htmlFor="comment">Commenter le post</Form.Label>
+                                                <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
+                                            </Form.Group>                
+                                            <Button variant="primary" type="submit">
+                                                Envoyer
+                                            </Button>
+                                        </Form>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
                         </Modal.Body>
                         <Modal.Footer>
                             <span className="text-capitalize">créé par {props.postAuthor}, le { props.postDate }</span>
                         </Modal.Footer>
                     </Modal>
                     {/*logique pour la modification du post */}
-                    <Button onClick={ handleShowModifyModal } variant="primary" className="rounded-pill px-3 me-md-2 btn-sm">
+                    <Button onClick={ handleShowModifyModal } variant="primary" className="rounded-pill px-md-3 me-md-2 btn-sm">
                         <i className="far fa-edit"></i>
                         <span className="d-none d-md-inline ms-md-1">Modifier</span>
                     </Button>
@@ -283,36 +287,40 @@ function Post(props) {
                         </Modal.Body>
                     </Modal>
                     {/*logique pour la suppression du post*/}
-                    <Button onClick={ deletePost } variant="danger" className="rounded-pill px-3 me-md-2 btn-sm">
+                    <Button onClick={ deletePost } variant="danger" className="rounded-pill px-md-3 me-md-2 btn-sm">
                         <i className="far fa-trash-alt"></i>
                         <span className="d-none d-md-inline ms-md-1">Supprimer</span>
                     </Button>
                 </Card.Footer>        
-            </Card>
+                </Card>
+           </li>
         )    
     }
     /**
     * ? Si l'utilisateur n'est pas isAdmin ou autheur du post
     */
-     else{ 
+     else { 
         return (
-            <Card className="m-2 card">
+            <li>
+                <Card className="m-2 card">
                 <Card.Header className="d-flex flex-row justify-content-between">
                     <div>
-                        <span className="d-none">{ props.postId }</span>
-                        <a href={route} className="text-uppercase fw-bold">{ props.postAuthor }</a>
-                        <span className="d-none" id="authorId">{ props.postAuthorId}</span>
+                        <h2 className="text-capitalize fw-bold h6"><a href={route}>{ props.postAuthor }</a></h2>
                     </div>
-                    <span className="ms-5">{ props.postDate }</span>
+                    <span className="ms-5 date">{ props.postDate }</span>
                 </Card.Header>
-                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
-                <Card.Body>
-                    <Card.Title>{ props.postTitle }</Card.Title>
-                    <Card.Text>{ props.postSubject }</Card.Text>
+                <Card.Body className="d-flex flex-row justify-content-between">
+                    <div>
+                        <Card.Title className="title">{ props.postTitle }</Card.Title>
+                        <Card.Text>{ props.postSubject }</Card.Text>
+                    </div>
+                    <div className="divImg">
+                        <Card.Img className="cardImg" alt={ props.postTitle } src={ props.postImgUrl } />
+                    </div>
                 </Card.Body>
                 <Card.Footer className="d-flex flex-row justify-content-around">
                     {/*logique pour la visualisation du post avec ses commentaires*/}
-                    <Button variant="warning" className="rounded-pill px-3 me-md-2 btn-sm" onClick={ handleShowModal }>
+                    <Button variant="warning" className="rounded-pill px-md-3 me-md-2 btn-sm" onClick={ handleShowModal }>
                         <i className="fas fa-eye"></i>
                         <span className="d-none d-md-inline ms-md-1">Voir</span>
                     </Button>
@@ -320,42 +328,41 @@ function Post(props) {
                         <Modal.Header closeButton>
                             <Modal.Title>Post n°{ props.postId }</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>
-                            <Card>
+                        <Modal.Body className="d-lg-flex flex-lg-row justify-content-lg-between">
+                            <Card style={{width: "55%"}} className="mb-3 border border-2">
                                 <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
                                 <Card.Body>
                                     <Card.Title>{ props.postTitle }</Card.Title>
                                     <Card.Text>{ props.postSubject }</Card.Text>
                                 </Card.Body>
-                                <Card.Footer>
-                                     <Accordion defaultActiveKey="0">
-                                        <Accordion.Item eventKey="0">
-                                            <Accordion.Header>Commentaires</Accordion.Header>
-                                            <Accordion.Body>
-                                                <ul className="list-unstyled">
-                                                    { list }
-                                                </ul>
-                                                <Form onSubmit={ sendNewComment } className="mt-3 mb-3 border border-1 p-3">
-                                                    <Form.Group className="mt-3 mb-3">
-                                                        <Form.Label htmlFor="comment">Commenter le post</Form.Label>
-                                                        <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
-                                                    </Form.Group>                
-                                                    <Button variant="primary" type="submit">
-                                                        Envoyer
-                                                    </Button>
-                                                </Form>                                        
-                                            </Accordion.Body>
-                                        </Accordion.Item>
-                                    </Accordion>
-                                </Card.Footer>
                             </Card>
+                            <Accordion style={{width: "40%"}} defaultActiveKey="0">
+                                <Accordion.Item eventKey="0">
+                                    <Accordion.Header>Commentaires</Accordion.Header>
+                                        <Accordion.Body>
+                                            <ul className="list-unstyled">
+                                                { list }
+                                            </ul>
+                                            <Form onSubmit={ sendNewComment } className="mt-3 mb-3 border border-1 p-3">
+                                                <Form.Group className="mt-3 mb-3">
+                                                    <Form.Label htmlFor="comment">Commenter le post</Form.Label>
+                                                    <Form.Control name="comment" id="comment" type="text" value={ commentToSend } onChange={ (e) => setCommentToSend(e.target.value) } />
+                                                </Form.Group>                
+                                                <Button variant="primary" type="submit">
+                                                    Envoyer
+                                                </Button>
+                                            </Form>                                        
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                            </Accordion>
                         </Modal.Body>
                         <Modal.Footer>
                             <span className="text-capitalize">créé par {props.postAuthor}, le { props.postDate }</span>
                         </Modal.Footer>
                     </Modal>
                 </Card.Footer>        
-            </Card>
+                </Card>
+            </li>
         ) 
     }
      

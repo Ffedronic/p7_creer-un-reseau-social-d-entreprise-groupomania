@@ -67,14 +67,14 @@ function Login() {
        */      
       <Container>
         <Form onSubmit={ loginForm } className="border border-1 p-3 rounded-3 shadow bg-light mt-5">
-          <Form.Group className="mb-3" controlId="email">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="email" className="fw-bold">Email :</Form.Label>
             <InputGroup>
               <InputGroup.Text><i className="fas fa-at"></i></InputGroup.Text>
               <Form.Control required type="email" id="email" name="email" value={ email } onChange={(e) => setEmail(e.target.value)} placeholder="exemple@groupomania.com" />
             </InputGroup>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="password" className="fw-bold">Mot de passe :</Form.Label>
             <InputGroup className="mb-3">
               <InputGroup.Text><i className="fas fa-lock"></i></InputGroup.Text>

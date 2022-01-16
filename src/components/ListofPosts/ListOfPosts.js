@@ -72,20 +72,24 @@ function Posts() {
             * * Affichage de la liste des posts avec isAuthor === true
             */
             return(
-                <Container className="d-flex flex-wrap justify-content-center mt-5">
-                    { items.map((post) => 
-                    <Post 
-                        key={ post.id }
-                        postId={ post.id }
-                        isAuthor={ true }
-                        postAuthor={ post.authorFirstName }
-                        postAuthorId={ post.author }
-                        postDate={ new Date(post.date).toLocaleDateString("fr-FR", options) }
-                        postTitle={ post.title }
-                        postSubject={ post.subject }
-                        postImgUrl={ post.img_url }
-                        />
-                    )}
+                <Container className="mt-5">
+                    <h1 className="mb-3 h2">Liste des posts</h1>
+                    <ul className=" list-unstyled">
+                        { items.map((post) => 
+                        <Post 
+                            key={ post.id }
+                            postId={ post.id }
+                            isAuthor={ true }
+                            postAuthor={ post.authorFirstName }
+                            postAuthorId={ post.author }
+                            postDate={ new Date(post.date).toLocaleDateString("fr-FR", options) }
+                            postTitle={ post.title }
+                            postSubject={ post.subject }
+                            postImgUrl={ post.img_url }
+                            />
+                        )}
+                    </ul>
+                    
                 </Container>
             )    
         }
@@ -153,8 +157,11 @@ function Posts() {
             /**
             * ! Affichage de la liste des posts
             */
-            <Container className="d-flex flex-wrap justify-content-center mt-5">
-                { listItems }
+            <Container className="mt-5">
+                <h1 className="mb-3 h2">Liste des posts</h1>
+                <ul className=" list-unstyled">
+                    { listItems }
+                </ul>
             </Container>
         )
     }

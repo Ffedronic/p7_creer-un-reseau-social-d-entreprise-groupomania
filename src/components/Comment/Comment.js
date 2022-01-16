@@ -48,7 +48,7 @@ function Comment(props) {
 
     if(isAuthor) {
         return(
-            <Card id={props.commentId} className="mb-3">
+            <Card id={props.commentId} className="mb-3 w-100">
                 <Card.Header className="text-capitalize d-flex flex-row justify-content-between">
                     <div>
                         {props.commentAuthor}
@@ -69,7 +69,7 @@ function Comment(props) {
         )
     } else {
         return(
-            <Card id={props.commentId} className="mb-3">
+            <Card id={props.commentId} className="mb-3 w-100">
                 <Card.Header className="text-capitalize d-flex flex-row justify-content-between">
                     <div>
                         {props.commentAuthor}

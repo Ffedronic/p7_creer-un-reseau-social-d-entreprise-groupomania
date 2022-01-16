@@ -32,9 +32,9 @@ function Banner() {
       <div>
         <Navbar bg="light" expand="md" variant="light">
           <Container>
-            <Navbar.Brand href="#0">
+            <Navbar.Brand href="/connexion">
               <img
-                alt=""
+                alt="logo groupomania"
                 src= { logo }
                 width="275"
                 height="70"
@@ -64,7 +64,7 @@ function Banner() {
           <Container>
             <Navbar.Brand href="/posts">
               <img
-                alt=""
+                alt="logo groupomania"
                 src= { logo }
                 width="275"
                 height="70"
@@ -76,7 +76,7 @@ function Banner() {
               <Nav.Item className="btn btn-primary btn-sm rounded-pill p-0 me-3">
                 <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-2"></i>Profil</Nav.Link>
               </Nav.Item>
-              <Nav.Item className="btn btn-warning btn-sm rounded-pill p-0 me-3">
+              <Nav.Item className="btn btn-secondary btn-sm rounded-pill p-0 me-3">
                 <Nav.Link className="text-white" href="/nouveauPost"><i className="far fa-envelope me-2"></i>Ajouter un sujet</Nav.Link>
               </Nav.Item>
               <Nav.Item className="btn btn-success btn-sm rounded-pill p-0">
