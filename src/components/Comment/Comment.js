@@ -27,7 +27,8 @@ function Comment(props) {
 
     const postId = props.postId;
     const isAuthor = props.isAuthor;
-    
+    const route = `/profil/${props.commentAuthorId}`;
+
     const deleteComment = (event) => {
         event.preventDefault();
         /**
@@ -46,15 +47,37 @@ function Comment(props) {
         document.getElementById(commentId).remove();
     };
 
+    /**
+     * * Génération du temps de post
+     */
+     function displayDateUpload(date) {
+        const today = new Date();
+        console.log(today);
+        const diff = today.getTime() - date.getTime() ; 
+        if( diff > 0 && diff <= 60000 ) {
+            const displayDiff = `posté il y a ${(diff/1000).toFixed(0)} seconde(s)`;
+            return displayDiff ;
+        } else if( diff > 60000 && diff <= 3600000 ) {
+            const displayDiff = `posté il y a ${(diff/60000).toFixed(0)} minute(s)`;
+            return displayDiff ;
+        } else if( diff > 3600000 && diff <= 86400000) {
+            const displayDiff = `posté il y a ${(diff/3600000).toFixed(0)} heure(s)`;
+            return displayDiff ;
+        } else {
+            const displayDiff = `posté il y a ${(diff/86400000).toFixed(0)} jour(s)` ;
+            return displayDiff ;
+        }
+    }
+
     if(isAuthor) {
         return(
             <Card id={props.commentId} className="mb-3 w-100">
-                <Card.Header className="text-capitalize d-flex flex-row justify-content-between">
-                    <div>
-                        {props.commentAuthor}
+                <Card.Header className="d-flex flex-row justify-content-between">
+                    <div className="text-capitalize">
+                        <a href={ route }>{props.commentAuthor}</a>
                     </div>
                     <div>
-                        le {props.commentDate}
+                        {displayDateUpload(props.commentDate)}
                     </div>
                 </Card.Header>
                 <Card.Body>
@@ -70,12 +93,12 @@ function Comment(props) {
     } else {
         return(
             <Card id={props.commentId} className="mb-3 w-100">
-                <Card.Header className="text-capitalize d-flex flex-row justify-content-between">
-                    <div>
-                        {props.commentAuthor}
+                <Card.Header className="d-flex flex-row justify-content-between">
+                    <div className="text-capitalize">
+                        <a href={ route }>{props.commentAuthor}</a>
                     </div>
                     <div>
-                        le {props.commentDate}
+                        {displayDateUpload(props.commentDate)}
                     </div>
                 </Card.Header>
                 <Card.Body>

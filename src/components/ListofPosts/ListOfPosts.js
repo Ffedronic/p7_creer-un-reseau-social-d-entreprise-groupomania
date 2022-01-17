@@ -31,10 +31,6 @@ const token = localStorage.getItem("token");
 const isAdmin = localStorage.getItem("isAdmin");
 const userId =  Number(localStorage.getItem("userId"));
 
-/**
-* * Options de conversion du datetime en date
-*/    
- const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
 /**
 * ! Posts component affichant la liste des posts issus de la base de données
@@ -82,7 +78,7 @@ function Posts() {
                             isAuthor={ true }
                             postAuthor={ post.authorFirstName }
                             postAuthorId={ post.author }
-                            postDate={ new Date(post.date).toLocaleDateString("fr-FR", options) }
+                            postDate={ new Date(post.date) }
                             postTitle={ post.title }
                             postSubject={ post.subject }
                             postImgUrl={ post.img_url }
@@ -119,7 +115,7 @@ function Posts() {
                         isAuthor={ true }
                         postAuthor={ item.authorFirstName }
                         postAuthorId={ item.author }
-                        postDate={ new Date(item.date).toLocaleDateString("fr-FR", options)}
+                        postDate={ new Date(item.date) }
                         postTitle={ item.title }
                         postSubject={ item.subject }
                         postImgUrl={ item.img_url }
@@ -142,7 +138,7 @@ function Posts() {
                         isAuthor={ false }
                         postAuthor={ item.authorFirstName }
                         postAuthorId={ item.author }
-                        postDate={ new Date(item.date).toLocaleDateString("fr-FR", options)}
+                        postDate={ new Date(item.date) }
                         postTitle={ item.title }
                         postSubject={ item.subject }
                         postImgUrl={ item.img_url }

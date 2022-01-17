@@ -40,12 +40,6 @@ const isAdmin = localStorage.getItem("isAdmin");
 const userId =  Number(localStorage.getItem("userId"));
  
 /**
-* * Options de conversion du datetime en date
-*/    
-const options = { year: 'numeric', month: 'long', day: 'numeric' };
- 
- 
-/**
 * ! Post component affichant un post
 */
 function Post(props) {
@@ -79,7 +73,7 @@ function Post(props) {
         * ? Si je suis administrateur, isAuthor = true pour tous les commentaires
         */
         if(isAdmin > 0) {
-            listComments = comments.map((comment) => <li key={comment.id}><Comment isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} /></li>) ;
+            listComments = comments.map((comment) => <li key={comment.id}><Comment commentAuthorId={comment.authorId} isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date)} /></li>) ;
             setList(listComments);
         } else {
             /**
@@ -90,13 +84,13 @@ function Post(props) {
                 * ? Si je suis l'auteur du commentaire, isAuthor = true pour le commentaire
                 */
                 if(Number(comment.authorId) === userId){
-                    const commentToDisplay = <li key={comment.id}><Comment isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} /></li> ;
+                    const commentToDisplay = <li key={comment.id}><Comment commentAuthorId={comment.authorId} isAuthor={true} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date)} /></li> ;
                     listComments.push(commentToDisplay);
                     /**
                     * ? Si je ne suis pas l'auteur du commentaire, isAuthor = false pour le commentaire
                     */
                 } else {
-                    const commentToDisplay = <li key={comment.id}><Comment isAuthor={false} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date).toLocaleDateString("fr-FR", options)} /></li>;
+                    const commentToDisplay = <li key={comment.id}><Comment commentAuthorId={comment.authorId} isAuthor={false} commentAuthor={comment.firstName} commentId={comment.id} commentContent={comment.content} commentDate={new Date(comment.date)} /></li>;
                     listComments.push(commentToDisplay);
                 }
             }
@@ -104,10 +98,32 @@ function Post(props) {
         console.log(listComments);
         setList(listComments);
     };
-     
-     /**
-      * * Création des fonctions nécessaires au modal de visualisation du post
+    
+    /**
+     * * Génération du temps de post
      */
+    function displayDateUpload(date) {
+        const today = new Date();
+        console.log(today);
+        const diff = today.getTime() - date.getTime() ; 
+        if( diff > 0 && diff <= 60000 ) {
+            const displayDiff = `posté il y a ${(diff/1000).toFixed(0)} seconde(s)`;
+            return displayDiff ;
+        } else if( diff > 60000 && diff <= 3600000 ) {
+            const displayDiff = `posté il y a ${(diff/60000).toFixed(0)} minute(s)`;
+            return displayDiff ;
+        } else if( diff > 3600000 && diff <= 86400000) {
+            const displayDiff = `posté il y a ${(diff/3600000).toFixed(0)} heure(s)`;
+            return displayDiff ;
+        } else {
+            const displayDiff = `posté il y a ${(diff/86400000).toFixed(0)} jour(s)` ;
+            return displayDiff ;
+        }
+    }
+
+    /**
+    * * Création des fonctions nécessaires au modal de visualisation du post
+    */
     const HandleCloseModal = () => {        //fermeture du modal de visualisation du post
         setShowModal(false);
         window.location.reload();
@@ -185,11 +201,12 @@ function Post(props) {
     };
      
     /**
-    * * Création de la constante isAuthor pour le post
+    * * Création de la constante isAuthor et la route du profil utilisateur pour le post
     */
     const isAuthor = props.isAuthor ;
     
     const route = `/profil/${props.postAuthorId}`;
+    
     /**
     * ? Si l'utilisateur est auteur ou isAdmin du post
     */
@@ -203,7 +220,7 @@ function Post(props) {
                 <Card.Header className="d-flex flex-row justify-content-between">
                     <div>
                         <h2 className="text-capitalize fw-bold h6"><a href={route}>{ props.postAuthor }</a></h2>                    </div>
-                    <span className="ms-5">{ props.postDate }</span>
+                    <span className="ms-5">{ displayDateUpload(props.postDate) }</span>
                 </Card.Header>
                 <Card.Body className="d-flex flex-row justify-content-between">
                     <div>
@@ -222,17 +239,17 @@ function Post(props) {
                     </Button>
                     <Modal fullscreen show={ showModal } onHide={ HandleCloseModal }>
                         <Modal.Header closeButton>
-                            <Modal.Title>Post n°{ props.postId }</Modal.Title>
+                            <a href={ route } className="text-capitalize">{props.postAuthor}</a>, { displayDateUpload(props.postDate) }
                         </Modal.Header>
-                        <Modal.Body className="d-lg-flex flex-lg-row justify-content-lg-between">
-                            <Card style={{width: "55%"}} className="mb-3 border border-1">
-                                <Card.Img style={{width: "100%", height: "100%"}} variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
+                        <Modal.Body>
+                            <Card className="mb-3 border border-1">
+                                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
                                 <Card.Body>
                                     <Card.Title>{ props.postTitle }</Card.Title>
                                     <Card.Text>{ props.postSubject }</Card.Text>
                                 </Card.Body>
                             </Card>
-                            <Accordion style={{width: "40%"}} defaultActiveKey="0">
+                            <Accordion defaultActiveKey="0">
                                 <Accordion.Item eventKey="0">
                                     <Accordion.Header>Commentaires</Accordion.Header>
                                     <Accordion.Body>
@@ -252,9 +269,6 @@ function Post(props) {
                                 </Accordion.Item>
                             </Accordion>
                         </Modal.Body>
-                        <Modal.Footer>
-                            <span className="text-capitalize">créé par {props.postAuthor}, le { props.postDate }</span>
-                        </Modal.Footer>
                     </Modal>
                     {/*logique pour la modification du post */}
                     <Button onClick={ handleShowModifyModal } variant="primary" className="rounded-pill px-md-3 me-md-2 btn-sm">
@@ -307,7 +321,7 @@ function Post(props) {
                     <div>
                         <h2 className="text-capitalize fw-bold h6"><a href={route}>{ props.postAuthor }</a></h2>
                     </div>
-                    <span className="ms-5 date">{ props.postDate }</span>
+                    <span className="ms-5 date">{ displayDateUpload(props.postDate) }</span>
                 </Card.Header>
                 <Card.Body className="d-flex flex-row justify-content-between">
                     <div>
@@ -326,17 +340,17 @@ function Post(props) {
                     </Button>
                     <Modal fullscreen show={ showModal } onHide={ HandleCloseModal }>
                         <Modal.Header closeButton>
-                            <Modal.Title>Post n°{ props.postId }</Modal.Title>
+                            <a href={ route } className="text-capitalize">{props.postAuthor}</a>, { displayDateUpload(props.postDate) }
                         </Modal.Header>
-                        <Modal.Body className="d-lg-flex flex-lg-row justify-content-lg-between">
-                            <Card style={{width: "55%"}} className="mb-3 border border-2">
-                                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
+                        <Modal.Body>
+                            <Card className="mb-3 border border-2">
+                                <Card.Img className="img" variant="top" as={ Image } src={ props.postImgUrl } thumbnail />
                                 <Card.Body>
                                     <Card.Title>{ props.postTitle }</Card.Title>
                                     <Card.Text>{ props.postSubject }</Card.Text>
                                 </Card.Body>
                             </Card>
-                            <Accordion style={{width: "40%"}} defaultActiveKey="0">
+                            <Accordion defaultActiveKey="0">
                                 <Accordion.Item eventKey="0">
                                     <Accordion.Header>Commentaires</Accordion.Header>
                                         <Accordion.Body>
@@ -356,9 +370,6 @@ function Post(props) {
                                     </Accordion.Item>
                             </Accordion>
                         </Modal.Body>
-                        <Modal.Footer>
-                            <span className="text-capitalize">créé par {props.postAuthor}, le { props.postDate }</span>
-                        </Modal.Footer>
                     </Modal>
                 </Card.Footer>        
                 </Card>
