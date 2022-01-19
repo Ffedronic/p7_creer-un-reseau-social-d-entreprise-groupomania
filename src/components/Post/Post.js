@@ -378,7 +378,7 @@ function Post(props) {
                                         </Card>
                                     </Col>
                                     <Col xs={12} lg={5}>
-                                    <Accordion className="shadow">
+                                        <Accordion className="shadow">
                                         <Accordion.Item eventKey="0">
                                             <Accordion.Header>
                                                 Commentaires
@@ -398,7 +398,7 @@ function Post(props) {
                                                     </Form>                                        
                                                 </Accordion.Body>
                                         </Accordion.Item>
-                                    </Accordion>
+                                        </Accordion>
                                     </Col>
                                 </Row>
                             </Container>
