@@ -9,13 +9,13 @@ dotenv.config();
 module.exports = (req, res, next) => {
   try {
     /* récupération du isAdmin issu du headers.authorization de la requête envoyée par le client*/    
-    const isAdmin = Number(req.headers.authorization.split(' ')[2]) ;
     /* récupération du token issu du headers.authorization de la requête envoyée par le client*/
     const token = req.headers.authorization.split(' ')[1];
     /*dechiffrement du token avec la fonction verify de jwt, le token, clé secrète*/
     const decodedToken = jwt.verify(token, process.env.GROUPOMANIA_SECRET_KEY);
     /*récupération du userId issu du dechiffrement du token*/
     const userId = decodedToken.userId;
+    const isAdmin = decodedToken.isAdmin;
     /*enregistrement du userId dans un variable locale de réponse*/
     res.locals.userId = userId;
     /*enregistrement du isAdmin dans une variable locale de réponse */

@@ -72,7 +72,8 @@ exports.login = (req, res, next) => {
                     res.status(200).json({
                         userId: userProfil.id,
                         token: jwt.sign({
-                        userId: userProfil.id
+                        userId: userProfil.id,
+                        isAdmin : userProfil.isAdmin
                         }, 
                         process.env.GROUPOMANIA_SECRET_KEY,
                         {
