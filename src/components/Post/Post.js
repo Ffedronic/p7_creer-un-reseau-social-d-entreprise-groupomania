@@ -137,7 +137,7 @@ function Post(props) {
     const sendNewComment = (event) => {     //requête d'envoi et mise à jour de la liste des commentaires
         event.preventDefault();
         const newComment = { content: commentToSend };
-        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
         /**
          * * Envoi du commentaire au serveur de la base de données
          */
@@ -180,7 +180,7 @@ function Post(props) {
     const modifyOnePost = (event) => {
         event.preventDefault();
         const modifyFormData = new FormData(document.getElementById("postForm"));
-        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
         Axios.put(`http://localhost:4000/api/posts/${props.postId}`, modifyFormData)
             .then((result) => {
             console.log(result);
@@ -194,7 +194,7 @@ function Post(props) {
     */
     const deletePost = (event) => {
         event.preventDefault();
-        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
         Axios.delete(`http://localhost:4000/api/posts/${props.postId}`)
             .then((result) => {
             console.log(result);

@@ -69,8 +69,8 @@ function Posts() {
             */
             return(
                 <Container className="mt-5">
-                    <h1 className="mb-3 h2">Liste des posts</h1>
-                    <ul className=" list-unstyled">
+                    <main>
+                        <ul className=" list-unstyled">
                         { items.map((post) => 
                         <Post 
                             key={ post.id }
@@ -84,8 +84,8 @@ function Posts() {
                             postImgUrl={ post.img_url }
                             />
                         )}
-                    </ul>
-                    
+                        </ul>
+                    </main>
                 </Container>
             )    
         }
@@ -154,10 +154,11 @@ function Posts() {
             * ! Affichage de la liste des posts
             */
             <Container className="mt-5">
-                <h1 className="mb-3 h2">Liste des posts</h1>
-                <ul className=" list-unstyled">
+                <main>
+                    <ul className=" list-unstyled">
                     { listItems }
-                </ul>
+                    </ul>
+                </main>
             </Container>
         )
     }

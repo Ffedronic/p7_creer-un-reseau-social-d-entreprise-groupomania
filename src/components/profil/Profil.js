@@ -56,7 +56,7 @@ function Profil() {
     * * Envoi de la requête au serveur
     */
       useEffect(() => {
-        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
         Axios.get(`http://localhost:4000/api/auth/${params.id}`)
         .then((response) =>{
             setProfil(response.data.result[0]);
@@ -97,7 +97,7 @@ function Profil() {
             lastName : lastName,
             email : email
         };
-        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
         Axios.put(`http://localhost:4000/api/auth/${params.id}`, newProfil)
         .then((response) =>{
             console.log(response.data.result);
@@ -106,7 +106,7 @@ function Profil() {
         .catch(error => console.log(error));
     };
     const deleteMyProfil = (event) => {         //Supprime son profil utilisateur de la base de données, vide le localStorage et ramène vers la page de connexion
-        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
         Axios.delete(`http://localhost:4000/api/auth/${params.id}`)
         .then(() => {
             localStorage.clear();

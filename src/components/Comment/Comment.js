@@ -18,7 +18,6 @@ import Button from 'react-bootstrap/Button';
 * ! Création des constantes issues du localStorage
 */
 const token = localStorage.getItem("token");
-const isAdmin = localStorage.getItem("isAdmin");
 
 /**
 * ! Comment component affichant un commentaire
@@ -34,7 +33,7 @@ function Comment(props) {
         /**
         * Requête Axios pour suppression du commentaire de la base de données
         */
-        Axios.defaults.headers['Authorization'] =`Bearer ${token} ${isAdmin}`;
+        Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
         Axios.delete(`http://localhost:4000/api/posts/${postId}/comments/${props.commentId}`)
             .then((result) => {
                 console.log(result);

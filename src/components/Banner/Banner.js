@@ -3,6 +3,7 @@ import 'bootstrap';
 
 //import du logo groupomania
 import logo from '../icon-left-font-monochrome-black.png';
+import './Banner.scss'
 
 //import du Outlet
 import { Outlet } from "react-router-dom";
@@ -29,8 +30,8 @@ function Banner() {
   if(!isLogged) {
     return (
       /*barre de navigation avec les react-bootstrap components*/
-      <div>
-        <Navbar bg="light" expand="md" variant="light">
+      <header>
+        <Navbar className="sticky-top" bg="light" expand="md" variant="light">
           <Container>
             <Navbar.Brand href="/connexion">
               <img
@@ -52,15 +53,18 @@ function Banner() {
             </Navbar.Collapse>
           </Container>
         </Navbar>
+        <div>
+          <h1>Bienvenue sur votre réseau social</h1>
+        </div>
         <Outlet/>
-      </div>
+      </header>
     )
   } else {
     /*si l'utilisateur est connecté,*/
     return (
       /*barre de navigation avec les react-bootstrap components*/
-      <div>
-        <Navbar bg="light" expand="md" variant="light">
+      <header>
+        <Navbar className="sticky-top" bg="light" expand="md" variant="light">
           <Container>
             <Navbar.Brand href="/posts">
               <img
@@ -85,8 +89,13 @@ function Banner() {
             </Navbar.Collapse>
           </Container>
         </Navbar>
+        <div id="hero-image" className='d-none d-md-block'>
+          <div id="hero-text">
+            <h1 className='fw-bold fs-1'>Bienvenue sur le forum</h1>
+          </div>
+        </div>
         <Outlet/>
-      </div> 
+      </header> 
     )
   }
 }
