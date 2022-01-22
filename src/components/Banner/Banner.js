@@ -53,9 +53,11 @@ function Banner() {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <div>
-          <h1>Bienvenue sur votre réseau social</h1>
-        </div>
+        <section className='hero-image d-none d-md-block'>
+          <article className="hero-text">
+            <h1 className='fw-bold fs-1'>Bienvenue sur votre réseau social</h1>
+          </article>
+        </section>
         <Outlet/>
       </header>
     )
@@ -77,23 +79,23 @@ function Banner() {
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
-              <Nav.Item className="btn btn-primary btn-sm rounded-pill p-0 me-3">
-                <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-2"></i>Profil</Nav.Link>
-              </Nav.Item>
-              <Nav.Item className="btn btn-secondary btn-sm rounded-pill p-0 me-3">
-                <Nav.Link className="text-white" href="/nouveauPost"><i className="far fa-envelope me-2"></i>Ajouter un sujet</Nav.Link>
-              </Nav.Item>
-              <Nav.Item className="btn btn-success btn-sm rounded-pill p-0">
+                <Nav.Item className="d-block-inline d-md-none btn btn-primary btn-sm rounded-pill p-0 me-3">
+                  <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-2"></i>Profil</Nav.Link>
+                </Nav.Item>
+                <Nav.Item className="d-block-inline d-md-none btn btn-secondary btn-sm rounded-pill p-0 me-3">
+                  <Nav.Link className="text-white" href="/nouveauPost"><i className="far fa-envelope me-2"></i>Nouveau sujet</Nav.Link>
+                </Nav.Item>
+              <Nav.Item className="btn btn-danger btn-sm rounded-pill p-0">
                 <Nav.Link onClick={ isLogOut } className="text-white" href="/connexion"><i className="fas fa-sign-out-alt me-2"></i>Déconnexion</Nav.Link>
               </Nav.Item>
             </Navbar.Collapse>
           </Container>
         </Navbar>
-        <div id="hero-image" className='d-none d-md-block'>
-          <div id="hero-text">
+        <section className='hero-image d-none d-md-block'>
+          <article className="hero-text">
             <h1 className='fw-bold fs-1'>Bienvenue sur le forum</h1>
-          </div>
-        </div>
+          </article>
+        </section>
         <Outlet/>
       </header> 
     )

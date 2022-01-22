@@ -21,15 +21,18 @@ import Axios from 'axios';
 /**
 * ! import des react-boostrap components
 */
+import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-
-
+import Nav from 'react-bootstrap/Nav';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 /**
 * ! Création des constantes issues du localStorage
 */
 const token = localStorage.getItem("token");
 const isAdmin = localStorage.getItem("isAdmin");
 const userId =  Number(localStorage.getItem("userId"));
+const profilHref = `/profil/${Number(localStorage.getItem("userId"))}`;
 
 
 /**
@@ -70,21 +73,36 @@ function Posts() {
             return(
                 <Container className="mt-5">
                     <main>
-                        <ul className=" list-unstyled">
-                        { items.map((post) => 
-                        <Post 
-                            key={ post.id }
-                            postId={ post.id }
-                            isAuthor={ true }
-                            postAuthor={ post.authorFirstName }
-                            postAuthorId={ post.author }
-                            postDate={ new Date(post.date) }
-                            postTitle={ post.title }
-                            postSubject={ post.subject }
-                            postImgUrl={ post.img_url }
-                            />
-                        )}
-                        </ul>
+                        <Row>
+                            <Col md={3} className="d-none d-md-block mt-2">
+                                <Navbar className="d-md-flex flex-column shadow rounded p-3 border" bg="light" variant="light">
+                                    <p className="fw-bold">Menu Principal</p>
+                                    <Nav.Item className="btn btn-primary btn-sm rounded-pill p-0 my-5">
+                                        <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-2"></i>Mon Profil</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item className="btn btn-secondary btn-sm rounded-pill p-0 mb-5">
+                                        <Nav.Link className="text-white" href="/nouveauPost"><i className="far fa-envelope me-2"></i>Ajouter un sujet</Nav.Link>
+                                    </Nav.Item>
+                                </Navbar>
+                            </Col>
+                            <Col>
+                                <ul className=" list-unstyled">
+                                    { items.map((post) => 
+                                    <Post 
+                                        key={ post.id }
+                                        postId={ post.id }
+                                        isAuthor={ true }
+                                        postAuthor={ post.authorFirstName }
+                                        postAuthorId={ post.author }
+                                        postDate={ new Date(post.date) }
+                                        postTitle={ post.title }
+                                        postSubject={ post.subject }
+                                        postImgUrl={ post.img_url }
+                                        />
+                                    )}
+                                </ul>
+                            </Col>
+                        </Row>
                     </main>
                 </Container>
             )    
@@ -155,9 +173,24 @@ function Posts() {
             */
             <Container className="mt-5">
                 <main>
-                    <ul className=" list-unstyled">
-                    { listItems }
-                    </ul>
+                    <Row>
+                        <Col md={3} className="d-none d-md-block mt-2">
+                            <Navbar className="d-md-flex flex-column shadow rounded p-3 border" bg="light" variant="light">
+                                <p className="fw-bold text-uppercase">Menu Principal</p>
+                                <Nav.Item className="btn btn-primary btn-sm rounded-pill p-0 my-5">
+                                    <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-2"></i>Mon Profil</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item className="btn btn-secondary btn-sm rounded-pill p-0 mb-5">
+                                    <Nav.Link className="text-white" href="/nouveauPost"><i className="far fa-envelope me-2"></i>Ajouter un sujet</Nav.Link>
+                                </Nav.Item>
+                            </Navbar>
+                        </Col>
+                        <Col>
+                            <ul className=" list-unstyled">
+                                { listItems }
+                            </ul>
+                        </Col>
+                    </Row>
                 </main>
             </Container>
         )
