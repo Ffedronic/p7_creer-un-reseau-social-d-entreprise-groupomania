@@ -115,6 +115,13 @@ function Profil() {
         .catch(error => console.log(error));
     };
 
+    /**
+     * * Redirection vers la liste des posts
+     */
+    const Redirect = () => {
+        window.location.href='/posts';
+    }
+
 
     /**
      * ? Si l'utilisateur n'est pas loggé
@@ -130,10 +137,11 @@ function Profil() {
      */
     if(isAdmin > 0 || profil.id === userId ) {
         return(
-            <Container className="d-flex flex-row justify-content-center">
+            <Container className="d-flex flex-column align-items-center justify-content-center">
+                <Button className="mt-3" onClick={ Redirect }>Retour à la liste des sujets</Button>
                 <Card className="w-75 mt-5" bg="light">
                     <Card.Header className="fw-bold text-white bg-success">
-                        Mon Profil
+                        <span className="fs-4">&#127775; </span> Profil de <span className="text-uppercase">{profil.firstName}</span>
                     </Card.Header>
                     <Card.Body>
                         <ul className="list-unstyled d-md-flex flex-row justify-content-around align-items-center">
@@ -200,10 +208,11 @@ function Profil() {
      */
     else {
         return(
-            <Container className="d-flex flex-row justify-content-center">
+            <Container className="d-flex flex-column align-items-center justify-content-center">
+                <Button className="mt-3" onClick={ Redirect }>Retour à la liste des sujets</Button>
                 <Card className="w-75 mt-5" bg="light">
                     <Card.Header className="fw-bold text-white bg-success">
-                        Mon Profil
+                        <span className="fs-4">&#127775; </span> Profil de <span className="text-uppercase">{profil.firstName}</span>
                     </Card.Header>
                     <Card.Body>
                         <ul className="list-unstyled d-md-flex flex-row justify-content-around align-items-center">

@@ -51,7 +51,6 @@ function Comment(props) {
      */
      function displayDateUpload(date) {
         const today = new Date();
-        console.log(today);
         const diff = today.getTime() - date.getTime() ; 
         if( diff > 0 && diff <= 60000 ) {
             const displayDiff = `posté il y a ${(diff/1000).toFixed(0)} seconde(s)`;

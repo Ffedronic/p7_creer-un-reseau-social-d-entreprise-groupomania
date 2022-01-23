@@ -76,7 +76,7 @@ function Posts() {
                         <Row>
                             <Col md={3} className="d-none d-md-block mt-2">
                                 <Navbar className="d-md-flex flex-column shadow rounded p-3 border" bg="light" variant="light">
-                                    <p className="fw-bold">Menu Principal</p>
+                                    <p className="fw-bold"><span className="fs-4">&#128211; </span> Menu Principal</p>
                                     <Nav.Item className="btn btn-primary btn-sm rounded-pill p-0 my-5">
                                         <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-2"></i>Mon Profil</Nav.Link>
                                     </Nav.Item>
@@ -176,7 +176,7 @@ function Posts() {
                     <Row>
                         <Col md={3} className="d-none d-md-block mt-2">
                             <Navbar className="d-md-flex flex-column shadow rounded p-3 border" bg="light" variant="light">
-                                <p className="fw-bold text-uppercase">Menu Principal</p>
+                                <p className="fw-bold text-uppercase"><span className="fs-4">&#128211; </span> Menu Principal</p>
                                 <Nav.Item className="btn btn-primary btn-sm rounded-pill p-0 my-5">
                                     <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-2"></i>Mon Profil</Nav.Link>
                                 </Nav.Item>

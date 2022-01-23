@@ -21,7 +21,8 @@ import Axios from 'axios';
 * ! Import de Comment component
 */
 import Comment from "../Comment/Comment"
- 
+
+
 /**
 * ! import des react-boostrap components
 */
@@ -34,6 +35,7 @@ import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+
 /**
 * ! Création des constantes issues du localStorage
 */
@@ -65,6 +67,23 @@ function Post(props) {
         .catch(error => console.log(error));
     }, [props.postId]);
     
+    function displayDateUpload(date) {
+        const today = new Date();
+        const diff = today.getTime() - date.getTime() ; 
+        if( diff > 0 && diff <= 60000 ) {
+            const displayDiff = `posté il y a ${(diff/1000).toFixed(0)} seconde(s)`;
+            return displayDiff ;
+        } else if( diff > 60000 && diff <= 3600000 ) {
+            const displayDiff = `posté il y a ${(diff/60000).toFixed(0)} minute(s)`;
+            return displayDiff ;
+        } else if( diff > 3600000 && diff <= 86400000) {
+            const displayDiff = `posté il y a ${(diff/3600000).toFixed(0)} heure(s)`;
+            return displayDiff ;
+        } else {
+            const displayDiff = `posté il y a ${(diff/86400000).toFixed(0)} jour(s)` ;
+            return displayDiff ;
+        }
+    }
     /**
     * * Génération de la liste des commentaires à afficher
     */
@@ -100,26 +119,6 @@ function Post(props) {
         setList(listComments);
     };
     
-    /**
-     * * Génération du temps de post
-     */
-    function displayDateUpload(date) {
-        const today = new Date();
-        const diff = today.getTime() - date.getTime() ; 
-        if( diff > 0 && diff <= 60000 ) {
-            const displayDiff = `posté il y a ${(diff/1000).toFixed(0)} seconde(s)`;
-            return displayDiff ;
-        } else if( diff > 60000 && diff <= 3600000 ) {
-            const displayDiff = `posté il y a ${(diff/60000).toFixed(0)} minute(s)`;
-            return displayDiff ;
-        } else if( diff > 3600000 && diff <= 86400000) {
-            const displayDiff = `posté il y a ${(diff/3600000).toFixed(0)} heure(s)`;
-            return displayDiff ;
-        } else {
-            const displayDiff = `posté il y a ${(diff/86400000).toFixed(0)} jour(s)` ;
-            return displayDiff ;
-        }
-    }
 
     /**
     * * Création des fonctions nécessaires au modal de visualisation du post
@@ -217,6 +216,7 @@ function Post(props) {
                 <Card className="m-2 shadow card">
                     <Card.Header className="d-flex flex-row justify-content-between">
                         <div>
+                            <span className="fs-5">&#11088; </span>
                             <span className="text-capitalize fw-bold h6"><a href={route}>{ props.postAuthor }</a></span>                    
                         </div>
                         <span className="ms-5">{ displayDateUpload(props.postDate) }</span>
@@ -248,7 +248,7 @@ function Post(props) {
                                                 <Card.Header className="fw-bold fs-6 text-end">
                                                     { props.postTitle }
                                                 </Card.Header>
-                                                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } />
+                                                <Card.Img alt={props.postTitle} variant="top" as={ Image } src={ props.postImgUrl } />
                                                 <Card.Body>
                                                     <Card.Title>{ props.postTitle }</Card.Title>
                                                     <Card.Text>{ props.postSubject }</Card.Text>
@@ -328,11 +328,12 @@ function Post(props) {
     */
      else { 
         return (
-            <li>
+            <li className="mb-5">
                 <Card className="m-2 shadow card">
                     <Card.Header className="d-flex flex-row justify-content-between">
                         <div>
-                            <span className="text-capitalize fw-bold h6"><a href={route}>{ props.postAuthor }</a></span>
+                            <span className="fs-5">&#11088; </span>
+                            <span className="text-capitalize fw-bold h6"><a href={route}>&#9997; { props.postAuthor }</a></span>
                         </div>
                         <span className="ms-5 date">{ displayDateUpload(props.postDate) }</span>
                     </Card.Header>
@@ -363,7 +364,7 @@ function Post(props) {
                                                 <Card.Header className="fw-bold fs-6 text-end">
                                                     { props.postTitle }
                                                 </Card.Header>
-                                                <Card.Img variant="top" as={ Image } src={ props.postImgUrl } />
+                                                <Card.Img alt={props.postTitle} variant="top" as={ Image } src={ props.postImgUrl } />
                                                 <Card.Body>
                                                     <Card.Title>{ props.postTitle }</Card.Title>
                                                     <Card.Text>{ props.postSubject }</Card.Text>
