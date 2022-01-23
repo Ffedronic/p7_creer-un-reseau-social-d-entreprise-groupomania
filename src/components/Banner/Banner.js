@@ -45,10 +45,10 @@ function Banner() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-center justify-content-md-end" id="basic-navbar-nav">
               <Nav.Item className="btn btn-info btn-sm rounded-pill p-0 me-3">
-                <Nav.Link className="text-white" href="/inscription"><i className="fas fa-user-plus me-3"></i>Inscription</Nav.Link>
+                <Nav.Link className="text-black fw-bold" href="/inscription"><i className="fas fa-user-plus me-3"></i>Inscription</Nav.Link>
               </Nav.Item>
               <Nav.Item className="btn btn-success btn-sm rounded-pill p-0">
-                <Nav.Link className="text-white" href="/connexion"><i className="fas fa-sign-in-alt me-3"></i>Connexion</Nav.Link>
+                <Nav.Link className="text-white fw-bold" href="/connexion"><i className="fas fa-sign-in-alt me-3"></i>Connexion</Nav.Link>
               </Nav.Item>
             </Navbar.Collapse>
           </Container>
@@ -79,21 +79,21 @@ function Banner() {
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-end" id="basic-navbar-nav">
-                <Nav.Item className="d-block-inline d-md-none btn btn-primary btn-sm rounded-pill p-0 me-3">
-                  <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-2"></i>Profil</Nav.Link>
+                <Nav.Item className="d-block-inline d-md-none btn btn-primary btn-sm rounded-pill p-0 me-1">
+                  <Nav.Link className="text-white" href={ profilHref }><i className="far fa-id-card me-1"></i>Profil</Nav.Link>
                 </Nav.Item>
-                <Nav.Item className="d-block-inline d-md-none btn btn-secondary btn-sm rounded-pill p-0 me-3">
-                  <Nav.Link className="text-white" href="/nouveauPost"><i className="far fa-envelope me-2"></i>Nouveau sujet</Nav.Link>
+                <Nav.Item className="d-block-inline d-md-none btn btn-secondary btn-sm rounded-pill p-0 me-1">
+                  <Nav.Link className="text-white" href="/nouveauPost"><i className="far fa-envelope me-1"></i>Nouveau sujet</Nav.Link>
                 </Nav.Item>
               <Nav.Item className="btn btn-danger btn-sm rounded-pill p-0">
-                <Nav.Link onClick={ isLogOut } className="text-white" href="/connexion"><i className="fas fa-sign-out-alt me-2"></i>Déconnexion</Nav.Link>
+                <Nav.Link onClick={ isLogOut } className="text-white" href="/connexion"><i className="fas fa-sign-out-alt me-1"></i>Deconnecter</Nav.Link>
               </Nav.Item>
             </Navbar.Collapse>
           </Container>
         </Navbar>
         <section className='hero-image d-none d-md-block'>
           <article className="hero-text">
-            <h1 className='fw-bold fs-1'>Bienvenue sur le forum</h1>
+            <h1 className='fw-bold fs-1'>Bienvenue sur le forum <i class="fas fa-door-open fs-1 text-primary"></i></h1>
           </article>
         </section>
         <Outlet/>

@@ -100,10 +100,10 @@ function SignUp() {
               </InputGroup.Text>
               <Form.Control required type="password" id="password" name="password" value={ password } onChange={(e) => setPassword(e.target.value)} placeholder="entrez votre mot de passe" />
             </InputGroup>
-            <Form.Text className="text-muted">
+            <Form.Text className="text-black">
               <i className="fas fa-exclamation-circle me-1"></i>
               Votre mot passe doit contenir au minimum 8 caractères, 1 lettre majuscule, 1 lettre minuscule, 2 chiffres, et
-              <span className="text-decoration-underline">pas de symboles.</span>
+               <span className="fw-bold">pas de symboles.</span>
             </Form.Text>
           </Form.Group>
           <Button variant="success" type="submit">
