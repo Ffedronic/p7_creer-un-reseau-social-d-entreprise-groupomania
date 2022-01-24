@@ -216,7 +216,7 @@ function Post(props) {
                 <Card className="m-2 shadow card">
                     <Card.Header className="d-flex flex-row justify-content-between">
                         <div>
-                            <i class="fas fa-sticky-note fs-5 me-3 text-warning"></i>
+                            <i className="fas fa-sticky-note fs-5 me-3 text-warning"></i>
                             <span className="text-capitalize fw-bold h6"><a href={route}>{ props.postAuthor }</a></span>                    
                         </div>
                         <span className="ms-5">{ displayDateUpload(props.postDate) }</span>
@@ -227,7 +227,7 @@ function Post(props) {
                             <Card.Text>{ props.postSubject }</Card.Text>
                         </div>
                         <div className="divImg">
-                            <Card.Img className="cardImg" fluid alt={ props.postTitle } src={ props.postImgUrl } />
+                            <Card.Img className="cardImg" fluid="true" alt={ props.postTitle } src={ props.postImgUrl } />
                         </div>
                     </Card.Body>
                     <Card.Footer className="d-flex flex-row justify-content-around">
@@ -248,7 +248,7 @@ function Post(props) {
                                                 <Card.Header className="fw-bold fs-6 text-end">
                                                     { props.postTitle }
                                                 </Card.Header>
-                                                <Card.Img alt={props.postTitle} fluid variant="top" as={ Image } src={ props.postImgUrl } />
+                                                <Card.Img alt={props.postTitle} fluid="true" variant="top" as={ Image } src={ props.postImgUrl } />
                                                 <Card.Body>
                                                     <Card.Title>{ props.postTitle }</Card.Title>
                                                     <Card.Text>{ props.postSubject }</Card.Text>
@@ -331,7 +331,7 @@ function Post(props) {
                 <Card className="m-2 shadow card">
                     <Card.Header className="d-flex flex-row justify-content-between">
                         <div>
-                            <i class="fas fa-sticky-note fs-5 me-3 text-warning"></i>
+                            <i className="fas fa-sticky-note fs-5 me-3 text-warning"></i>
                             <span className="text-capitalize fw-bold h6"><a href={route}>{ props.postAuthor }</a></span>
                         </div>
                         <span className="ms-5 date">{ displayDateUpload(props.postDate) }</span>
@@ -342,7 +342,7 @@ function Post(props) {
                             <Card.Text>{ props.postSubject }</Card.Text>
                         </div>
                         <div className="divImg">
-                            <Card.Img className="cardImg" fluid alt={ props.postTitle } src={ props.postImgUrl } />
+                            <Card.Img className="cardImg" fluid="true" alt={ props.postTitle } src={ props.postImgUrl } />
                         </div>
                     </Card.Body>
                     <Card.Footer className="d-flex flex-row justify-content-around">
@@ -363,7 +363,7 @@ function Post(props) {
                                                 <Card.Header className="fw-bold fs-6 text-end">
                                                     { props.postTitle }
                                                 </Card.Header>
-                                                <Card.Img alt={props.postTitle} fluid variant="top" as={ Image } src={ props.postImgUrl } />
+                                                <Card.Img alt={props.postTitle} fluid="true" variant="top" as={ Image } src={ props.postImgUrl } />
                                                 <Card.Body>
                                                     <Card.Title>{ props.postTitle }</Card.Title>
                                                     <Card.Text>{ props.postSubject }</Card.Text>

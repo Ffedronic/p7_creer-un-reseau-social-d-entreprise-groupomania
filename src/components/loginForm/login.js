@@ -31,7 +31,8 @@ function Login() {
    */
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [error, setError] = useState("");
+  
   /**
    * * Vérification du log de l'utilisateur
    */
@@ -53,8 +54,9 @@ function Login() {
       localStorage.setItem("userId", response.data.userId);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("isAdmin", response.data.isAdmin);
-      window.location.href = "posts";
+      window.location.href="/posts";
     })
+    .catch(() => setError("utilisateur ou mot de passe incorrect"));
   };
     
   /**
@@ -80,6 +82,7 @@ function Login() {
               <InputGroup.Text><i className="fas fa-lock"></i></InputGroup.Text>
               <Form.Control required type="password" id="password" name="password" value={ password } onChange={(e) => setPassword(e.target.value)} placeholder="entrez votre mot de passe" />
             </InputGroup>
+            <p className="text-danger fw-bold">{ error }</p>
             <Form.Text className="text-black"><i className="fas fa-exclamation-circle me-1"></i>Votre mot passe doit contenir au minimum 8 caractères, 1 lettre majuscule, 1 lettre minuscule, 2 chiffres, et <span className="fw-bold">pas de symboles.</span></Form.Text>
           </Form.Group>
           <Button variant="success" type="submit"><i className="fas fa-check-circle me-3"></i>Envoyer</Button>

@@ -53,7 +53,7 @@ exports.login = (req, res, next) => {
     /*envoi de la requête au serveur*/
     groupomaniaDBConnect.query(sqlSearchUser, [req.body.email], (error, result) => {
         if (error) {
-            throw error;
+            throw new Error("utilisateur inexistant");
         }
         /*création du profil utilisateur à partir de la réponse de la requête sqlSearchUser*/
         const userProfil = result[0];

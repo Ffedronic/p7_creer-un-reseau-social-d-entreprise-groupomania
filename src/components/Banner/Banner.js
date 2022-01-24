@@ -93,7 +93,7 @@ function Banner() {
         </Navbar>
         <section className='hero-image d-none d-md-block'>
           <article className="hero-text">
-            <h1 className='fw-bold fs-1'>Bienvenue sur le forum <i class="fas fa-door-open fs-1 text-primary"></i></h1>
+            <h1 className='fw-bold fs-1'>Bienvenue sur le forum <i className="fas fa-door-open fs-1 text-primary"></i></h1>
           </article>
         </section>
         <Outlet/>
