@@ -6,6 +6,9 @@ const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
     'image/png': 'png',
+    'image/bmp':'bmp',
+    'image/gif': 'gif',
+    'image/webp': 'webp',
 };
 
 // creer un objet de configuration indiquant à multer où et comment enregistrer les fichiers images

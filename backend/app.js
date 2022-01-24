@@ -17,9 +17,6 @@ const mysql = require('mysql');
 // import helmet
 const helmet = require('helmet');
 
-//import cookie parser
-const cookieParser = require('cookie-parser');
-
 //import du router user
 const userRouter = require('./routes/user');
 
@@ -53,9 +50,6 @@ app.use(helmet());
 
 //middleware global, transforme le corps de la requete en objet javascript utilisable
 app.use(express.json());
-
-//middleware cookie-parser
-app.use(cookieParser());
 
 // indique à Express qu'il faut gerer la ressource images de manière statique à chaque requête reçue vers la route /images
 // __dirname = nom du dossier dans lequel on va se trouver
