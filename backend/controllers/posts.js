@@ -1,5 +1,5 @@
 //import mysql
-const mysql = require('mysql2');
+const mysql = require('mysql');
 
 //import de file system
 const fs = require('fs');
