@@ -2,7 +2,7 @@
 
 ## Contexte.
 
- Dans le cadre des mesures d’amélioration de la communication entre collègues, la Direction de Groupomania a promis la création d’un réseau social interne, moderne et ludique, qui permettra aux employés de se connaître dans un cadre plus informel.
+ Dans le cadre des mesures d’amélioration de la communication entre collègues de l'entreprise, la Direction de Groupomania a promis la création d’un réseau social interne, moderne et ludique, qui permettra aux employés de se connaître dans un cadre plus informel.
 ### Requêtes spécifiques.
 -	Présentation simple des fonctionnalités,
 -   Création simple d’un compte, accessible depuis un téléphone mobile,
