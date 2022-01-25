@@ -190,6 +190,7 @@ function Post(props) {
     const deletePost = (event) => {
         event.preventDefault();
         Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
+        console.log(props.postId);
         Axios.delete(`http://localhost:4000/api/posts/${props.postId}`)
             .then((result) => {
             window.location.href = "posts";

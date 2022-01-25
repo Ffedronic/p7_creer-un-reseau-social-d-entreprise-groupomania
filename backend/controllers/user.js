@@ -55,6 +55,7 @@ exports.login = (req, res, next) => {
         if (error) {
             throw new Error("utilisateur inexistant");
         }
+        
         /*création du profil utilisateur à partir de la réponse de la requête sqlSearchUser*/
         const userProfil = result[0];
 
@@ -79,7 +80,7 @@ exports.login = (req, res, next) => {
                         {
                         expiresIn: "168h"
                         }),
-                    isAdmin: userProfil.isAdmin });
+                        isAdmin: userProfil.isAdmin });
                 }
             })
             .catch((error) => res.status(500).json({
