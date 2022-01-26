@@ -109,9 +109,9 @@ exports.modifyOnePost = (req, res, next) => {
             img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         };
         /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = ?, subject = ?, img_url = ? WHERE id = ? AND author = ?`;
+        const sqlModifyOnePost = `UPDATE posts SET title = ?, subject = ?, img_url = ? WHERE id = ?`;
         /*envoi de la requête au serveur sql*/
-        groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, post.img_url, req.params.id, res.locals.userId], (error) => {
+        groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, post.img_url, req.params.id], (error) => {
             if (error) {
                 throw error;
             }
@@ -129,9 +129,9 @@ exports.modifyOnePost = (req, res, next) => {
             subject: req.body.subject
         };
         /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = ?,  subject = ? WHERE id = ? AND author = ?`;
+        const sqlModifyOnePost = `UPDATE posts SET title = ?,  subject = ? WHERE id = ?`;
         /*envoi de la requête au serveur sql*/
-        groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, req.params.id, res.locals.userId], (error) => {
+        groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, req.params.id], (error) => {
             if (error) {
                 throw error;
             }
