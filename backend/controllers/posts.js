@@ -100,46 +100,90 @@ exports.createOnePost = (req, res, next) => {
 
 //controller pour modifier un post
 exports.modifyOnePost = (req, res, next) => {
-    /*si la requête contient une image*/
-    if (req.file) {
-        /*création de l'objet post*/
-        const post = {
-            title: req.body.title,
-            subject: req.body.subject,
-            img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        };
-        /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = ?, subject = ?, img_url = ? WHERE id = ?`;
-        /*envoi de la requête au serveur sql*/
-        groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, post.img_url, req.params.id], (error) => {
-            if (error) {
-                throw error;
-            }
-            /*envoi du message de validation de la modification du post*/
-            res.status(200).json({
-                message: 'post modifié.'
+    /*si l'utilisateur est administrateur (isAdmin === 1)*/
+    if (res.locals.isAdmin === 1) {
+        /*si la requête contient une image*/
+        if (req.file) {
+            /*création de l'objet post*/
+            const post = {
+                title: req.body.title,
+                subject: req.body.subject,
+                img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+            };
+            /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
+            const sqlModifyOnePost = `UPDATE posts SET title = ?, subject = ?, img_url = ? WHERE id = ?`;
+            /*envoi de la requête au serveur sql*/
+            groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, post.img_url, req.params.id], (error) => {
+                if (error) {
+                    throw error;
+                }
+                /*envoi du message de validation de la modification du post*/
+                res.status(200).json({
+                    message: 'post modifié.'
+                });
             });
-        });
-    }
-    /*si la requête ne contient pas d'image*/
-    else {
-        /*création de l'objet post*/
-        const post = {
-            title: req.body.title,
-            subject: req.body.subject
-        };
-        /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
-        const sqlModifyOnePost = `UPDATE posts SET title = ?,  subject = ? WHERE id = ?`;
-        /*envoi de la requête au serveur sql*/
-        groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, req.params.id], (error) => {
-            if (error) {
-                throw error;
-            }
-            /*envoi du message de validation de la modification du post*/
-            res.status(200).json({
-                message: 'post modifié.'
+        }
+        /*si la requête ne contient pas d'image*/
+        else {
+            /*création de l'objet post*/
+            const post = {
+                title: req.body.title,
+                subject: req.body.subject
+            };
+            /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
+            const sqlModifyOnePost = `UPDATE posts SET title = ?,  subject = ? WHERE id = ?`;
+            /*envoi de la requête au serveur sql*/
+            groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, req.params.id], (error) => {
+                if (error) {
+                    throw error;
+                }
+                /*envoi du message de validation de la modification du post*/
+                res.status(200).json({
+                    message: 'post modifié.'
+                });
             });
-        });
+        }    
+    } else {
+        if (req.file) {
+            /*création de l'objet post*/
+            const post = {
+                title: req.body.title,
+                subject: req.body.subject,
+                img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+            };
+            /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
+            const sqlModifyOnePost = `UPDATE posts SET title = ?, subject = ?, img_url = ? WHERE id = ? AND author = ?`;
+            /*envoi de la requête au serveur sql*/
+            groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, post.img_url, req.params.id, res.locals.userId], (error) => {
+                if (error) {
+                    throw error;
+                }
+                /*envoi du message de validation de la modification du post*/
+                res.status(200).json({
+                    message: 'post modifié.'
+                });
+            });
+        }
+        /*si la requête ne contient pas d'image*/
+        else {
+            /*création de l'objet post*/
+            const post = {
+                title: req.body.title,
+                subject: req.body.subject
+            };
+            /*création de la requête sql pour modifier le post dans la base de données dont l'id est fourni par les paramètres de la requête*/
+            const sqlModifyOnePost = `UPDATE posts SET title = ?,  subject = ? WHERE id = ? AND author = ?`;
+            /*envoi de la requête au serveur sql*/
+            groupomaniaDBConnect.query(sqlModifyOnePost, [post.title, post.subject, req.params.id, res.locals.userId], (error) => {
+                if (error) {
+                    throw error;
+                }
+                /*envoi du message de validation de la modification du post*/
+                res.status(200).json({
+                    message: 'post modifié.'
+                });
+            });
+        }
     }
 };
 
@@ -174,23 +218,27 @@ exports.deleteOnePost = (req, res, next) => {
                 });
             });
         } else {
-            /*suppression de l'image du post du dossier 'images'*/
-            const filename = post.img_url.split('/images/')[1];
-            fs.unlink(`images/${filename}`, () => {
-                /*création de la requête sql pour supprimer le post dans la base de données dont l'id est fourni par 
-                les paramètres de la requête*/
-                const sqlDeleteOnePost = `DELETE FROM posts WHERE id = ? AND author = ?`;
-                /*envoi de la requête au serveur sql*/
-                groupomaniaDBConnect.query(sqlDeleteOnePost, [req.params.id, res.locals.userId], (error, result) => {
-                    if (error) {
-                        throw error;
-                    }
-                    /*envoi du message de validation de la suppression du post*/
-                    res.status(200).json({
-                        message: "post supprimé."
+            if(Number(res.locals.userId) === Number(post.author)) {
+                /*suppression de l'image du post du dossier 'images'*/
+                const filename = post.img_url.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    /*création de la requête sql pour supprimer le post dans la base de données dont l'id est fourni par 
+                    les paramètres de la requête*/
+                    const sqlDeleteOnePost = `DELETE FROM posts WHERE id = ? AND author = ?`;
+                    /*envoi de la requête au serveur sql*/
+                    groupomaniaDBConnect.query(sqlDeleteOnePost, [req.params.id, res.locals.userId], (error, result) => {
+                        if (error) {
+                            throw error;
+                        }
+                        /*envoi du message de validation de la suppression du post*/
+                        res.status(200).json({
+                            message: "post supprimé."
+                        });
                     });
                 });
-            });
+            } else {
+                res.status(401).json({message: "non autorisé"});
+            }
         }
     });
 };

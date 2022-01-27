@@ -106,13 +106,22 @@ function Profil() {
         .catch(error => console.log(error));
     };
     const deleteMyProfil = (event) => {         //Supprime son profil utilisateur de la base de données, vide le localStorage et ramène vers la page de connexion
-        Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
-        Axios.delete(`http://localhost:4000/api/auth/${params.id}`)
-        .then(() => {
-            localStorage.clear();
-            window.location.href = "/connexion";
-        })
-        .catch(error => console.log(error));
+        if(isAdmin > 0) {
+            Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
+            Axios.delete(`http://localhost:4000/api/auth/${params.id}`)
+            .then(() => {
+                window.location.href = "/posts";
+            })
+            .catch(error => console.log(error));    
+        } else {
+            Axios.defaults.headers['Authorization'] =`Bearer ${token}`;
+            Axios.delete(`http://localhost:4000/api/auth/${params.id}`)
+            .then(() => {
+                localStorage.clear();
+                window.location.href = "/connexion";
+            })
+            .catch(error => console.log(error));
+        }
     };
 
     /**

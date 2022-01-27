@@ -91,41 +91,112 @@ exports.login = (req, res, next) => {
 
 //controller pour modifier son profil utilisateur
 exports.modifyProfil = (req, res, next) => {
-    /*création de la requête sql pour mettre à jour le prénom, nom et email de l'utilisateur dans la base de données à partir de son id 
-    fourni par le profil utilisateur*/
-    const sqlUpdateMyProfil = `UPDATE users SET firstName = ?, lastName = ?, email = ? WHERE id = ?`;
-    /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlUpdateMyProfil, [req.body.firstName, req.body.lastName, req.body.email, req.params.id], (error, result) => {
-        if (error) {
-            console.log(error);
-            res.status(500).json({
-                error
+    if(res.locals.isAdmin === 1 ) {
+        /*création de la requête sql pour mettre à jour le prénom, nom et email de l'utilisateur dans la base de données à partir de son id 
+        fourni par le profil utilisateur*/
+        const sqlUpdateMyProfil = `UPDATE users SET firstName = ?, lastName = ?, email = ? WHERE id = ?`;
+        /*envoi de la requête au serveur sql*/
+        groupomaniaDBConnect.query(sqlUpdateMyProfil, [req.body.firstName, req.body.lastName, req.body.email, req.params.id], (error, result) => {
+            if (error) {
+                console.log(error);
+                res.status(500).json({
+                    error
+                });
+            }
+            /*envoi du résultat de la requête sql*/
+            res.status(200).json({
+                result
             });
-        }
-        /*envoi du résultat de la requête sql*/
-        res.status(200).json({
-            result
         });
-    });
+    } else {
+        /*création de la requête sql pour récupérer le prénom, le nom, l'email de l'utilisateur dans la base de données
+        dont l'id est fourni par les paramètres de la requete client*/
+        const sqlSearchUserProfil = `SELECT id, firstName, lastName, email FROM users WHERE id = ?`;
+        /*envoi de la requête au serveur sql*/
+        groupomaniaDBConnect.query(sqlSearchUserProfil, [req.params.id], (error, result) => {
+            if (error) {
+                console.log(error);
+                res.status(500).json({
+                    error
+                });
+            }
+            const profil = result[0];
+            if(Number(res.locals.userId) === Number(profil.id)){
+                /*création de la requête sql pour mettre à jour le prénom, nom et email de l'utilisateur dans la base de données à partir de son id 
+                fourni par le profil utilisateur*/
+                const sqlUpdateMyProfil = `UPDATE users SET firstName = ?, lastName = ?, email = ? WHERE id = ?`;
+                /*envoi de la requête au serveur sql*/
+                groupomaniaDBConnect.query(sqlUpdateMyProfil, [req.body.firstName, req.body.lastName, req.body.email, res.locals.userId], (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        res.status(500).json({
+                            error
+                        });
+                    }
+                    /*envoi du résultat de la requête sql*/
+                    res.status(200).json({
+                        result
+                    });
+                });
+            } else {
+                res.status(403).json({message: "non autorisé."})
+            }
+        });
+    }
 };
 
 //controller pour supprimer son profil utilisateur
 exports.deleteProfil = (req, res, next) => {
-    /*création de la requête sql pour supprimer l'utilisateur de la base de données à partir de son id fourni par le profil utilisateur*/
-    const sqlDeleteMyProfil = `DELETE FROM users WHERE id = ?`;
-    /*envoi de la requête au serveur sql*/
-    groupomaniaDBConnect.query(sqlDeleteMyProfil, [req.params.id], (error, result) => {
-        if (error) {
-            console.log(error);
-            res.status(500).json({
-                error
+    if(res.locals.isAdmin === 1 ) {
+        /*création de la requête sql pour supprimer l'utilisateur de la base de données à partir de son id fourni par le profil utilisateur*/
+        const sqlDeleteMyProfil = `DELETE FROM users WHERE id = ?`;
+        /*envoi de la requête au serveur sql*/
+        groupomaniaDBConnect.query(sqlDeleteMyProfil, [req.params.id], (error, result) => {
+            if (error) {
+                console.log(error);
+                res.status(500).json({
+                    error
+                });
+            }
+            /*envoi du message de validation de la suppression du profil dans la base de données*/
+            res.status(200).json({
+                result
             });
-        }
-        /*envoi du message de validation de la suppression du profil dans la base de données*/
-        res.status(200).json({
-            result
         });
-    });
+    } else {
+        /*création de la requête sql pour récupérer le prénom, le nom, l'email de l'utilisateur dans la base de données
+        dont l'id est fourni par les paramètres de la requete client*/
+        const sqlSearchUserProfil = `SELECT id, firstName, lastName, email FROM users WHERE id = ?`;
+        /*envoi de la requête au serveur sql*/
+        groupomaniaDBConnect.query(sqlSearchUserProfil, [req.params.id], (error, result) => {
+            if (error) {
+                console.log(error);
+                res.status(500).json({
+                    error
+                });
+            }
+            const profil = result[0];
+            if(res.locals.userId === Number(profil.id)){
+                /*création de la requête sql pour supprimer l'utilisateur de la base de données à partir de son id fourni par le profil utilisateur*/
+                const sqlDeleteMyProfil = `DELETE FROM users WHERE id = ?`;
+                /*envoi de la requête au serveur sql*/
+                groupomaniaDBConnect.query(sqlDeleteMyProfil, [res.locals.userId], (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        res.status(500).json({
+                            error
+                        });
+                    }
+                    /*envoi du message de validation de la suppression du profil dans la base de données*/
+                    res.status(200).json({
+                        result
+                    });
+                });
+            } else {
+                res.status(403).json({message: "non autorisé."})
+            }
+        });    
+    }
 };
 
 //controller pour voir le profil d'un utilisateur
